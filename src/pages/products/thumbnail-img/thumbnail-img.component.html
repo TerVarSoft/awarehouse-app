@@ -1,0 +1,3 @@
+<loading-img *ngIf="isLoading" style="object-fit: contain; max-height: 100px">
+</loading-img>
+<img *ngIf="!isLoading" (click)="openImage($event)" [src]="url | safeUrl" style="object-fit: contain;" />

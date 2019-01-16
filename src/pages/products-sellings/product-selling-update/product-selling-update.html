@@ -1,0 +1,86 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>{{"Venta " + selling.productName}}</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="save()">
+                Guardar
+            </button>
+        </ion-buttons>
+
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-item>
+        <ion-label>Cantidad</ion-label>
+        <ion-input [formControl]="formQuantity" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label>Total</ion-label>
+        <ion-input [(ngModel)]="selling.total" type="number">
+        </ion-input>
+        {{selling.total}}
+    </ion-item>
+    <ion-item-divider color="primary-50">Precio</ion-item-divider>
+    <ion-list *ngIf="product" radio-group [(ngModel)]="priceIdFromOptions" (ionChange)="updatePriceFromOptions()">
+        <div *ngFor="let price of product.prices">
+            <ion-item *ngIf="price.value">
+                <ion-label>{{price.value}} Bs. ({{priceTypes[price.type].name}})</ion-label>
+                <ion-radio value="{{price.type}}" color="secondary"></ion-radio>
+            </ion-item>
+        </div>
+    </ion-list>
+
+    <ion-item *ngIf="product">
+        <ion-label>Otro Precio (Bs)</ion-label>
+        <ion-input [formControl]="formOtherPrice" type="number"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="!product">
+        <ion-label>Precio (Bs)</ion-label>
+        <ion-input [(ngModel)]="selling.price" [formControl]="formPrice" type="number"></ion-input>
+    </ion-item>
+
+    <ion-item-divider color="primary-50">Cantidad para el precio</ion-item-divider>
+    <ion-list *ngIf="product" radio-group [(ngModel)]="selling.quantityForPrice" (ionChange)="updateQuantityForPrice()">
+        <ion-item>
+            <ion-label>1</ion-label>
+            <ion-radio value="1" color="secondary"></ion-radio>
+        </ion-item>
+        <ion-item>
+            <ion-label>100</ion-label>
+            <ion-radio value="100" color="secondary"></ion-radio>
+        </ion-item>
+        <ion-item *ngIf="product.quantityPerPackage">
+            <ion-label>{{product.quantityPerPackage}}</ion-label>
+            <ion-radio value="{{product.quantityPerPackage}}" color="secondary"></ion-radio>
+        </ion-item>
+    </ion-list>
+
+    <ion-item *ngIf="!product">
+        <ion-label>Cantidad para el precio</ion-label>
+        <ion-input [(ngModel)]="selling.quantityForPrice" [formControl]="formQuantityForPrice" type="number"></ion-input>
+    </ion-item>
+
+    <ion-item-divider color="primary-50">Mas</ion-item-divider>
+    <ion-item>
+        <ion-label>Porcentaje %</ion-label>
+        <ion-input [formControl]="formPercentage" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label>Precio de compra unitario</ion-label>
+        <ion-input [formControl]="formBuyingPrice" type="number"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="selling.buyingPrice">
+        <ion-label>Ganancia</ion-label>
+        <ion-input [(ngModel)]="selling.revenue" type="number"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="selling.id">
+        <button item-end ion-button color="danger" (click)="remove()">Borrar Venta</button>
+    </ion-item>
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-title>{{selling.buyingPrice ? "Ganancia:" + selling.revenue + " / " : ""}} Total: {{selling.total}}</ion-title>
+    </ion-toolbar>
+</ion-footer>

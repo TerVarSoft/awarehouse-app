@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Productos Tunari
+    </ion-title>
+  </ion-navbar>
+
+  <ion-toolbar color="primary">
+    <ion-searchbar animated=true #searchInput placeholder="Busca un producto en el sistema !" [formControl]="searchQuery"
+      (ionClear)="onSearchClear()">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item-sliding *ngFor="let product of products" (click)="goToProductDetails(product)">
+      <ion-item>
+        <ion-thumbnail item-left>
+          <product-img [product]="product"></product-img>
+        </ion-thumbnail>
+        <h2 class="text-color">{{product.name}}</h2>
+        <h3 class="text-color">{{product.description || product.properties?.type}}</h3>
+        <p>
+          {{getSelectedProductPrice(product)}}
+        </p>
+
+        <ion-icon item-end (click)="openProductOptions($event, product)" color="primary" name="more"></ion-icon>
+
+      </ion-item>
+      <ion-item-options side="left">
+        <button ion-button (click)="addPriceWhenNoPrice($event, product)" color="primary">
+          <ion-icon name="pricetag"></ion-icon>
+          Precio
+        </button>
+        <button ion-button (click)="setProductQuantity($event, product)" color="primary-700">
+          <ion-icon name="home"></ion-icon>
+          Cantid
+        </button>
+      </ion-item-options>
+      <ion-item-options side="right">
+        <button ion-button (click)="createSelling($event, product)" color="primary">
+          <ion-icon name="basket"></ion-icon>
+          Vender
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab bottom right #fab (click)="createProduct(fab)">
+    <button ion-fab color="secondary">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-infinite-scroll (ionInfinite)="pullNextProductsPage($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando mas productos">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-chip *ngIf="productCategories && productCategories.length > 2" (click)="changeCategory($event)">
+      <ion-label>{{selectedCategory.name}}</ion-label>
+    </ion-chip>
+    <ion-chip *ngIf="productTypes && productTypes.length > 2" (click)="changeType($event)">
+      <ion-label>{{selectedType.name}}</ion-label>
+    </ion-chip>
+    <ion-chip *ngIf="productPrices && productPrices.length > 0" (click)="changePrice($event)">
+      <ion-label>{{selectedPrice.name}}</ion-label>
+    </ion-chip>
+  </ion-toolbar>
+</ion-footer>

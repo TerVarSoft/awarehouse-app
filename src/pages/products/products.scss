@@ -1,0 +1,11 @@
+page-products {  
+
+}
+
+.product-options {
+  .ion-md-trash,
+  .ion-md-create,
+  .ion-md-eye  {
+    color: map-get($colors, secondary);
+  }
+}

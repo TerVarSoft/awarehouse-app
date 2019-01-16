@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{product.name}}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only color="royal" (click)="editProduct()">
+        <ion-icon name="create"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="product-profile" text-center>
+    <product-img [product]="product" style="max-height: 100px;"></product-img>
+  </div>
+
+  <ion-segment [(ngModel)]="segment" color="secondary">
+    <ion-segment-button value="general">
+      General
+    </ion-segment-button>
+    <ion-segment-button value="prices">
+      Precios
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="segment">
+    <div *ngSwitchCase="'general'">
+      <div class="product-detail" padding>
+        <h2 class="text-color">{{product.name}}</h2>
+        <p class="text-color">{{product.description}}</p>
+        <p class="text-color">{{product.properties?.type || product.category}}</p>
+      </div>
+
+      <ion-item-group>
+        <ion-item *ngIf="product.quantity">
+          <h2>Cantidad en deposito</h2>
+          <p item-right>{{product.quantity}}</p>
+        </ion-item>
+        <ion-item *ngIf="product.quantityPerPackage">
+          <h2>Cantidad por paquete</h2>
+          <p item-right>{{product.quantityPerPackage}}</p>
+        </ion-item>
+      </ion-item-group>
+
+      <ion-item-group>
+        <ion-item-divider color="primary-50" class="text-color">
+          Etiquetas
+        </ion-item-divider>
+        <ion-item *ngFor="let tag of product.tags" class="text-color">
+          {{tag}}
+        </ion-item>
+      </ion-item-group>
+    </div>
+
+    <ion-item-group *ngSwitchCase="'prices'">
+      <ion-item-divider color="primary-50" class="text-color">
+        Lista de precios de venta
+      </ion-item-divider>
+      <ion-item *ngFor="let price of product.prices" class="text-color">
+        <div *ngIf="price.value">
+          {{price.value}} Bs
+        </div>
+        <ion-note item-end>
+          {{price.name}}
+        </ion-note>
+      </ion-item>
+      <ion-item-divider color="primary-50" class="text-color">
+        Otros Precios
+      </ion-item-divider>
+      <ion-item>
+        <div *ngIf="product.buyingUnitPrice">
+          {{product.buyingUnitPrice}} Bs
+        </div>
+        <ion-note item-end>
+          Precio de compra unitario
+        </ion-note>
+      </ion-item>
+    </ion-item-group>
+  </div>
+</ion-content>

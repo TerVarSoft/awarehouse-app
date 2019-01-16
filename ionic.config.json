@@ -1,6 +1,8 @@
 {
   "name": "awarehouse-app",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "0f0d7b19"
 }

@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{product.name || "Crear Producto"}}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button (click)="save()">
+        Guardar
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="product-profile" text-center>
+    <img *ngIf="(imagePreview || product.thumbnailUrl)" [src]="(imagePreview || product.thumbnailUrl) | safeUrl" style="max-height: 100px;" />
+    <ion-fab class="gallery-button">
+      <button (click)="pickPicture()" color="secondary" ion-fab mini>
+        <ion-icon name="image"></ion-icon>
+      </button>
+    </ion-fab>
+    <ion-fab class="camera-button">
+      <button (click)="takePicture()" color="secondary" ion-fab mini>
+        <ion-icon name="camera"></ion-icon>
+      </button>
+    </ion-fab>
+  </div>
+  <ion-segment [(ngModel)]="segment" color="secondary">
+    <ion-segment-button value="general">
+      General
+    </ion-segment-button>
+    <ion-segment-button value="prices">
+      Precios
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="segment">
+    <div *ngSwitchCase="'general'">
+      <ion-list>
+        <ion-item>
+          <ion-label>Nombre</ion-label>
+          <ion-input [(ngModel)]="product.name" type="text" novalidate></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Descripcion</ion-label>
+          <ion-input [(ngModel)]="product.description" type="text" novalidate></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="productCategories.length > 1">
+          <ion-label>Categoria</ion-label>
+          <ion-select [(ngModel)]="product.categoryId" interface="popover" (ionChange)='updateCategory()'>
+            <ion-option *ngFor="let category of productCategories" [value]="category.id">
+              {{category.name}}
+            </ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="productTypes.length > 1">
+          <ion-label>Tipo</ion-label>
+          <ion-select [(ngModel)]="product.typeId" interface="popover" (ionChange)='updateType()'>
+            <ion-option *ngFor="let type of productTypes" [value]="type.id">
+              {{type.name}}
+            </ion-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Cantidad</ion-label>
+          <ion-input [(ngModel)]="product.quantity" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Cantidad por paquete</ion-label>
+          <ion-input [(ngModel)]="product.quantityPerPackage" type="number"></ion-input>
+        </ion-item>
+
+        <ion-list-header>
+          Etiquetas
+          <button ion-button outline item-end icon-left (click)="addTag()">
+            <ion-icon name="add"></ion-icon>
+            Agregar
+          </button>
+        </ion-list-header>
+
+        <ion-item *ngFor="let tag of product.tags">
+          {{tag}}
+          <ion-icon name="close-circle" color="primary" item-end (click)="removeTag(tag)"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div *ngSwitchCase="'prices'">
+      <ion-item-group>
+        <ion-item-divider color="primary-50">Lista de precios de venta</ion-item-divider>
+        <ion-item *ngFor="let price of product.prices">
+          <ion-label>{{price.name}}</ion-label>
+          <ion-input [(ngModel)]="price.value" type="number"></ion-input>
+        </ion-item>
+      </ion-item-group>
+    </div>
+  </div>
+</ion-content>
