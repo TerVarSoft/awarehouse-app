@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams, Alert } from 'ionic-angular';
+import { NavController, NavParams } from '@ionic/angular';
 import * as _ from "lodash";
 
 import { TunariNotifier } from '../../../providers/tunari-notifier';
@@ -171,12 +171,12 @@ export class ProductSellingUpdatePage {
 
             this.updateFavoritesInBackground();
             updateSellingLoader.dismiss();
-            this.navCtrl.pop();
+            // this.navCtrl.pop();
         });
     }
 
     remove() {
-        let removeSellingtAlert: Alert = this.util.getRemoveSellingAlert(this.selling.productName);
+        let removeSellingtAlert:any = this.util.getRemoveSellingAlert(this.selling.productName);
 
         removeSellingtAlert.addButton({
             text: 'Borralo!',
@@ -188,7 +188,7 @@ export class ProductSellingUpdatePage {
                 this.sellingsProvider.remove(this.selling, shouldUpdateProductQuantity).subscribe(() => {
                     this.updateFavoritesInBackground();
                     removeSellingLoader.dismiss();
-                    this.navCtrl.pop();
+                    // this.navCtrl.pop();
                 });
             }
         });

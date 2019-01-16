@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from '@ionic/angular';
 
 import { TunariApi } from '../../../providers/tunari-api';
 

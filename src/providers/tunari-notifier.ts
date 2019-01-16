@@ -1,31 +1,31 @@
 import { Injectable } from '@angular/core';
-import { LoadingController, Loading, ToastController, Toast } from 'ionic-angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 /**
  * Notifications service helper. 
  */
 @Injectable()
-export class TunariNotifier {  
+export class TunariNotifier {
 
   constructor(public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController) {}
+    private toastCtrl: ToastController) { }
 
-  createToast(message: string): Toast {
-    let toast = this.toastCtrl.create({
+  async createToast(message: string) {
+    let toast = await this.toastCtrl.create({
       message: message,
       duration: 2000,
-      position: 'bottom'      
+      position: 'bottom'
     });
 
     toast.present();
     return toast;
   }
 
-  createLoader(message: string): Loading {
-    let loader = this.loadingCtrl.create();  
-    loader.setContent(message);
+  async createLoader(message: string) {
+    let loader = await this.loadingCtrl.create();
+    // loader.setContent(message);
     loader.present();
 
     return loader;
-  }  
+  }
 }

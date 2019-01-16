@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { Component } from '@angular/core';
 import { Camera } from 'ionic-native';
-import { NavParams, AlertController, NavController } from 'ionic-angular';
+import { NavParams, AlertController, NavController } from '@ionic/angular';
 
 import { Products } from '../../../providers/products';
 import { ProductsUtil } from './../products-util';

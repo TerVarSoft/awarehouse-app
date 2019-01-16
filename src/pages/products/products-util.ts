@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { AlertController, Alert } from 'ionic-angular';
+import { Injectable, } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 import { SettingsCache } from '../../providers/settings-cache';
 
@@ -16,16 +16,17 @@ export class ProductsUtil {
 
   /* *Get Alert helper methods */
 
-  getSelectPriceAlert(selectedProductCategory: string, selectedPrice: number): Alert {
+  async getSelectPriceAlert(selectedProductCategory: string, selectedPrice: number) {
     let productCategory =
       this.settingsProvider.getProductCategories().filter(category => category.name == selectedProductCategory)[0];
 
-    let alert = this.alertCtrl.create();
+    let alert = await this.alertCtrl.create({
+      header: 'Precio'
+    });
 
-    alert.setTitle('Precio');
 
     productCategory.priceTypes.forEach(priceType => {
-      alert.addInput({
+      alert.inputs.push({
         type: 'radio',
         label: priceType.name,
         value: priceType.id,
@@ -33,7 +34,7 @@ export class ProductsUtil {
       });
     });
 
-    alert.addButton('Cancel');
+    alert.buttons.push('Cancel');
 
     return alert;
   }
@@ -43,7 +44,7 @@ export class ProductsUtil {
     const priceToUpdate = product.prices.find(price => price.priceId === selectedPriceType.id);
 
     let alert = this.alertCtrl.create({
-      title: product.name,
+      header: product.name,
       message: selectedPriceType.name,
       inputs: [
         {
@@ -65,7 +66,7 @@ export class ProductsUtil {
 
   getAddQuantityAlert(product: Product) {
     let alert = this.alertCtrl.create({
-      title: product.name,
+      header: product.name,
       message: "Cantidad",
       inputs: [
         {
@@ -88,7 +89,7 @@ export class ProductsUtil {
   getCreateSellingAlert(product: Product, selectedPriceId: string) {
     const selectedPrice = product.prices.find(price => price.priceId === selectedPriceId);
     let alert = this.alertCtrl.create({
-      title: `Venta ${product.name}`,
+      header: `Venta ${product.name}`,
       message: `${selectedPrice.name}: ${selectedPrice.value} Bs.`,
       inputs: [
         {
@@ -109,7 +110,7 @@ export class ProductsUtil {
 
   getRemoveProductAlert(productName: string) {
     let alert = this.alertCtrl.create({
-      title: 'Borrando!',
+      header: 'Borrando!',
       message: `Estas Seguro de borrar el producto ${productName}`,
       buttons: [
         {
@@ -121,8 +122,8 @@ export class ProductsUtil {
     return alert;
   }
 
-  getProductCategoriesAlert(selectedCategory: any) {
-    const categoryInputs = this.settingsProvider.getProductCategoriesWithAll()
+  async getProductCategoriesAlert(selectedCategory: any) {
+    const categoryInputs: any[] = this.settingsProvider.getProductCategoriesWithAll()
       .map(category => ({
         label: category.name,
         value: category,
@@ -130,8 +131,8 @@ export class ProductsUtil {
         checked: selectedCategory.id === category.id
       }));
 
-    let alert = this.alertCtrl.create({
-      title: 'Categorias',
+    let alert = await this.alertCtrl.create({
+      header: 'Categorias',
       message: 'Selecciona una categoria',
       inputs: categoryInputs,
       buttons: [
@@ -146,7 +147,7 @@ export class ProductsUtil {
 
   getProductTypesAlert(selectedCategory: any, selectedType: any) {
     console.log('')
-    const typeInputs = this.settingsProvider.getProductTypesWithAll(selectedCategory.id)
+    const typeInputs: any[] = this.settingsProvider.getProductTypesWithAll(selectedCategory.id)
       .map(type => ({
         label: type.name,
         value: type,
@@ -155,7 +156,7 @@ export class ProductsUtil {
       }));
 
     let alert = this.alertCtrl.create({
-      title: 'Tipos',
+      header: 'Tipos',
       message: 'Selecciona un tipo',
       inputs: typeInputs,
       buttons: [
@@ -170,7 +171,7 @@ export class ProductsUtil {
 
   getProductPricesAlert(selectedCategory: any, selectedType: any, selectedPrice: any) {
     console.log('')
-    const priceInputs = this.settingsProvider.getProductPrices(selectedCategory.id, selectedType.id)
+    const priceInputs: any[] = this.settingsProvider.getProductPrices(selectedCategory.id, selectedType.id)
       .map(price => ({
         label: price.name,
         value: price,
@@ -179,7 +180,7 @@ export class ProductsUtil {
       }));
 
     let alert = this.alertCtrl.create({
-      title: 'Tipos',
+      header: 'Tipos',
       message: 'Selecciona un tipo',
       inputs: priceInputs,
       buttons: [

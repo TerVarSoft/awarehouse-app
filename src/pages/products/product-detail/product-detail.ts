@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from '@ionic/angular';
 
 import { ProductUpdatePage } from '../product-update/product-update';
 
@@ -41,8 +41,8 @@ export class ProductDetailPage {
   }
 
   editProduct() {
-    this.navCtrl.push(ProductUpdatePage, {
-      product: this.product
-    });
+    // this.navCtrl.push(ProductUpdatePage, {
+    //   product: this.product
+    // });
   }
 }

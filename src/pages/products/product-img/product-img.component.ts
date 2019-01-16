@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController } from '@ionic/angular';
 
 import { ProductPreviewPage } from '../product-preview/product-preview';
 
@@ -18,8 +18,8 @@ export class ProductImgComponent {
   openImage(event) {
     event.stopPropagation();
 
-    this.navCtrl.push(ProductPreviewPage, {
-      product: this.product
-    });
+    // this.navCtrl.push(ProductPreviewPage, {
+    //   product: this.product
+    // });
   }
 }

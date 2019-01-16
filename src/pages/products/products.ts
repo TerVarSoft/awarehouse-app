@@ -1,6 +1,6 @@
 import { Component, ElementRef, Renderer } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams, ActionSheetController, Platform, Alert, FabContainer } from 'ionic-angular';
+import { NavController, NavParams, ActionSheetController, Platform } from '@ionic/angular';
 import { Keyboard } from '@ionic-native/keyboard';
 import 'rxjs/add/observable/from';
 import "rxjs/add/operator/debounceTime";
@@ -99,27 +99,28 @@ export class ProductsPage {
 
   /** Main Fab button functions. */
 
-  createProduct(fab: FabContainer) {
-    fab.close();
-    this.navCtrl.push(ProductUpdatePage, {
-      product: new Product(),
-      selectedProductCategoryId: this.selectedCategory.id,
-      selectedProductTypeId: this.selectedType.id,
-    });
+  // createProduct(fab: FabContainer) {
+  //   fab.close();
+  createProduct() {
+    // this.navCtrl.push(ProductUpdatePage, {
+    //   product: new Product(),
+    //   selectedProductCategoryId: this.selectedCategory.id,
+    //   selectedProductTypeId: this.selectedType.id,
+    // });
   }
 
   /** Individual Products functions. */
 
   goToProductDetails(product: Product) {
-    this.navCtrl.push(ProductDetailPage, {
-      product: product
-    });
+    // this.navCtrl.push(ProductDetailPage, {
+    //   product: product
+    // });
   }
 
   addPriceWhenNoPrice(event, product: Product) {
     event.stopPropagation();
 
-    let alert: Alert = this.util.getAddPriceAlert(product, this.selectedPrice);
+    let alert: any = this.util.getAddPriceAlert(product, this.selectedPrice);
     alert.addButton({
       text: 'Guardar',
       handler: data => {
@@ -162,7 +163,7 @@ export class ProductsPage {
   setProductQuantity(event, product: Product) {
     event.stopPropagation();
 
-    let alert: Alert = this.util.getAddQuantityAlert(product);
+    let alert: any = this.util.getAddQuantityAlert(product);
     alert.addButton({
       text: 'Guardar',
       handler: data => {
@@ -184,7 +185,7 @@ export class ProductsPage {
   createSelling(event, product: Product) {
     event.stopPropagation();
 
-    let alert: Alert = this.util.getCreateSellingAlert(product, this.selectedPrice.id);
+    let alert: any = this.util.getCreateSellingAlert(product, this.selectedPrice.id);
     alert.addButton({
       text: 'Guardar',
       handler: data => {
@@ -215,27 +216,27 @@ export class ProductsPage {
   openProductOptions(event, product) {
     event.stopPropagation();
 
-    let actionSheet = this.actionSheetCtrl.create({
-      title: product.name,
+    let actionSheet: any = this.actionSheetCtrl.create({
+      header: product.name,
       cssClass: 'product-options',
       buttons: [
         {
           text: 'Ver',
           icon: !this.platform.is('ios') ? 'eye' : null,
           handler: () => {
-            this.navCtrl.push(ProductDetailPage, {
-              product: product
-            });
+            // this.navCtrl.push(ProductDetailPage, {
+            //   product: product
+            // });
           }
         }, {
           text: 'Editar',
           icon: !this.platform.is('ios') ? 'create' : null,
           handler: () => {
-            this.navCtrl.push(ProductUpdatePage, {
-              product: product,
-              selectedProductCategoryId: this.selectedCategory.id,
-              selectedProductTypeId: this.selectedType.id,
-            });
+            // this.navCtrl.push(ProductUpdatePage, {
+            //   product: product,
+            //   selectedProductCategoryId: this.selectedCategory.id,
+            //   selectedProductTypeId: this.selectedType.id,
+            // });
           }
         }, {
           text: 'Eliminar',
@@ -254,7 +255,7 @@ export class ProductsPage {
   changeCategory(event) {
     event.stopPropagation();
 
-    let alert: Alert = this.util.getProductCategoriesAlert(this.selectedCategory);
+    let alert: any = this.util.getProductCategoriesAlert(this.selectedCategory);
     alert.addButton({
       text: 'Guardar',
       handler: data => {
@@ -283,7 +284,7 @@ export class ProductsPage {
   changeType(event) {
     event.stopPropagation();
 
-    let alert: Alert = this.util.getProductTypesAlert(this.selectedCategory, this.selectedType);
+    let alert: any = this.util.getProductTypesAlert(this.selectedCategory, this.selectedType);
     alert.addButton({
       text: 'Guardar',
       handler: data => {
@@ -299,7 +300,7 @@ export class ProductsPage {
   changePrice(event) {
     event.stopPropagation();
 
-    let alert: Alert = this.util.getProductPricesAlert(this.selectedCategory, this.selectedType, this.selectedPrice);
+    let alert: any = this.util.getProductPricesAlert(this.selectedCategory, this.selectedType, this.selectedPrice);
     alert.addButton({
       text: 'Guardar',
       handler: data => {
@@ -333,7 +334,7 @@ export class ProductsPage {
   }
 
   private removeProduct(productToDelete) {
-    let removeProductAlert: Alert = this.util.getRemoveProductAlert(productToDelete.name);
+    let removeProductAlert: any = this.util.getRemoveProductAlert(productToDelete.name);
 
     removeProductAlert.addButton({
       text: 'Borralo!',

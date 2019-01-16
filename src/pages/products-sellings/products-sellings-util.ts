@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlertController } from 'ionic-angular';
+import { AlertController } from '@ionic/angular';
 
 import { SettingsCache } from '../../providers/settings-cache';
 
@@ -8,9 +8,9 @@ export class ProductsSellingsUtil {
 
     constructor(public alertCtrl: AlertController, private settingsProvider: SettingsCache) { }
 
-    getRemoveSellingAlert(productName: string) {
-        let alert = this.alertCtrl.create({
-            title: 'Borrando!',
+    async getRemoveSellingAlert(productName: string) {
+        let alert = await this.alertCtrl.create({
+            header: 'Borrando!',
             message: `Estas Seguro de borrar la venta del producto: ${productName}`,
             buttons: [
                 {
@@ -19,7 +19,7 @@ export class ProductsSellingsUtil {
             ]
         });
 
-        alert.addInput({
+        alert.inputs.push({
             type: 'checkbox',
             label: 'Actualizar la cantidad',
             value: 'true',

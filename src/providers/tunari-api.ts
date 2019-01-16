@@ -2,7 +2,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
 import { Http, Headers, ResponseContentType, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { Events } from 'ionic-angular';
+import { Events } from '@ionic/angular';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/mergeMap';
