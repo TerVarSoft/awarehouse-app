@@ -48,15 +48,15 @@ export class LoginPage {
             this.storage.setAuthToken(userToken.authToken).then(() => {
               console.log("Token Authentication has been provided by the server");
               this.settingsProvider.setSettings(userToken.settings);
-              loader.dismiss();
-              this.navCtrl.setRoot(ProductsPage);
+              // await loader.dismiss();
+              // this.navCtrl.setRoot(ProductsPage);
             });
           } else {
-            loader.dismiss();
+            // loader.dismiss();
             this.notifier.createToast(this.messages.notAdminUser);
           }
         }, error => {
-          loader.dismiss();
+          // loader.dismiss();
           this.notifier.createToast(this.messages.invalidUser);
         });
     }
@@ -67,7 +67,7 @@ export class LoginPage {
     this.settingsProvider.loadFromStorage().then(settings => {
       if (settings) {
         console.log("Settings loaded from local storage...");
-        this.navCtrl.setRoot(ProductsPage);
+        // this.navCtrl.setRoot(ProductsPage);
       }
     });
   }

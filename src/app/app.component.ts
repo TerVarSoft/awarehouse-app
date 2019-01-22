@@ -31,7 +31,7 @@ export class AppComponent {
   constructor(
     public platform: Platform,
     statusBar: StatusBar,
-    public network: Network,
+    // public network: Network,
     splashScreen: SplashScreen,
     public storage: TunariStorage,
     public messages: TunariMessages,
@@ -47,17 +47,17 @@ export class AppComponent {
 
       moment.locale('es');
 
-      this.network.onDisconnect().subscribe(() => {
-        this.notifier.createToast(this.messages.noInternetError);
-      });
+      // this.network.onDisconnect().subscribe(() => {
+      //   this.notifier.createToast(this.messages.noInternetError);
+      // });
 
-      this.network.onConnect().subscribe(() => {
-        this.notifier.createToast(this.messages.connectedToInternet);
-      });
+      // this.network.onConnect().subscribe(() => {
+      //   this.notifier.createToast(this.messages.connectedToInternet);
+      // });
 
-      if (!connection.isConnected()) {
-        this.notifier.createToast(this.messages.noInternetError);
-      }
+      // if (!connection.isConnected()) {
+      //   this.notifier.createToast(this.messages.noInternetError);
+      // }
 
       // this.events.subscribe('user:logout', () => {
       //   this.onLogout();

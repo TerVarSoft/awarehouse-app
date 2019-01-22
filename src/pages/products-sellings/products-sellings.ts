@@ -33,9 +33,9 @@ export class ProductsSellingsPage {
     }
 
     editSelling(selling: Selling) {
-        this.navCtrl.push(ProductSellingUpdatePage, {
-            selling: selling
-        });
+        // this.navCtrl.push(ProductSellingUpdatePage, {
+        //     selling: selling
+        // });
     }
 
     filterByDate() {

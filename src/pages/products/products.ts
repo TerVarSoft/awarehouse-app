@@ -48,7 +48,7 @@ export class ProductsPage {
   constructor(public platform: Platform,
     public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController,
-    public keyboard: Keyboard,
+    // public keyboard: Keyboard,
     public renderer: Renderer,
     private elRef: ElementRef,
     public productsProvider: Products,
@@ -123,8 +123,8 @@ export class ProductsPage {
     let alert: any = this.util.getAddPriceAlert(product, this.selectedPrice);
     alert.addButton({
       text: 'Guardar',
-      handler: data => {
-        let saveProductLoader = this.notifier.createLoader(`Salvando ${product.name}`);
+      handler: async data => {
+        let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
         const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id)
 
         if (selectedPrice) {
@@ -166,8 +166,8 @@ export class ProductsPage {
     let alert: any = this.util.getAddQuantityAlert(product);
     alert.addButton({
       text: 'Guardar',
-      handler: data => {
-        let saveProductLoader = this.notifier.createLoader(`Salvando ${product.name}`);
+      handler: async data => {
+        let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
         product.quantity = data.quantity;
         this.productsProvider.put(product).subscribe(() => {
           saveProductLoader.dismiss();
@@ -188,8 +188,8 @@ export class ProductsPage {
     let alert: any = this.util.getCreateSellingAlert(product, this.selectedPrice.id);
     alert.addButton({
       text: 'Guardar',
-      handler: data => {
-        let createSellingLoader = this.notifier.createLoader(`Salvando ${product.name}`);
+      handler: async data => {
+        let createSellingLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
         product.quantity = data.quantity;
         this.sellingsProvider.post({
           productId: product.id,
@@ -322,9 +322,9 @@ export class ProductsPage {
   }
 
   private setupKeyboard() {
-    this.keyboard.onKeyboardHide().subscribe(() => {
-      this.blurSearchBar();
-    });
+    // this.keyboard.onKeyboardHide().subscribe(() => {
+    //   this.blurSearchBar();
+    // });
   }
 
   private blurSearchBar() {
@@ -338,9 +338,9 @@ export class ProductsPage {
 
     removeProductAlert.addButton({
       text: 'Borralo!',
-      handler: () => {
+      handler: async () => {
         let removeProductLoader =
-          this.notifier.createLoader(`Borrando el Producto ${productToDelete.name}`);
+          await this.notifier.createLoader(`Borrando el Producto ${productToDelete.name}`);
         this.productsProvider.remove(productToDelete).subscribe(() => {
           this.products =
             this.products.filter(product => product.name !== productToDelete.name)
@@ -356,14 +356,14 @@ export class ProductsPage {
   private initFavorites() {
     this.page = 0;
     this.productsProvider.getFavorites(this.params.data.productCategory)
-      .then(cachedFavorites => {
+      .then(async cachedFavorites => {
         if (cachedFavorites && cachedFavorites.length > 0) {
           console.log("Favorites pulled from storage...");
           this.products = cachedFavorites;
           this.updateFavoritesInBackground();
         } else {
           console.log("Favorites pulled from the server...");
-          let loader = this.notifier.createLoader("Cargando Novedades");
+          let loader = await this.notifier.createLoader("Cargando Novedades");
           this.productsProvider.loadFavoritesFromServer(this.params.data.productCategory)
             .map(productsObject => productsObject.items)
             .subscribe(products => {

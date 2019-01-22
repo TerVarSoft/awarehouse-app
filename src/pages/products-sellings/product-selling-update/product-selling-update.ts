@@ -170,7 +170,7 @@ export class ProductSellingUpdatePage {
             }
 
             this.updateFavoritesInBackground();
-            updateSellingLoader.dismiss();
+            // updateSellingLoader.dismiss();
             // this.navCtrl.pop();
         });
     }
@@ -187,7 +187,7 @@ export class ProductSellingUpdatePage {
                 const shouldUpdateProductQuantity: boolean = alertResults.length > 0;
                 this.sellingsProvider.remove(this.selling, shouldUpdateProductQuantity).subscribe(() => {
                     this.updateFavoritesInBackground();
-                    removeSellingLoader.dismiss();
+                    // removeSellingLoader.dismiss();
                     // this.navCtrl.pop();
                 });
             }

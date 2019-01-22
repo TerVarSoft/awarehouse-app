@@ -9,9 +9,9 @@ declare var navigator: any;
 @Injectable()
 export class Connection {  
   
-  constructor(public network: Network) {
+  // constructor(public network: Network) {
 
-  }
+  // }
 
   isConnected(): boolean {       
     return navigator.onLine;    

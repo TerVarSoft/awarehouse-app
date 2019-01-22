@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { Component } from '@angular/core';
-import { Camera } from 'ionic-native';
+import { Camera } from '@ionic-native/camera';
 import { NavParams, AlertController, NavController } from '@ionic/angular';
 
 import { Products } from '../../../providers/products';
@@ -98,9 +98,9 @@ export class ProductUpdatePage {
     this.product.prices = newPrices;
   }
 
-  addTag() {
-    let addTagAlert = this.alertCtrl.create({
-      title: 'Agregar Etiqueta',
+  async addTag() {
+    let addTagAlert = await this.alertCtrl.create({
+      header: 'Agregar Etiqueta',
       message: this.product.name,
       inputs: [
         {
@@ -124,30 +124,30 @@ export class ProductUpdatePage {
   }
 
   pickPicture() {
-    Camera.getPicture({
-      destinationType: Camera.DestinationType.DATA_URL,
-      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-    }).then((imageData) => {
-      this.imagePreview = "data:image/jpeg;base64," + imageData;
-      this.tmpImageData = imageData;
-    }, (err) => {
-      console.log(err);
-    });
+    // Camera.getPicture({
+    //   destinationType: Camera.DestinationType.DATA_URL,
+    //   sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+    // }).then((imageData) => {
+    //   this.imagePreview = "data:image/jpeg;base64," + imageData;
+    //   this.tmpImageData = imageData;
+    // }, (err) => {
+    //   console.log(err);
+    // });
   }
 
   takePicture() {
-    Camera.getPicture({
-      destinationType: Camera.DestinationType.DATA_URL,
-    }).then((imageData) => {
-      this.imagePreview = "data:image/jpeg;base64," + imageData;
-      this.tmpImageData = imageData;
-    }, (err) => {
-      console.log(err);
-    });
+    // Camera.getPicture({
+    //   destinationType: Camera.DestinationType.DATA_URL,
+    // }).then((imageData) => {
+    //   this.imagePreview = "data:image/jpeg;base64," + imageData;
+    //   this.tmpImageData = imageData;
+    // }, (err) => {
+    //   console.log(err);
+    // });
   }
 
-  save() {
-    let createProductLoader = this.notifier.createLoader(`Guardando producto ${this.product.name}`);
+  async save() {
+    let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.name}`);
     this.product.isImgUploading = true;
     this.productsProvider.save(this.product).subscribe((updatedProduct: any) => {
       updateProductPatch(this.originalProduct, updatedProduct);
@@ -160,10 +160,10 @@ export class ProductUpdatePage {
           this.updateFavoritesInBackground();
         });
 
-      this.navCtrl.pop(updatedProduct);
+      // this.navCtrl.pop(updatedProduct);
       createProductLoader.dismiss();
     }, error => {
-      this.navCtrl.pop();
+      // this.navCtrl.pop();
       createProductLoader.dismiss();
       this.notifier.createToast(this.messages.errorWhenSavingProduct);
     });
@@ -181,9 +181,9 @@ export class ProductUpdatePage {
     this.addLocation("Tienda");
   }
 
-  private addLocation(type: string) {
-    let addLocationAlert = this.alertCtrl.create({
-      title: 'Agregar Ubicacion',
+  private async addLocation(type: string) {
+    let addLocationAlert = await this.alertCtrl.create({
+      header: 'Agregar Ubicacion',
       message: type,
       inputs: [
         {

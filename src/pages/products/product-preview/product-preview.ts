@@ -30,6 +30,6 @@ export class ProductPreviewPage implements OnInit {
     }
 
     closePreview(){
-        this.navCtrl.pop();
+        // this.navCtrl.pop();
     }
 }
