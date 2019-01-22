@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ProductsPage } from '../products/products';
+import { ProductsPage } from '../products/products.page';
 
 @Component({
   selector: 'products-tabs',

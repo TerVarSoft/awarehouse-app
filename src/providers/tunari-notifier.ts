@@ -17,14 +17,16 @@ export class TunariNotifier {
       position: 'bottom'
     });
 
-    toast.present();
+    await toast.present();
     return toast;
   }
 
   async createLoader(message: string) {
-    let loader = await this.loadingCtrl.create();
-    // loader.setContent(message);
-    loader.present();
+    let loader = await this.loadingCtrl.create({
+      message: message
+    });
+    
+    await loader.present();
 
     return loader;
   }

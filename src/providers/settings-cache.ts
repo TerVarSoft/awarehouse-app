@@ -10,7 +10,7 @@ import { TunariStorage } from './tunari-storage';
 @Injectable()
 export class SettingsCache {
 
-  settings: any;
+  settings: any = {};
 
   constructor(public settingsProvider: Settings,
     public storage: TunariStorage) {
@@ -42,7 +42,7 @@ export class SettingsCache {
 
   getProductPrices(categoryId: string, typeId: string): any[] {
     if (!categoryId && !typeId) {
-      return this.settings.productPrices;
+      return this.settings.productPrices || [];
     }
 
     let assignedPrices = typeId ?
@@ -50,7 +50,7 @@ export class SettingsCache {
         .find(type => (type.id === typeId && type.categoryId === categoryId)).prices :
       this.settings.productCategories.find(category => category.id === categoryId).prices;
 
-    return assignedPrices;
+    return assignedPrices || [];
   }
 
   getInvitationTypes(): string[] {

@@ -9,6 +9,9 @@
   </ion-navbar> -->
 
   <ion-toolbar color="primary">
+    <ion-title>
+      Productos Tunari
+    </ion-title>
     <!-- <ion-searchbar animated=true #searchInput placeholder="Busca un producto en el sistema !" [formControl]="searchQuery"
       (ionClear)="onSearchClear()">
     </ion-searchbar> -->
@@ -20,7 +23,7 @@
     <ion-item-sliding *ngFor="let product of products" (click)="goToProductDetails(product)">
       <ion-item>
         <ion-thumbnail item-left>
-          <product-img [product]="product"></product-img>
+          <!--<product-img [product]="product"></product-img>-->
         </ion-thumbnail>
         <h2 class="text-color">{{product.name}}</h2>
         <h3 class="text-color">{{product.description || product.properties?.type}}</h3>
@@ -38,7 +41,7 @@
         </button>
         <button ion-button (click)="setProductQuantity($event, product)" color="primary-700">
           <ion-icon name="home"></ion-icon>
-          Cantid
+          Cantidad
         </button>
       </ion-item-options>
       <ion-item-options side="right">
@@ -50,10 +53,10 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-fab bottom right #fab (click)="createProduct(fab)">
-    <button ion-fab color="secondary">
+  <ion-fab vertical="bottom" horizontal="end" #fab slot="fixed" (click)="createProduct(fab)">
+    <ion-fab-button color="secondary">
       <ion-icon name="add"></ion-icon>
-    </button>
+    </ion-fab-button>
   </ion-fab>
 
   <ion-infinite-scroll (ionInfinite)="pullNextProductsPage($event)">

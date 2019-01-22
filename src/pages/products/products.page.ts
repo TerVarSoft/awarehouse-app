@@ -58,11 +58,12 @@ export class ProductsPage {
     public notifier: TunariNotifier,
     public messages: TunariMessages,
     public connection: Connection,
-    public params: NavParams) {
+    // public params: NavParams
+    ) {
 
     this.setDefaultValues();
     this.setupKeyboard();
-    this.initFavorites();
+    // this.initFavorites();
     this.initSearchQuery();
   }
 
@@ -138,7 +139,7 @@ export class ProductsPage {
           saveProductLoader.dismiss();
 
           if (product.isFavorite) {
-            this.updateFavoritesInBackground();
+            // this.updateFavoritesInBackground();
           }
         }, error => {
           saveProductLoader.dismiss();
@@ -173,7 +174,7 @@ export class ProductsPage {
           saveProductLoader.dismiss();
 
           if (product.isFavorite) {
-            this.updateFavoritesInBackground();
+            // this.updateFavoritesInBackground();
           }
         });
       }
@@ -185,23 +186,23 @@ export class ProductsPage {
   createSelling(event, product: Product) {
     event.stopPropagation();
 
-    let alert: any = this.util.getCreateSellingAlert(product, this.selectedPrice.id);
-    alert.addButton({
-      text: 'Guardar',
-      handler: async data => {
-        let createSellingLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-        product.quantity = data.quantity;
-        this.sellingsProvider.post({
-          productId: product.id,
-          quantity: data.quantity,
-          priceId: this.selectedPrice.id
-        }).subscribe(() => {
-          createSellingLoader.dismiss();
-        });
-      }
-    });
+    // let alert: any = this.util.getCreateSellingAlert(product, this.selectedPrice.id);
+    // alert.addButton({
+    //   text: 'Guardar',
+    //   handler: async data => {
+    //     let createSellingLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
+    //     product.quantity = data.quantity;
+    //     this.sellingsProvider.post({
+    //       productId: product.id,
+    //       quantity: data.quantity,
+    //       priceId: this.selectedPrice.id
+    //     }).subscribe(() => {
+    //       createSellingLoader.dismiss();
+    //     });
+    //   }
+    // });
 
-    alert.present();
+    // alert.present();
   }
 
   // createSelling(event, product: Product) {
@@ -270,7 +271,7 @@ export class ProductsPage {
           this.productPrices[0] : {};
 
         if (this.selectedCategory.id === '') {
-          this.initFavorites();
+          // this.initFavorites();
         } else {
           this.searchProducts();
         }
@@ -344,7 +345,7 @@ export class ProductsPage {
         this.productsProvider.remove(productToDelete).subscribe(() => {
           this.products =
             this.products.filter(product => product.name !== productToDelete.name)
-          this.updateFavoritesInBackground();
+          // this.updateFavoritesInBackground();
           removeProductLoader.dismiss();
         });
       }
@@ -353,33 +354,33 @@ export class ProductsPage {
     removeProductAlert.present();
   }
 
-  private initFavorites() {
-    this.page = 0;
-    this.productsProvider.getFavorites(this.params.data.productCategory)
-      .then(async cachedFavorites => {
-        if (cachedFavorites && cachedFavorites.length > 0) {
-          console.log("Favorites pulled from storage...");
-          this.products = cachedFavorites;
-          this.updateFavoritesInBackground();
-        } else {
-          console.log("Favorites pulled from the server...");
-          let loader = await this.notifier.createLoader("Cargando Novedades");
-          this.productsProvider.loadFavoritesFromServer(this.params.data.productCategory)
-            .map(productsObject => productsObject.items)
-            .subscribe(products => {
-              this.products = products
-              loader.dismiss();
-            });
-        }
-      });
-  }
+  // private initFavorites() {
+  //   this.page = 0;
+  //   this.productsProvider.getFavorites(this.params.data.productCategory)
+  //     .then(async cachedFavorites => {
+  //       if (cachedFavorites && cachedFavorites.length > 0) {
+  //         console.log("Favorites pulled from storage...");
+  //         this.products = cachedFavorites;
+  //         this.updateFavoritesInBackground();
+  //       } else {
+  //         console.log("Favorites pulled from the server...");
+  //         let loader = await this.notifier.createLoader("Cargando Novedades");
+  //         this.productsProvider.loadFavoritesFromServer(this.params.data.productCategory)
+  //           .map(productsObject => productsObject.items)
+  //           .subscribe(products => {
+  //             this.products = products
+  //             loader.dismiss();
+  //           });
+  //       }
+  //     });
+  // }
 
-  private updateFavoritesInBackground() {
-    // Update storage in background with server response.
-    console.log("Updating product favorites in background");
-    this.productsProvider.loadFavoritesFromServer(this.params.data.productCategory)
-      .subscribe();
-  }
+  // private updateFavoritesInBackground() {
+  //   // Update storage in background with server response.
+  //   console.log("Updating product favorites in background");
+  //   this.productsProvider.loadFavoritesFromServer(this.params.data.productCategory)
+  //     .subscribe();
+  // }
 
   private initSearchQuery() {
     this.searchQuery.valueChanges
@@ -403,9 +404,9 @@ export class ProductsPage {
       .filter(query => !this.connection.isConnected())
       .subscribe(() => this.notifier.createToast(this.messages.noInternetError));
 
-    this.searchQuery.valueChanges
-      .filter(query => !query)
-      .subscribe(() => this.initFavorites());
+    // this.searchQuery.valueChanges
+    //   .filter(query => !query)
+    //   .subscribe(() => this.initFavorites());
   }
 
   private searchProducts = () => {

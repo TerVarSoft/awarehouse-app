@@ -11,7 +11,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { ProductsPage } from '../pages/products/products';
+import { ProductsPage } from '../pages/products/products.page';
 // import { LoginPage } from '../pages/login/login.page';
 import { ProductImgComponent } from '../pages/products/product-img/product-img.component';
 
@@ -21,6 +21,7 @@ import { TunariNotifier } from '../providers/tunari-notifier';
 import { TunariMessages } from '../providers/tunari-messages';
 import { Products } from '../providers/products';
 import { Settings } from '../providers/settings';
+import { Sellings } from '../providers/sellings';
 import { SettingsCache } from '../providers/settings-cache';
 import { TunariApi } from '../providers/tunari-api';
 import { TunariStorage } from '../providers/tunari-storage';
@@ -28,13 +29,13 @@ import { TunariStorage } from '../providers/tunari-storage';
 @NgModule({
   declarations: [
     AppComponent,
-    ProductsPage,
+    // ProductsPage,
     // LoginPage,
     ProductImgComponent
   ],
   entryComponents: [
     AppComponent,
-    ProductsPage,
+    // ProductsPage,
     // LoginPage
   ],
   imports: [
@@ -48,6 +49,7 @@ import { TunariStorage } from '../providers/tunari-storage';
     Login,
     Products,
     Settings,
+    Sellings,
     SettingsCache,
     SplashScreen,
     StatusBar,

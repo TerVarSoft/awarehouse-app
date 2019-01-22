@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import {Router} from '@angular/router'
 import { NavController } from '@ionic/angular';
 
-import { ProductsPage } from '../products/products';
+import { ProductsPage } from '../products/products.page';
 
 import { Login } from '../../providers/login';
 import { SettingsCache } from '../../providers/settings-cache';
@@ -23,6 +24,7 @@ export class LoginPage {
   isLoggedIn: boolean = true;
 
   constructor(public navCtrl: NavController,
+    private router: Router,
     public loginService: Login,
     public settingsProvider: SettingsCache,
     public notifier: TunariNotifier,
@@ -76,6 +78,7 @@ export class LoginPage {
           console.log("Token Authentication has been provided by the server");
           this.settingsProvider.setSettings(userToken.settings);
           loader.dismiss();
+          this.router.navigate(['/products']);
           // this.navCtrl.setRoot(ProductsPage);
         });
       } else {
@@ -95,6 +98,7 @@ export class LoginPage {
     this.settingsProvider.loadFromStorage().then(settings => {
       if (settings) {
         console.log("Settings loaded from local storage...");
+        this.router.navigate(['/products']);
         // this.navCtrl.setRoot(ProductsPage);
       }
     });
