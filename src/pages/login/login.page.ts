@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 
-import { ProductsPage } from '../../pages/products/products';
+import { ProductsPage } from '../products/products';
 
 import { Login } from '../../providers/login';
 import { SettingsCache } from '../../providers/settings-cache';
@@ -14,7 +14,8 @@ import { UserToken } from '../../models/user-token';
 
 @Component({
   selector: 'page-login',
-  templateUrl: 'login.html'
+  templateUrl: 'login.html',
+  styleUrls: ['login.page.scss'],
 })
 export class LoginPage {
   login: { username?: string, password?: string } = {};

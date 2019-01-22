@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -11,7 +12,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { ProductsPage } from '../pages/products/products';
-import { LoginPage } from '../pages/login/login';
+// import { LoginPage } from '../pages/login/login.page';
 import { ProductImgComponent } from '../pages/products/product-img/product-img.component';
 
 import { Connection } from '../providers/connection';
@@ -28,16 +29,17 @@ import { TunariStorage } from '../providers/tunari-storage';
   declarations: [
     AppComponent,
     ProductsPage,
-    LoginPage,
+    // LoginPage,
     ProductImgComponent
   ],
   entryComponents: [
     AppComponent,
     ProductsPage,
-    LoginPage
+    // LoginPage
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot()],

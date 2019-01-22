@@ -1,15 +1,16 @@
-Loading System from your friends at TerVarSoft...
+<!--Loading System from your friends at TerVarSoft...-->
+
 <ion-content *ngIf="!isLoggedIn">
 	<div class="logo">
 		<img src="assets/img/appicon.png" alt="Ionic logo">
 	</div>
 
-	<!-- <form #loginForm="ngForm" novalidate>
+	<form #loginForm="ngForm" novalidate padding>
 		<ion-list no-lines>
 			<ion-item>
 				<ion-label floating>Usuario</ion-label>
-				<ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel" spellcheck="false" autocapitalize="off"
-					required>
+				<ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel" spellcheck="false"
+				 autocapitalize="off" required>
 				</ion-input>
 			</ion-item>
 			<p ion-text [hidden]="username.valid || submitted == false" color="danger" padding-left>
@@ -27,10 +28,9 @@ Loading System from your friends at TerVarSoft...
 		</ion-list>
 
 		<ion-row responsive-sm>
-			<ion-col>
-				<button color="secondary" ion-button (click)="onLogin(loginForm)" type="submit" block>Login</button>
+			<ion-col size="4" push="8">
+				<ion-button color="secondary" shape="round" (click)="onLogin(loginForm)" type="submit" block>Login</ion-button>
 			</ion-col>
 		</ion-row>
-	</form> -->
-
+	</form>
 </ion-content>

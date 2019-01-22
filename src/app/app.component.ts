@@ -9,7 +9,7 @@ import { Events } from '@ionic/angular';
 
 import * as moment from 'moment';
 
-import { LoginPage } from '../pages/login/login';
+import { LoginPage } from '../pages/login/login.page';
 import { ProductsTabsPage } from '../pages/products-tabs/products-tabs';
 import { ProductsSellingsPage } from '../pages/products-sellings/products-sellings';
 
