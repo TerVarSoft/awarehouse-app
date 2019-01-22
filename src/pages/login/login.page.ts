@@ -37,30 +37,57 @@ export class LoginPage {
     });
   }
 
-  onLogin(form: NgForm) {
+  // async onLogin(form: NgForm) {
+  //   this.submitted = true;
+
+  //   if (form.valid) {
+  //     let loader = await this.notifier.createLoader(this.messages.authenticating);
+  //     this.loginService.post(this.login.username, this.login.password)
+  //       .subscribe(resp => {
+  //         const userToken: UserToken = resp;
+  //         if (userToken.role === 0) {
+  //           this.storage.setAuthToken(userToken.authToken).then(() => {
+  //             console.log("Token Authentication has been provided by the server");
+  //             this.settingsProvider.setSettings(userToken.settings);
+  //             loader.dismiss();
+  //             // this.navCtrl.setRoot(ProductsPage);
+  //           });
+  //         } else {
+  //           // loader.dismiss();
+  //           this.notifier.createToast(this.messages.notAdminUser);
+  //         }
+  //       }, error => {
+  //         // loader.dismiss();
+  //         this.notifier.createToast(this.messages.invalidUser);
+  //       });
+  //   }
+  // }
+
+  async onLogin(form: NgForm) {
     this.submitted = true;
 
     if (form.valid) {
-      let loader = this.notifier.createLoader(this.messages.authenticating);
-      this.loginService.post(this.login.username, this.login.password)
-        .subscribe(resp => {
-          const userToken: UserToken = resp;
-          if (userToken.role === 0) {
-            this.storage.setAuthToken(userToken.authToken).then(() => {
-              console.log("Token Authentication has been provided by the server");
-              this.settingsProvider.setSettings(userToken.settings);
-              // await loader.dismiss();
-              // this.navCtrl.setRoot(ProductsPage);
-            });
-          } else {
-            // loader.dismiss();
-            this.notifier.createToast(this.messages.notAdminUser);
-          }
-        }, error => {
-          // loader.dismiss();
-          this.notifier.createToast(this.messages.invalidUser);
+      let loader = await this.notifier.createLoader(this.messages.authenticating);
+      const loginResponse = await this.loginService.post(this.login.username, this.login.password);
+
+      const userToken: UserToken = loginResponse;
+      if (userToken.role === 0) {
+        this.storage.setAuthToken(userToken.authToken).then(() => {
+          console.log("Token Authentication has been provided by the server");
+          this.settingsProvider.setSettings(userToken.settings);
+          loader.dismiss();
+          // this.navCtrl.setRoot(ProductsPage);
         });
+      } else {
+        // loader.dismiss();
+        this.notifier.createToast(this.messages.notAdminUser);
+      }
     }
+    // }, error => {
+    //   // loader.dismiss();
+    //   this.notifier.createToast(this.messages.invalidUser);
+    // });
+
   }
 
   private loadConfiguration() {

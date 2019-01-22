@@ -19,7 +19,7 @@ export class Login {
 
   post(userName: string, password: string) {    
 
-    return this.api.post(this.endpoint, { 
+    return this.api.postPromise(this.endpoint, { 
       userName: userName,
       password: password
     });

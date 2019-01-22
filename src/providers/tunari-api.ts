@@ -47,20 +47,26 @@ export class TunariApi {
     });
   }
 
-  post(endpoint: string, body: any) {
+  async postPromise(endpoint: string, body: any) {
+    return (await this.post(endpoint, body)).toPromise();
+  }
+
+  async post(endpoint: string, body: any) {
     let url = this.baseUrl + endpoint;
     let requestOptions = new RequestOptions();
     requestOptions.headers = new Headers(this.headers);
 
-    return this.getApiToken().flatMap(token => {
-      if (token) {
-        requestOptions.headers.append(this.authKey, 'Bearer ' + token);
-      }
+    const token = await this.storage.getAuthtoken();
 
-      return this.http
-        .post(url, body, requestOptions)
-        .map(resp => resp.json().data);
-    });
+
+    if (token) {
+      requestOptions.headers.append(this.authKey, 'Bearer ' + token);
+    }
+
+    return await this.http
+      .post(url, body, requestOptions)
+      .map(resp => resp.json().data);
+
   }
 
   postImage(endpoint: string, imageData: any) {
