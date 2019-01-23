@@ -149,24 +149,24 @@ export class ProductUpdatePage {
   async save() {
     let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.name}`);
     this.product.isImgUploading = true;
-    this.productsProvider.save(this.product).subscribe((updatedProduct: any) => {
-      updateProductPatch(this.originalProduct, updatedProduct);
-      this.updateFavoritesInBackground();
+    // this.productsProvider.save(this.product).subscribe((updatedProduct: any) => {
+    //   updateProductPatch(this.originalProduct, updatedProduct);
+    //   this.updateFavoritesInBackground();
 
-      this.productsProvider.updateProductImg(updatedProduct.id, this.tmpImageData)
-        .subscribe((updatedProduct: any) => {
-          console.log('updating after upload')
-          updateProductPatch(this.originalProduct, updatedProduct);
-          this.updateFavoritesInBackground();
-        });
+    //   this.productsProvider.updateProductImg(updatedProduct.id, this.tmpImageData)
+    //     .subscribe((updatedProduct: any) => {
+    //       console.log('updating after upload')
+    //       updateProductPatch(this.originalProduct, updatedProduct);
+    //       this.updateFavoritesInBackground();
+    //     });
 
-      // this.navCtrl.pop(updatedProduct);
-      createProductLoader.dismiss();
-    }, error => {
-      // this.navCtrl.pop();
-      createProductLoader.dismiss();
-      this.notifier.createToast(this.messages.errorWhenSavingProduct);
-    });
+    //   // this.navCtrl.pop(updatedProduct);
+    //   createProductLoader.dismiss();
+    // }, error => {
+    //   // this.navCtrl.pop();
+    //   createProductLoader.dismiss();
+    //   this.notifier.createToast(this.messages.errorWhenSavingProduct);
+    // });
   }
 
   removeTag(tagToRemove: string) {

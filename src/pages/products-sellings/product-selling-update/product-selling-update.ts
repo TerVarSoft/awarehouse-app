@@ -163,16 +163,16 @@ export class ProductSellingUpdatePage {
         let updateSellingLoader =
             this.notifier.createLoader('Guardando la venta');
 
-        this.sellingsProvider.save(this.selling).subscribe(() => {
-            if (this.product && this.product.isFavorite && this.product.quantity) {
-                this.product.quantity -= this.selling.quantity;
-                this.product.quantity = this.product.quantity < 0 ? 0 : this.product.quantity;
-            }
+        // this.sellingsProvider.save(this.selling).subscribe(() => {
+        //     if (this.product && this.product.isFavorite && this.product.quantity) {
+        //         this.product.quantity -= this.selling.quantity;
+        //         this.product.quantity = this.product.quantity < 0 ? 0 : this.product.quantity;
+        //     }
 
-            this.updateFavoritesInBackground();
-            // updateSellingLoader.dismiss();
-            // this.navCtrl.pop();
-        });
+        //     this.updateFavoritesInBackground();
+        //     // updateSellingLoader.dismiss();
+        //     // this.navCtrl.pop();
+        // });
     }
 
     remove() {

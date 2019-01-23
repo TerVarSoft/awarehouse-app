@@ -123,7 +123,7 @@ export class ProductsUtil {
   }
 
   async getProductCategoriesAlert(selectedCategory: any) {
-    const categoryInputs: any[] = this.settingsProvider.getProductCategoriesWithAll()
+    const categoryInputs: any[] = (await this.settingsProvider.getProductCategoriesWithAll())
       .map(category => ({
         label: category.name,
         value: category,
@@ -145,9 +145,9 @@ export class ProductsUtil {
     return alert;
   }
 
-  getProductTypesAlert(selectedCategory: any, selectedType: any) {
+  async getProductTypesAlert(selectedCategory: any, selectedType: any) {
     console.log('')
-    const typeInputs: any[] = this.settingsProvider.getProductTypesWithAll(selectedCategory.id)
+    const typeInputs: any[] = (await this.settingsProvider.getProductTypesWithAll(selectedCategory.id))
       .map(type => ({
         label: type.name,
         value: type,
@@ -169,9 +169,9 @@ export class ProductsUtil {
     return alert;
   }
 
-  getProductPricesAlert(selectedCategory: any, selectedType: any, selectedPrice: any) {
+  async getProductPricesAlert(selectedCategory: any, selectedType: any, selectedPrice: any) {
     console.log('')
-    const priceInputs: any[] = this.settingsProvider.getProductPrices(selectedCategory.id, selectedType.id)
+    const priceInputs: any[] = (await this.settingsProvider.getProductPrices(selectedCategory.id, selectedType.id))
       .map(price => ({
         label: price.name,
         value: price,

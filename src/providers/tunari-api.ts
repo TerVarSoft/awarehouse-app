@@ -3,11 +3,13 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, ResponseContentType, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Events } from '@ionic/angular';
-import 'rxjs/add/observable/fromPromise';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { _throw } from 'rxjs/observable/throw';
+// import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+// import 'rxjs/add/observable/throw';
 
 import { TunariStorage } from './tunari-storage';
 
@@ -136,7 +138,7 @@ export class TunariApi {
   }
 
   private getApiToken(): Observable<Headers> {
-    return Observable.fromPromise(this.storage.getAuthtoken());
+    return fromPromise(this.storage.getAuthtoken());
   }
 
   private fixBinary(bin) {
@@ -158,7 +160,8 @@ export class TunariApi {
 
         this.events.publish('user:logout');
       }
-      return Observable.throw(res);
+      console.log(res);
+      return _throw(res);
     };
   }
 

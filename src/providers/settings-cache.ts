@@ -20,11 +20,15 @@ export class SettingsCache {
     return this.settings.filter(setting => setting.key === 'imgServer')[0].value;
   }
 
-  getProductCategoriesWithAll(): any[] {
+  async getProductCategoriesWithAll() {
+    if (!this.settings.productCategories) await this.loadFromStorage();
+
     return [{ id: '', name: 'Todas' }, ...this.settings.productCategories];
   }
 
-  getProductTypesWithAll(categoryId: string): any[] {
+  async getProductTypesWithAll(categoryId: string) {
+    if (!this.settings.productTypes) await this.loadFromStorage();
+
     return [{ id: '', name: 'Todos' }, ...this.getProductTypes(categoryId)];
   }
 
@@ -40,7 +44,9 @@ export class SettingsCache {
     return filteredTypes;
   }
 
-  getProductPrices(categoryId: string, typeId: string): any[] {
+  async getProductPrices(categoryId: string, typeId: string) {
+    if (!this.settings.productPrices) await this.loadFromStorage();
+
     if (!categoryId && !typeId) {
       return this.settings.productPrices || [];
     }
@@ -58,7 +64,7 @@ export class SettingsCache {
   }
 
   loadFromStorage() {
-    console.log('loading sotrage')
+    console.log('loading sotrage');
     return this.storage.getSettings().then(settings => {
       console.log(settings)
       this.setSettings(settings);

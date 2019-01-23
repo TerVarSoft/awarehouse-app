@@ -33,11 +33,14 @@ export class ProductsPage {
 
   private page: number = 0;
 
-  private selectedCategory: any = this.settingsProvider.getProductCategoriesWithAll()[0];
+  // private selectedCategory: any = this.settingsProvider.getProductCategoriesWithAll()[0];
+  private selectedCategory: any = {};
 
-  private selectedType: any = this.settingsProvider.getProductTypesWithAll('')[0];
+  // private selectedType: any = this.settingsProvider.getProductTypesWithAll('')[0];
+  private selectedType: any = {};
 
-  private selectedPrice: any = this.settingsProvider.getProductPrices('', '')[0];
+  // private selectedPrice: any = this.settingsProvider.getProductPrices('', '')[0] || {};
+  private selectedPrice: any = {};
 
   private productCategories: any[];
 
@@ -59,7 +62,7 @@ export class ProductsPage {
     public messages: TunariMessages,
     public connection: Connection,
     // public params: NavParams
-    ) {
+  ) {
 
     this.setDefaultValues();
     this.setupKeyboard();
@@ -69,11 +72,12 @@ export class ProductsPage {
 
   /** Main Page functions */
 
-  public pullNextProductsPage(infiniteScroll) {
+  public pullNextProductsPage(eventInfiniteScroll) {
 
     if (this.page > 0 && this.connection.isConnected()) {
       this.page++;
       console.log('Pulling page ' + this.page + '...');
+
       const query = {
         tags: this.searchQuery.value,
         categoryId: this.selectedCategory.id,
@@ -86,11 +90,11 @@ export class ProductsPage {
           products => this.products.push(...products),
           null,
           () => {
-            infiniteScroll.complete();
+            eventInfiniteScroll.target.complete();
             console.log('Finished pulling page successfully');
           });
     } else {
-      infiniteScroll.complete();
+      eventInfiniteScroll.target.complete();
     }
   }
 
@@ -316,10 +320,13 @@ export class ProductsPage {
 
   /** Private functions */
 
-  private setDefaultValues() {
-    this.productCategories = this.settingsProvider.getProductCategoriesWithAll();
-    this.productTypes = this.settingsProvider.getProductTypesWithAll('');
-    this.productPrices = this.settingsProvider.getProductPrices('', '');
+  private async setDefaultValues() {
+    this.productCategories = await this.settingsProvider.getProductCategoriesWithAll();    
+    this.selectedCategory = this.productCategories[0];
+    this.productTypes = await this.settingsProvider.getProductTypesWithAll('');
+    this.selectedType = this.productTypes[0];
+    this.productPrices = await this.settingsProvider.getProductPrices('', '');
+    this.selectedPrice = this.productPrices[0];
   }
 
   private setupKeyboard() {
@@ -395,14 +402,16 @@ export class ProductsPage {
       }))
       .map(productsObject => productsObject.items)
       .subscribe(products => {
+        console.log('hey')
+        console.log(products)
         this.page = 1;
         this.products = products
       });
 
-    this.searchQuery.valueChanges
-      .filter(query => query)
-      .filter(query => !this.connection.isConnected())
-      .subscribe(() => this.notifier.createToast(this.messages.noInternetError));
+    // this.searchQuery.valueChanges
+    //   .filter(query => query)
+    //   .filter(query => !this.connection.isConnected())
+    //   .subscribe(() => this.notifier.createToast(this.messages.noInternetError));
 
     // this.searchQuery.valueChanges
     //   .filter(query => !query)

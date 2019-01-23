@@ -13,7 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { ProductsPage } from '../pages/products/products.page';
 // import { LoginPage } from '../pages/login/login.page';
-import { ProductImgComponent } from '../pages/products/product-img/product-img.component';
+// import { ProductImgComponent } from '../pages/products/product-img/product-img.component';
 
 import { Connection } from '../providers/connection';
 import { Login } from '../providers/login';
@@ -31,7 +31,7 @@ import { TunariStorage } from '../providers/tunari-storage';
     AppComponent,
     // ProductsPage,
     // LoginPage,
-    ProductImgComponent
+    // ProductImgComponent
   ],
   entryComponents: [
     AppComponent,
