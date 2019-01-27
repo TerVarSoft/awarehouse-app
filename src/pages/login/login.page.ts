@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import {Router} from '@angular/router'
+import { Router } from '@angular/router'
 import { NavController } from '@ionic/angular';
 
 import { ProductsPage } from '../products/products.page';
@@ -78,6 +78,7 @@ export class LoginPage {
           console.log("Token Authentication has been provided by the server");
           this.settingsProvider.setSettings(userToken.settings);
           loader.dismiss();
+
           this.router.navigate(['/products']);
           // this.navCtrl.setRoot(ProductsPage);
         });

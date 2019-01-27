@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
+import {Router} from '@angular/router'
 
-import { Platform, NavController } from '@ionic/angular';
+import { Platform, NavController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -31,14 +32,18 @@ export class AppComponent {
   constructor(
     public platform: Platform,
     statusBar: StatusBar,
+    private router: Router,
     // public network: Network,
     splashScreen: SplashScreen,
     public storage: TunariStorage,
     public messages: TunariMessages,
     public notifier: TunariNotifier,
     public connection: Connection,
-    public events: Events
+    public events: Events,
+    private menu: MenuController
   ) {
+    // this.menu.enable(true, 'first');
+    // this.menu.open('first');
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -80,8 +85,10 @@ export class AppComponent {
 
 
 
-  // onLogout() {
-  //   this.storage.removeStorage();
-  //   this.navCtrl.setRoot(LoginPage);
-  // }
+  onLogout() {
+    this.menu.close();
+    this.storage.removeStorage();
+    // this.navCtrl.setRoot(LoginPage);
+    this.router.navigate(['/']);    
+  }
 }

@@ -263,13 +263,13 @@ export class ProductsPage {
     let alert: any = this.util.getProductCategoriesAlert(this.selectedCategory);
     alert.addButton({
       text: 'Guardar',
-      handler: data => {
+      handler: async data => {
         console.log(data);
         this.selectedCategory = data
 
         this.selectedType = this.productTypes[0];
-        this.productTypes = this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
-        this.productPrices = this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id);
+        this.productTypes = await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
+        this.productPrices = await this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id);
 
         this.selectedPrice = this.productPrices.length > 0 ?
           this.productPrices[0] : {};

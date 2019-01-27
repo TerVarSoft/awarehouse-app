@@ -1,3 +1,39 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-router-outlet id="awarehouse-app"></ion-router-outlet>
+
+  <ion-menu side="start" contentId="awarehouse-app">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-list-header>
+          Negocio
+        </ion-list-header>
+        <ion-item menuClose (click)="onViewChange('inventory')">
+          <ion-label>
+            Inventario
+          </ion-label>
+          <ion-icon name="apps" slot="start"></ion-icon>
+        </ion-item>
+        <ion-item menuClose (click)="onViewChange('inventory')">
+          <ion-label>
+            Ventas
+          </ion-label>
+          <ion-icon name="calculator" slot="start"></ion-icon>
+        </ion-item>
+        <ion-list-header>
+          Usuario
+        </ion-list-header>
+        <ion-item menuClose (click)="onLogout()">
+          <ion-label>
+            Salir
+          </ion-label>
+          <ion-icon name="log-out" slot="start"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
 </ion-app>

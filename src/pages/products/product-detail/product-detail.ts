@@ -24,8 +24,12 @@ export class ProductDetailPage {
   constructor(public navParams: NavParams,
     public navCtrl: NavController,
     public settingsProvider: SettingsCache) {
+      this.initProperties();
+  }
+
+  async initProperties() {
     this.product = this.navParams.data.product;
-    this.productPrices = this.settingsProvider.getProductPrices(
+    this.productPrices = await this.settingsProvider.getProductPrices(
       this.product.categoryId, this.product.typeId);
 
     const newPrices = this.productPrices.map(priceType => {
