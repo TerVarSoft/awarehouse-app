@@ -30,6 +30,18 @@ export class Products {
     params.set('limit', "20");
     let requestOptions = new RequestOptions({ search: params });
 
+    return this.api.getPromise(this.endpoint, requestOptions);
+  }
+
+  getObserver(query: any, page: number = 1) {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('tags', query.tags);
+    params.set('categoryId', query.categoryId);
+    params.set('typeId', query.typeId);
+    params.set('page', page.toString());
+    params.set('limit', "20");
+    let requestOptions = new RequestOptions({ search: params });
+
     return this.api.get(this.endpoint, requestOptions);
   }
 

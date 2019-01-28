@@ -49,6 +49,22 @@ export class TunariApi {
     });
   }
 
+  async getPromise(endpoint: string, requestOptions: RequestOptions = new RequestOptions()) {
+    let url = this.baseUrl + endpoint;
+    requestOptions.headers = new Headers(this.headers);
+
+    const token = await this.storage.getAuthtoken();
+
+    if (token) {
+      requestOptions.headers.append(this.authKey, 'Bearer ' + token);
+    }
+
+    return await this.http.get(url, requestOptions)
+      .map(resp => resp.json().data)
+      .catch(this.catchErrors())
+      .toPromise();
+  }
+
   async postPromise(endpoint: string, body: any) {
     return (await this.post(endpoint, body)).toPromise();
   }

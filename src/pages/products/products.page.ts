@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer } from '@angular/core';
+import { Component, ElementRef, Renderer, NgZone } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NavController, NavParams, ActionSheetController, Platform, AlertController } from '@ionic/angular';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -28,11 +28,11 @@ import { SettingsCache } from '../../providers/settings-cache';
 })
 export class ProductsPage {
 
-  private products: Product[];
+  private products: Product[] = [];
 
   private searchQuery: FormControl = new FormControl();
 
-  private productsAreLoading: Boolean = false;
+  public productsAreLoading: boolean = false;
 
   private page: number = 0;
 
@@ -64,7 +64,8 @@ export class ProductsPage {
     public notifier: TunariNotifier,
     public messages: TunariMessages,
     public connection: Connection,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private _ngZone: NgZone
     // public params: NavParams
   ) {
 
@@ -77,7 +78,7 @@ export class ProductsPage {
 
   /** Main Page functions */
 
-  public pullNextProductsPage(eventInfiniteScroll) {
+  public async pullNextProductsPage(eventInfiniteScroll) {
 
     if (this.page > 0 && this.connection.isConnected()) {
       this.page++;
@@ -89,15 +90,12 @@ export class ProductsPage {
         typeId: this.selectedType.id
       }
 
-      this.productsProvider.get(query, this.page)
-        .map(productsObject => productsObject.items)
-        .subscribe(
-          products => this.products.push(...products),
-          null,
-          () => {
-            eventInfiniteScroll.target.complete();
-            console.log('Finished pulling page successfully');
-          });
+      const productsResponse = await this.productsProvider.get(query, this.page);
+
+      this.products.push(...productsResponse.items);
+      eventInfiniteScroll.target.complete();
+      console.log('Finished pulling page successfully');
+
     } else {
       eventInfiniteScroll.target.complete();
     }
@@ -285,19 +283,19 @@ export class ProductsPage {
         {
           text: 'Cancel'
         }, {
-            text: 'Guardar',
-            handler: async data => {
-              let createSellingLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-              product.quantity = data.quantity;
-              this.sellingsProvider.post({
-                productId: product.id,
-                quantity: data.quantity,
-                priceId: this.selectedPrice.id
-              }).subscribe(() => {
-                createSellingLoader.dismiss();
-              });
-            }
+          text: 'Guardar',
+          handler: async data => {
+            let createSellingLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
+            product.quantity = data.quantity;
+            (await this.sellingsProvider.post({
+              productId: product.id,
+              quantity: data.quantity,
+              priceId: this.selectedPrice.id
+            })).subscribe(() => {
+              createSellingLoader.dismiss();
+            });
           }
+        }
       ]
     });
 
@@ -591,27 +589,49 @@ export class ProductsPage {
   // }
 
   private initSearchQuery() {
+
     this.searchQuery.valueChanges
       .filter(query => query)
       .filter(query => this.connection.isConnected())
-      .debounceTime(100)
+      .debounceTime(200)
       .distinctUntilChanged()
-      .switchMap(query => {
-        this.productsAreLoading = true;
-        return this.productsProvider.get({
-          tags: query,
-          categoryId: this.selectedCategory.id,
-          typeId: this.selectedType.id
-        })
-      })
-      .map(productsObject => productsObject.items)
-      .subscribe(products => {
-        console.log('hey')
-        console.log(products)
-        this.page = 1;
-        this.products = products
-        this.productsAreLoading = false;
+      // .switchMap(query => {
+      //   this.productsAreLoading = true;
+      //   return this.productsProvider.getObserver({
+      //     tags: query,
+      //     categoryId: this.selectedCategory.id,
+      //     typeId: this.selectedType.id
+      //   })
+      // })
+      // .map(productsObject => productsObject.items)
+      .subscribe(query => {
+        console.log('subscripte searchQuery')
+        this.searchProducts();
       });
+
+    // this.searchQuery.valueChanges
+    //   .filter(query => query)
+    //   .filter(query => this.connection.isConnected())
+    //   .debounceTime(100)
+    //   .distinctUntilChanged()
+    //   .switchMap(query => {
+    //     this.productsAreLoading = true;
+    //     return this.productsProvider.getObserver({
+    //       tags: query,
+    //       categoryId: this.selectedCategory.id,
+    //       typeId: this.selectedType.id
+    //     })
+    //   })
+    //   .map(productsObject => productsObject.items)
+    //   .subscribe(products => {
+    //     console.log('hey')
+    //     console.log(products)
+
+    //     this.productsAreLoading = false;
+    //     this.page = 1;
+    //     this.products = products
+
+    //   });
 
     // this.searchQuery.valueChanges
     //   .filter(query => query)
@@ -623,7 +643,8 @@ export class ProductsPage {
     //   .subscribe(() => this.initFavorites());
   }
 
-  private searchProducts = () => {
+
+  private async searchProducts() {
     const query = {
       tags: this.searchQuery.value,
       categoryId: this.selectedCategory.id,
@@ -633,13 +654,14 @@ export class ProductsPage {
     console.log(query);
 
     this.productsAreLoading = true;
-    this.productsProvider.get(query).subscribe(products => {
-      this.page = 1;
-      this.products = products.items;
+    const productsResponse = await this.productsProvider.get(query);
+
+    this._ngZone.run(() => {
       this.productsAreLoading = false;
-    }, null,
-      () => {
-        console.log('Finished pulling page 1 of products');
-      });
+      this.page = 1;
+      this.products = productsResponse.items;
+    });
+
+    console.log('Finished pulling page 1 of products');
   }
 }
