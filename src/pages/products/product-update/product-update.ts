@@ -81,7 +81,7 @@ export class ProductUpdatePage {
     this.initProductPrices();
   }
 
-  async initProductPrices() {
+    async initProductPrices() {
     this.productPrices = await this.settingsProvider.getProductPrices(
       this.product.categoryId || '0',
       this.product.typeId || '0');

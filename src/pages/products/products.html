@@ -13,8 +13,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-list>
+<ion-content>
+  <ion-spinner name="dots" *ngIf="productsAreLoading"></ion-spinner>
+  <ion-list *ngIf="!productsAreLoading">
     <ion-item-sliding *ngFor="let product of products" (click)="goToProductDetails(product)">
       <ion-item>
         <ion-thumbnail slot="start">

@@ -1,6 +1,6 @@
 import { Component, ElementRef, Renderer } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams, ActionSheetController, Platform } from '@ionic/angular';
+import { NavController, NavParams, ActionSheetController, Platform, AlertController } from '@ionic/angular';
 import { Keyboard } from '@ionic-native/keyboard';
 import 'rxjs/add/observable/from';
 import "rxjs/add/operator/debounceTime";
@@ -22,6 +22,7 @@ import { SettingsCache } from '../../providers/settings-cache';
 
 @Component({
   selector: 'page-products',
+  styleUrls: ['products.page.scss'],
   templateUrl: 'products.html',
   providers: [ProductsUtil]
 })
@@ -30,6 +31,8 @@ export class ProductsPage {
   private products: Product[];
 
   private searchQuery: FormControl = new FormControl();
+
+  private productsAreLoading: Boolean = false;
 
   private page: number = 0;
 
@@ -61,6 +64,7 @@ export class ProductsPage {
     public notifier: TunariNotifier,
     public messages: TunariMessages,
     public connection: Connection,
+    private alertCtrl: AlertController
     // public params: NavParams
   ) {
 
@@ -68,6 +72,7 @@ export class ProductsPage {
     this.setupKeyboard();
     // this.initFavorites();
     this.initSearchQuery();
+    this.searchProducts();
   }
 
   /** Main Page functions */
@@ -122,35 +127,79 @@ export class ProductsPage {
     // });
   }
 
-  addPriceWhenNoPrice(event, product: Product) {
+  async addPriceWhenNoPrice(event, product: Product) {
     event.stopPropagation();
 
-    let alert: any = this.util.getAddPriceAlert(product, this.selectedPrice);
-    alert.addButton({
-      text: 'Guardar',
-      handler: async data => {
-        let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-        const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id)
+    const priceToUpdate = product.prices.find(price => price.priceId === this.selectedPrice.id);
 
-        if (selectedPrice) {
-          selectedPrice.value = data.price;
-        } else {
-          saveProductLoader.dismiss();
-          this.notifier.createToast(this.messages.errorWhenSavingProduct);
-        }
+    let alert = await this.alertCtrl.create({
+      header: product.name,
+      message: this.selectedPrice.name,
+      inputs: [
+        {
+          name: 'price',
+          type: 'number',
+          placeholder: 'Agrega un precio!',
+          value: "" + (priceToUpdate ? priceToUpdate.value : "")
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        }, {
+          text: 'Guardar',
+          handler: async data => {
+            let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
+            const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id)
 
-        this.productsProvider.put(product).subscribe(() => {
-          saveProductLoader.dismiss();
+            if (selectedPrice) {
+              selectedPrice.value = data.price;
+            } else {
+              saveProductLoader.dismiss();
+              this.notifier.createToast(this.messages.errorWhenSavingProduct);
+            }
 
-          if (product.isFavorite) {
-            // this.updateFavoritesInBackground();
+            this.productsProvider.put(product).subscribe(() => {
+              saveProductLoader.dismiss();
+
+              if (product.isFavorite) {
+                // this.updateFavoritesInBackground();
+              }
+            }, error => {
+              saveProductLoader.dismiss();
+              this.notifier.createToast(this.messages.errorWhenSavingProduct);
+            });
           }
-        }, error => {
-          saveProductLoader.dismiss();
-          this.notifier.createToast(this.messages.errorWhenSavingProduct);
-        });
-      }
+        }
+      ]
     });
+
+    // let alert: any = this.util.getAddPriceAlert(product, this.selectedPrice);
+    // alert.addButton({
+    //   text: 'Guardar',
+    //   handler: async data => {
+    //     let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
+    //     const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id)
+
+    //     if (selectedPrice) {
+    //       selectedPrice.value = data.price;
+    //     } else {
+    //       saveProductLoader.dismiss();
+    //       this.notifier.createToast(this.messages.errorWhenSavingProduct);
+    //     }
+
+    //     this.productsProvider.put(product).subscribe(() => {
+    //       saveProductLoader.dismiss();
+
+    //       if (product.isFavorite) {
+    //         // this.updateFavoritesInBackground();
+    //       }
+    //     }, error => {
+    //       saveProductLoader.dismiss();
+    //       this.notifier.createToast(this.messages.errorWhenSavingProduct);
+    //     });
+    //   }
+    // });
 
     alert.present();
   }
@@ -165,30 +214,92 @@ export class ProductsPage {
     return "";
   }
 
-  setProductQuantity(event, product: Product) {
+  async setProductQuantity(event, product: Product) {
     event.stopPropagation();
 
-    let alert: any = this.util.getAddQuantityAlert(product);
-    alert.addButton({
-      text: 'Guardar',
-      handler: async data => {
-        let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-        product.quantity = data.quantity;
-        this.productsProvider.put(product).subscribe(() => {
-          saveProductLoader.dismiss();
+    let alert = await this.alertCtrl.create({
+      header: product.name,
+      message: "Nueva Cantidad",
+      inputs: [
+        {
+          name: 'quantity',
+          type: 'number',
+          placeholder: 'Especifica la cantidad!',
+          value: "" + product.quantity
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        }, {
+          text: 'Guardar',
+          handler: async data => {
+            let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
+            product.quantity = data.quantity;
+            this.productsProvider.put(product).subscribe(() => {
+              saveProductLoader.dismiss();
 
-          if (product.isFavorite) {
-            // this.updateFavoritesInBackground();
+              if (product.isFavorite) {
+                // this.updateFavoritesInBackground();
+              }
+            });
           }
-        });
-      }
+        }
+      ]
     });
+
+    // let alert: any = this.util.getAddQuantityAlert(product);
+    // alert.addButton({
+    //   text: 'Guardar',
+    //   handler: async data => {
+    //     let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
+    //     product.quantity = data.quantity;
+    //     this.productsProvider.put(product).subscribe(() => {
+    //       saveProductLoader.dismiss();
+
+    //       if (product.isFavorite) {
+    //         // this.updateFavoritesInBackground();
+    //       }
+    //     });
+    //   }
+    // });
 
     alert.present();
   }
 
-  createSelling(event, product: Product) {
+  async createSelling(event, product: Product) {
     event.stopPropagation();
+
+    const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id);
+    let alert = await this.alertCtrl.create({
+      header: `Venta ${product.name}`,
+      message: `${selectedPrice.name}: ${selectedPrice.value} Bs.`,
+      inputs: [
+        {
+          name: 'quantity',
+          type: 'number',
+          placeholder: 'Especifica la cantidad!'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        }, {
+            text: 'Guardar',
+            handler: async data => {
+              let createSellingLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
+              product.quantity = data.quantity;
+              this.sellingsProvider.post({
+                productId: product.id,
+                quantity: data.quantity,
+                priceId: this.selectedPrice.id
+              }).subscribe(() => {
+                createSellingLoader.dismiss();
+              });
+            }
+          }
+      ]
+    });
 
     // let alert: any = this.util.getCreateSellingAlert(product, this.selectedPrice.id);
     // alert.addButton({
@@ -206,7 +317,7 @@ export class ProductsPage {
     //   }
     // });
 
-    // alert.present();
+    alert.present();
   }
 
   // createSelling(event, product: Product) {
@@ -257,63 +368,153 @@ export class ProductsPage {
 
   /** Product options functions */
 
-  changeCategory(event) {
+  async changeCategory(event) {
     event.stopPropagation();
 
-    let alert: any = this.util.getProductCategoriesAlert(this.selectedCategory);
-    alert.addButton({
-      text: 'Guardar',
-      handler: async data => {
-        console.log(data);
-        this.selectedCategory = data
+    const categoryInputs: any[] = (await this.settingsProvider.getProductCategoriesWithAll())
+      .map(category => ({
+        label: category.name,
+        value: category,
+        type: 'radio',
+        checked: this.selectedCategory.id === category.id
+      }));
 
-        this.selectedType = this.productTypes[0];
-        this.productTypes = await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
-        this.productPrices = await this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id);
+    let alert = await this.alertCtrl.create({
+      header: 'Categorias',
+      message: 'Selecciona una categoria',
+      inputs: categoryInputs,
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Guardar',
+          handler: async data => {
+            console.log(data);
+            this.selectedCategory = data
 
-        this.selectedPrice = this.productPrices.length > 0 ?
-          this.productPrices[0] : {};
+            this.selectedType = this.productTypes[0];
+            this.productTypes = await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
+            this.productPrices = await this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id);
 
-        if (this.selectedCategory.id === '') {
-          // this.initFavorites();
-        } else {
-          this.searchProducts();
+            this.selectedPrice = this.productPrices.length > 0 ?
+              this.productPrices[0] : {};
+
+            this.searchProducts();
+
+          }
         }
+      ]
+    });
 
-      }
-    })
+    // return alert;
+
+    // let alert: any = this.util.getProductCategoriesAlert(this.selectedCategory);
+    // alert.addButton({
+    //   text: 'Guardar',
+    //   handler: async data => {
+    //     console.log(data);
+    //     this.selectedCategory = data
+
+    //     this.selectedType = this.productTypes[0];
+    //     this.productTypes = await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
+    //     this.productPrices = await this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id);
+
+    //     this.selectedPrice = this.productPrices.length > 0 ?
+    //       this.productPrices[0] : {};
+
+    //     if (this.selectedCategory.id === '') {
+    //       // this.initFavorites();
+    //     } else {
+    //       this.searchProducts();
+    //     }
+
+    //   }
+    // })
 
     alert.present();
   }
 
-  changeType(event) {
+  async changeType(event) {
     event.stopPropagation();
 
-    let alert: any = this.util.getProductTypesAlert(this.selectedCategory, this.selectedType);
-    alert.addButton({
-      text: 'Guardar',
-      handler: data => {
-        console.log(data);
-        this.selectedType = data
-        this.searchProducts();
-      }
-    })
+    const typeInputs: any[] = (await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id))
+      .map(type => ({
+        label: type.name,
+        value: type,
+        type: 'radio',
+        checked: this.selectedType.id === type.id
+      }));
+
+    let alert = await this.alertCtrl.create({
+      header: 'Tipos',
+      message: 'Selecciona un tipo',
+      inputs: typeInputs,
+      buttons: [
+        {
+          text: 'Cancel'
+        }, {
+          text: 'Guardar',
+          handler: data => {
+            console.log(data);
+            this.selectedType = data
+            this.searchProducts();
+          }
+        }
+      ]
+    });
+
+    // let alert: any = this.util.getProductTypesAlert(this.selectedCategory, this.selectedType);
+    // alert.addButton({
+    //   text: 'Guardar',
+    //   handler: data => {
+    //     console.log(data);
+    //     this.selectedType = data
+    //     this.searchProducts();
+    //   }
+    // })
 
     alert.present();
   }
 
-  changePrice(event) {
+  async changePrice(event) {
     event.stopPropagation();
 
-    let alert: any = this.util.getProductPricesAlert(this.selectedCategory, this.selectedType, this.selectedPrice);
-    alert.addButton({
-      text: 'Guardar',
-      handler: data => {
-        console.log(data);
-        this.selectedPrice = data
-        this.searchProducts();
-      }
-    })
+    const priceInputs: any[] = (await this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id))
+      .map(price => ({
+        label: price.name,
+        value: price,
+        type: 'radio',
+        checked: this.selectedPrice.id === price.id
+      }));
+
+    let alert = await this.alertCtrl.create({
+      header: 'Tipos',
+      message: 'Selecciona un tipo',
+      inputs: priceInputs,
+      buttons: [
+        {
+          text: 'Cancel'
+        }, {
+          text: 'Guardar',
+          handler: data => {
+            console.log(data);
+            this.selectedPrice = data
+            this.searchProducts();
+          }
+        }
+      ]
+    });
+
+    // let alert: any = this.util.getProductPricesAlert(this.selectedCategory, this.selectedType, this.selectedPrice);
+    // alert.addButton({
+    //   text: 'Guardar',
+    //   handler: data => {
+    //     console.log(data);
+    //     this.selectedPrice = data
+    //     this.searchProducts();
+    //   }
+    // })
 
     alert.present();
   }
@@ -321,7 +522,7 @@ export class ProductsPage {
   /** Private functions */
 
   private async setDefaultValues() {
-    this.productCategories = await this.settingsProvider.getProductCategoriesWithAll();    
+    this.productCategories = await this.settingsProvider.getProductCategoriesWithAll();
     this.selectedCategory = this.productCategories[0];
     this.productTypes = await this.settingsProvider.getProductTypesWithAll('');
     this.selectedType = this.productTypes[0];
@@ -395,17 +596,21 @@ export class ProductsPage {
       .filter(query => this.connection.isConnected())
       .debounceTime(100)
       .distinctUntilChanged()
-      .switchMap(query => this.productsProvider.get({
-        tags: query,
-        categoryId: this.selectedCategory.id,
-        typeId: this.selectedType.id
-      }))
+      .switchMap(query => {
+        this.productsAreLoading = true;
+        return this.productsProvider.get({
+          tags: query,
+          categoryId: this.selectedCategory.id,
+          typeId: this.selectedType.id
+        })
+      })
       .map(productsObject => productsObject.items)
       .subscribe(products => {
         console.log('hey')
         console.log(products)
         this.page = 1;
         this.products = products
+        this.productsAreLoading = false;
       });
 
     // this.searchQuery.valueChanges
@@ -427,9 +632,11 @@ export class ProductsPage {
 
     console.log(query);
 
+    this.productsAreLoading = true;
     this.productsProvider.get(query).subscribe(products => {
       this.page = 1;
       this.products = products.items;
+      this.productsAreLoading = false;
     }, null,
       () => {
         console.log('Finished pulling page 1 of products');
