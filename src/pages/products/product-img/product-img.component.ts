@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 
 import { ProductPreviewPage } from '../product-preview/product-preview';
 
@@ -13,13 +13,18 @@ export class ProductImgComponent {
 
   @Input() product: Product;
 
-  constructor(public navCtrl: NavController) { }
+  constructor(private modalController: ModalController) { }
 
-  openImage(event) {
+  async openImage(event) {    
     event.stopPropagation();
 
-    // this.navCtrl.push(ProductPreviewPage, {
-    //   product: this.product
-    // });
+    const modal = await this.modalController.create({
+      component: ProductPreviewPage,
+      componentProps: {
+        'product': this.product
+      }
+    });
+
+    await modal.present();
   }
 }

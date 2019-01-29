@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { Component, OnInit, Input } from '@angular/core';
+import { NavController, NavParams, ModalController } from '@ionic/angular';
 
 import { TunariApi } from '../../../providers/tunari-api';
 
@@ -13,10 +13,13 @@ export class ProductPreviewPage implements OnInit {
 
     url: String;
 
-    product: Product;
+    @Input() product: Product;
 
-    constructor(public navParams: NavParams, public navCtrl: NavController, public api: TunariApi) {
-        this.product = this.navParams.data.product;
+    constructor(
+        private modalCtrl: ModalController,
+        public navParams: NavParams,
+        public navCtrl: NavController,
+        public api: TunariApi) {
     }
 
     ngOnInit() {
@@ -29,7 +32,7 @@ export class ProductPreviewPage implements OnInit {
             });
     }
 
-    closePreview(){
-        // this.navCtrl.pop();
+    closePreview() {
+        this.modalCtrl.dismiss();
     }
 }

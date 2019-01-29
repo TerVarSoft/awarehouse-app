@@ -1,8 +1,14 @@
 <ion-header>
-    <ion-navbar color="primary">
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-button (click)="closePreview()">
+                <ion-icon slot="start" name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
         <ion-title>{{product.name}}</ion-title>
-    </ion-navbar>
+    </ion-toolbar>
 </ion-header>
-<ion-content (click)="closePreview()" style="background-color:#111;text-align:center;margin-top:30px">
-    <img [src]="url | safeUrl" style="width: 90%;height:70%;object-fit:contain;"/>
+
+<ion-content color="dark" (click)="closePreview()" style="text-align:center">
+    <img [src]="url | safeUrl" style="width: 90%;height:70%;object-fit:contain;margin-top:30px;" />
 </ion-content>
