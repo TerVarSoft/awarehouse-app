@@ -114,7 +114,7 @@ export class ProductsPage {
     //   product: new Product(),
     //   selectedProductCategoryId: this.selectedCategory.id,
     //   selectedProductTypeId: this.selectedType.id,
-    // });
+    // });    
   }
 
   /** Individual Products functions. */
@@ -327,10 +327,10 @@ export class ProductsPage {
   //   });
   // }
 
-  openProductOptions(event, product) {
+  async openProductOptions(event, product) {
     event.stopPropagation();
 
-    let actionSheet: any = this.actionSheetCtrl.create({
+    let actionSheet: any = await this.actionSheetCtrl.create({
       header: product.name,
       cssClass: 'product-options',
       buttons: [
@@ -361,6 +361,7 @@ export class ProductsPage {
         }
       ]
     });
+
     actionSheet.present();
   }
 
