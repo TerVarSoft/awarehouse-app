@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 
 import { ProductsPage } from './products.page';
 
+import { ProductDetailPage } from './product-detail/product-detail';
+import { ProductUpdatePage } from './product-update/product-update';
 import { ProductImgComponent } from './product-img/product-img.component';
 import { ProductPreviewPage } from './product-preview/product-preview';
 import { LoadingImgComponent } from './loading-img/loading-img.component';
@@ -27,6 +29,8 @@ import {  SafeUrlPipe } from './../../pipes/safe-url.pipe';
     ],
     declarations: [
         ProductsPage,
+        ProductDetailPage,
+        ProductUpdatePage,        
         ProductImgComponent,
         ProductPreviewPage,
         LoadingImgComponent,
@@ -34,7 +38,9 @@ import {  SafeUrlPipe } from './../../pipes/safe-url.pipe';
         SafeUrlPipe
     ],
     entryComponents: [
-        ProductPreviewPage
+        ProductPreviewPage,
+        ProductDetailPage,
+        ProductUpdatePage
     ]
 })
 export class ProductsPageModule { }

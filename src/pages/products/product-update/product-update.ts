@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { Component } from '@angular/core';
 import { Camera } from '@ionic-native/camera';
-import { NavParams, AlertController, NavController } from '@ionic/angular';
+import { NavParams, AlertController, NavController, ModalController } from '@ionic/angular';
 
 import { Products } from '../../../providers/products';
 import { ProductsUtil } from './../products-util';
@@ -14,6 +14,7 @@ import { Product, updateProductPatch } from '../../../models/product';
 @Component({
   selector: 'product-update',
   templateUrl: 'product-update.html',
+  styleUrls: ['product-update.scss'],
   providers: [ProductsUtil]
 })
 export class ProductUpdatePage {
@@ -42,6 +43,7 @@ export class ProductUpdatePage {
   constructor(public navParams: NavParams,
     private alertCtrl: AlertController,
     public navCtrl: NavController,
+    private modalCtrl: ModalController,
     public util: ProductsUtil,
     public productsProvider: Products,
     public notifier: TunariNotifier,
@@ -81,7 +83,7 @@ export class ProductUpdatePage {
     this.initProductPrices();
   }
 
-    async initProductPrices() {
+  async initProductPrices() {
     this.productPrices = await this.settingsProvider.getProductPrices(
       this.product.categoryId || '0',
       this.product.typeId || '0');
@@ -211,6 +213,10 @@ export class ProductUpdatePage {
 
   removeLocation(locationToRemove) {
     this.product.locations = this.product.locations.filter(location => location !== locationToRemove);
+  }
+
+  closePreview() {
+    this.modalCtrl.dismiss();
   }
 
   private updateFavoritesInBackground() {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { NavController, NavParams, ModalController } from '@ionic/angular';
 
 import { ProductUpdatePage } from '../product-update/product-update';
 
@@ -11,6 +11,7 @@ import { SettingsCache } from '../../../providers/settings-cache';
 @Component({
   selector: 'product-detail',
   templateUrl: 'product-detail.html',
+  styleUrls: ['product-detail.scss'],
   providers: [ProductsUtil]
 })
 export class ProductDetailPage {
@@ -22,9 +23,10 @@ export class ProductDetailPage {
   productPrices: any[];
 
   constructor(public navParams: NavParams,
+    private modalCtrl: ModalController,
     public navCtrl: NavController,
     public settingsProvider: SettingsCache) {
-      this.initProperties();
+    this.initProperties();
   }
 
   async initProperties() {
@@ -44,9 +46,22 @@ export class ProductDetailPage {
     this.product.prices = newPrices;
   }
 
-  editProduct() {
+  async editProduct() {
     // this.navCtrl.push(ProductUpdatePage, {
     //   product: this.product
     // });
+
+    const createProductModal = await this.modalCtrl.create({
+      component: ProductUpdatePage,
+      componentProps: {
+        product: this.product
+      }
+    });
+
+    createProductModal.present();
+  }
+
+  closePreview() {
+    this.modalCtrl.dismiss();
   }
 }

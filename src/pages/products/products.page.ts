@@ -1,6 +1,6 @@
 import { Component, ElementRef, Renderer, NgZone } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams, ActionSheetController, Platform, AlertController } from '@ionic/angular';
+import { NavController, NavParams, ActionSheetController, Platform, AlertController, ModalController } from '@ionic/angular';
 import { Keyboard } from '@ionic-native/keyboard';
 import 'rxjs/add/observable/from';
 import "rxjs/add/operator/debounceTime";
@@ -65,6 +65,7 @@ export class ProductsPage {
     public messages: TunariMessages,
     public connection: Connection,
     private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
     private _ngZone: NgZone
     // public params: NavParams
   ) {
@@ -109,7 +110,17 @@ export class ProductsPage {
 
   // createProduct(fab: FabContainer) {
   //   fab.close();
-  createProduct() {
+  async createProduct() {
+    const createProductModal = await this.modalCtrl.create({
+      component: ProductUpdatePage,
+      componentProps: {
+        product: new Product(),
+        selectedProductCategoryId: this.selectedCategory.id,
+        selectedProductTypeId: this.selectedType.id,
+      }
+    });
+
+    createProductModal.present();
     // this.navCtrl.push(ProductUpdatePage, {
     //   product: new Product(),
     //   selectedProductCategoryId: this.selectedCategory.id,
@@ -119,10 +130,19 @@ export class ProductsPage {
 
   /** Individual Products functions. */
 
-  goToProductDetails(product: Product) {
+  async goToProductDetails(product: Product) {
     // this.navCtrl.push(ProductDetailPage, {
     //   product: product
     // });
+
+    const createProductModal = await this.modalCtrl.create({
+      component: ProductDetailPage,
+      componentProps: {
+        product: product
+      }
+    });
+
+    createProductModal.present();
   }
 
   async addPriceWhenNoPrice(event, product: Product) {

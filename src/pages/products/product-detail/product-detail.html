@@ -1,13 +1,17 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>{{product.name}}</ion-title>
-
-    <ion-buttons end>
-      <button ion-button icon-only color="royal" (click)="editProduct()">
-        <ion-icon name="create"></ion-icon>
-      </button>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="closePreview()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
-  </ion-navbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="editProduct()">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{product.name}}</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -58,23 +62,19 @@
         Lista de precios de venta
       </ion-item-divider>
       <ion-item *ngFor="let price of product.prices" class="text-color">
-        <div *ngIf="price.value">
-          {{price.value}} Bs
-        </div>
-        <ion-note item-end>
+        <ion-label position="fixed">
           {{price.name}}
-        </ion-note>
+        </ion-label>
+        <ion-input *ngIf="price.value" value="{{price.value + ' Bs'}}" disabled></ion-input>
       </ion-item>
       <ion-item-divider color="primary-50" class="text-color">
         Otros Precios
       </ion-item-divider>
-      <ion-item>
-        <div *ngIf="product.buyingUnitPrice">
-          {{product.buyingUnitPrice}} Bs
-        </div>
-        <ion-note item-end>
-          Precio de compra unitario
-        </ion-note>
+      <ion-item class="text-color" *ngIf="product.buyingUnitPrice">
+        <ion-label position="fixed">
+          P/Compra
+        </ion-label>
+        <ion-input *ngIf="product.buyingUnitPrice" value="{{product.buyingUnitPrice + ' Bs'}}" disabled></ion-input>
       </ion-item>
     </ion-item-group>
   </div>

@@ -1,27 +1,31 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>{{product.name || "Crear Producto"}}</ion-title>
-
-    <ion-buttons end>
-      <button ion-button (click)="save()">
-        Guardar
-      </button>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="closePreview()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
-  </ion-navbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">
+        Guardar
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{product.name || "Crear Producto"}}</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="product-profile" text-center>
     <img *ngIf="(imagePreview || product.thumbnailUrl)" [src]="(imagePreview || product.thumbnailUrl) | safeUrl" style="max-height: 100px;" />
     <ion-fab class="gallery-button">
-      <button (click)="pickPicture()" color="secondary" ion-fab mini>
+      <ion-fab-button size="small" (click)="pickPicture()" color="secondary">
         <ion-icon name="image"></ion-icon>
-      </button>
+      </ion-fab-button>
     </ion-fab>
     <ion-fab class="camera-button">
-      <button (click)="takePicture()" color="secondary" ion-fab mini>
+      <ion-fab-button size="small" (click)="takePicture()" color="secondary">
         <ion-icon name="camera"></ion-icon>
-      </button>
+      </ion-fab-button>
     </ion-fab>
   </div>
   <ion-segment [(ngModel)]="segment" color="secondary">
@@ -48,17 +52,17 @@
         <ion-item *ngIf="productCategories.length > 1">
           <ion-label>Categoria</ion-label>
           <ion-select [(ngModel)]="product.categoryId" interface="popover" (ionChange)='updateCategory()'>
-            <ion-option *ngFor="let category of productCategories" [value]="category.id">
+            <ion-select-option *ngFor="let category of productCategories" [value]="category.id">
               {{category.name}}
-            </ion-option>
+            </ion-select-option>
           </ion-select>
         </ion-item>
         <ion-item *ngIf="productTypes.length > 1">
           <ion-label>Tipo</ion-label>
           <ion-select [(ngModel)]="product.typeId" interface="popover" (ionChange)='updateType()'>
-            <ion-option *ngFor="let type of productTypes" [value]="type.id">
+            <ion-select-option *ngFor="let type of productTypes" [value]="type.id">
               {{type.name}}
-            </ion-option>
+            </ion-select-option>
           </ion-select>
         </ion-item>
 
@@ -73,10 +77,10 @@
 
         <ion-list-header>
           Etiquetas
-          <button ion-button outline item-end icon-left (click)="addTag()">
+          <ion-button (click)="addTag()" item-end icon-left size="small" shape="round" fill="outline">
             <ion-icon name="add"></ion-icon>
             Agregar
-          </button>
+          </ion-button>
         </ion-list-header>
 
         <ion-item *ngFor="let tag of product.tags">
