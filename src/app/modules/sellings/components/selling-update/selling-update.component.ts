@@ -3,17 +3,17 @@ import { FormControl } from '@angular/forms';
 import { NavController, NavParams } from '@ionic/angular';
 import * as _ from "lodash";
 
-import { TunariNotifier } from '../../../providers/tunari-notifier';
-import { ProductsSellingsUtil } from './../products-sellings-util';
-import { Products } from '../../../providers/products';
-import { Sellings } from '../../../providers/sellings';
+import { TunariNotifier } from './../../../../../providers/tunari-notifier';
+import { ProductsSellingsUtil } from './../../sellings.util';
+import { Products } from './../../../../../providers/products';
+import { Sellings } from './../../../../../providers/sellings';
 
-import { Selling } from '../../../models/selling';
-import { Product } from '../../../models/product';
+import { Selling } from './../../../../../models/selling';
+import { Product } from './../../../../../models/product';
 
 @Component({
-    selector: 'product-selling-update',
-    templateUrl: 'product-selling-update.html',
+    selector: 'selling-update',
+    templateUrl: 'selling-update.component.html',
     providers: [ProductsSellingsUtil]
 })
 export class ProductSellingUpdatePage {

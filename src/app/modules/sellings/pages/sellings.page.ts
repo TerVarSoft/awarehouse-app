@@ -1,20 +1,18 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
-import { ProductSellingUpdatePage } from './product-selling-update/product-selling-update';
-
 import * as _ from "lodash";
 import * as moment from 'moment';
 
-import { Transactions } from '../../providers/transactions';
+import { Transactions } from '../../../../providers/transactions';
 
-import { Selling } from '../../models/selling';
+import { Selling } from '../../../../models/selling';
 
 @Component({
-    selector: 'products-sellings',
-    templateUrl: 'products-sellings.html'
+    selector: 'sellings',
+    templateUrl: 'sellings.page.html'
 })
-export class ProductsSellingsPage {
+export class SellingsPage {
     private sellings: Selling[];
 
     private groupedSellings = [];

@@ -3,19 +3,19 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router'
 import { NavController } from '@ionic/angular';
 
-import { ProductsPage } from '../products/products.page';
+import { ProductsPage } from '../../../../../pages/products/products.page';
 
-import { Login } from '../../providers/login';
-import { SettingsCache } from '../../providers/settings-cache';
-import { TunariMessages } from '../../providers/tunari-messages';
-import { TunariNotifier } from '../../providers/tunari-notifier';
-import { TunariStorage } from '../../providers/tunari-storage';
+import { Login } from '../../../../../providers/login';
+import { SettingsCache } from '../../../../../providers/settings-cache';
+import { TunariMessages } from '../../../../../providers/tunari-messages';
+import { TunariNotifier } from '../../../../../providers/tunari-notifier';
+import { TunariStorage } from '../../../../../providers/tunari-storage';
 
-import { UserToken } from '../../models/user-token';
+import { UserToken } from '../../../../../models/user-token';
 
 @Component({
   selector: 'page-login',
-  templateUrl: 'login.html',
+  templateUrl: 'login.page.html',
   styleUrls: ['login.page.scss'],
 })
 export class LoginPage {

@@ -11,10 +11,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { ProductsPage } from '../pages/products/products.page';
-// import { LoginPage } from '../pages/login/login.page';
-// import { ProductImgComponent } from '../pages/products/product-img/product-img.component';
-
 import { Connection } from '../providers/connection';
 import { Login } from '../providers/login';
 import { TunariNotifier } from '../providers/tunari-notifier';
@@ -28,15 +24,10 @@ import { TunariStorage } from '../providers/tunari-storage';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    // ProductsPage,
-    // LoginPage,
-    // ProductImgComponent
+    AppComponent
   ],
   entryComponents: [
-    AppComponent,
-    // ProductsPage,
-    // LoginPage
+    AppComponent
   ],
   imports: [
     BrowserModule,

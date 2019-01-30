@@ -3,10 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'home', loadChildren: './home/home.module#HomePageModule' },
-  { path: 'login', loadChildren: './../pages/login/login.module#LoginPageModule' },
-  { path: 'products', loadChildren: './../pages/products/products.module#ProductsPageModule' },
-  { path: 'sellings', loadChildren: './../pages/products-sellings/products-sellings.module#ProductsSellingsPageModule' }
+  { path: 'login', loadChildren: './modules/login/login.module#LoginModule' },
+  { path: 'products', loadChildren: './../pages/products/products.module#ProductsModule' },
+  { path: 'sellings', loadChildren: './modules/sellings/sellings.module#SellingsModule' }
 ];
 
 @NgModule({

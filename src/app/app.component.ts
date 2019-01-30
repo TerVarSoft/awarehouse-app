@@ -10,10 +10,6 @@ import { Events } from '@ionic/angular';
 
 import * as moment from 'moment';
 
-import { LoginPage } from '../pages/login/login.page';
-import { ProductsTabsPage } from '../pages/products-tabs/products-tabs';
-import { ProductsSellingsPage } from '../pages/products-sellings/products-sellings';
-
 import { Connection } from '../providers/connection';
 import { TunariMessages } from '../providers/tunari-messages';
 import { TunariNotifier } from '../providers/tunari-notifier';
@@ -26,8 +22,6 @@ import { TunariStorage } from '../providers/tunari-storage';
 export class AppComponent {
 
   @ViewChild('rootNavController') navCtrl: NavController;
-
-  rootPage: any = LoginPage;
 
   constructor(
     public platform: Platform,
@@ -42,8 +36,6 @@ export class AppComponent {
     public events: Events,
     private menu: MenuController
   ) {
-    // this.menu.enable(true, 'first');
-    // this.menu.open('first');
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -70,7 +62,7 @@ export class AppComponent {
     });
   }
 
-  onViewChange(view) {    
+  onViewChange(view) {
     switch (view) {
       case "inventory":
         this.router.navigate(['/products']);
@@ -90,7 +82,6 @@ export class AppComponent {
   onLogout() {
     this.menu.close();
     this.storage.removeStorage();
-    // this.navCtrl.setRoot(LoginPage);
     this.router.navigate(['/']);
   }
 }

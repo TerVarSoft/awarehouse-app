@@ -43,4 +43,4 @@ import {  SafeUrlPipe } from './../../pipes/safe-url.pipe';
         ProductUpdatePage
     ]
 })
-export class ProductsPageModule { }
+export class ProductsModule { }

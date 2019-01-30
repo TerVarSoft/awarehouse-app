@@ -4,9 +4,9 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { ProductsSellingsPage } from './products-sellings';
+import { SellingsPage } from './pages/sellings.page';
 
-import { Transactions } from './../../providers/transactions';
+import { Transactions } from '../../../providers/transactions';
 
 @NgModule({
     imports: [
@@ -17,14 +17,14 @@ import { Transactions } from './../../providers/transactions';
         RouterModule.forChild([
             {
                 path: '',
-                component: ProductsSellingsPage
+                component: SellingsPage
             }
         ])
     ],
     declarations: [
-        ProductsSellingsPage
+        SellingsPage
     ],
     providers: [Transactions],
     entryComponents: []
 })
-export class ProductsSellingsPageModule { }
+export class SellingsModule { }
