@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {Router} from '@angular/router'
+import { Router } from '@angular/router'
 
 import { Platform, NavController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -28,7 +28,7 @@ export class AppComponent {
   @ViewChild('rootNavController') navCtrl: NavController;
 
   rootPage: any = LoginPage;
-  
+
   constructor(
     public platform: Platform,
     statusBar: StatusBar,
@@ -64,24 +64,26 @@ export class AppComponent {
       //   this.notifier.createToast(this.messages.noInternetError);
       // }
 
-      // this.events.subscribe('user:logout', () => {
-      //   this.onLogout();
-      // });
+      this.events.subscribe('user:logout', () => {
+        this.onLogout();
+      });
     });
   }
 
-  // onViewChange(view) {
-  //   switch (view) {
-  //     case "inventory":
-  //       this.navCtrl.setRoot(ProductsTabsPage);
-  //       break;
-  //     case "sellings":
-  //       this.navCtrl.setRoot(ProductsSellingsPage);
-  //       break;
-  //     default:
-  //       this.navCtrl.setRoot(ProductsTabsPage);
-  //   }
-  // }
+  onViewChange(view) {    
+    switch (view) {
+      case "inventory":
+        this.router.navigate(['/products']);
+        break;
+      case "sellings":
+        this.router.navigate(['/sellings']);
+        break;
+      default:
+        this.router.navigate(['/products']);
+    }
+
+    this.menu.close();
+  }
 
 
 
@@ -89,6 +91,6 @@ export class AppComponent {
     this.menu.close();
     this.storage.removeStorage();
     // this.navCtrl.setRoot(LoginPage);
-    this.router.navigate(['/']);    
+    this.router.navigate(['/']);
   }
 }

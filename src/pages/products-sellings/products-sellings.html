@@ -1,12 +1,12 @@
 <ion-header>
-    <ion-navbar color="primary">
-        <button ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-        </button>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start" menuToggle>
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
         <ion-title>
             Ventas
         </ion-title>
-    </ion-navbar>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -23,9 +23,12 @@
     <ion-item-group *ngFor="let oneDaySellings of groupedSellings">
         <ion-item-divider color="light">{{oneDaySellings.day}}</ion-item-divider>
         <ion-item *ngFor="let selling of oneDaySellings.sellings" (click)="editSelling(selling)">
-            <h2 class="text-color">{{selling.details}}</h2>
-            <p class="text-color">{{selling.total}} Bs</p>
-            <ion-note item-end>{{selling.time}}</ion-note>
+            <ion-label>
+                <h2 class="text-color">{{selling.details}}</h2>
+                <p class="text-color">{{selling.total}} Bs</p>
+            </ion-label>
+
+            <p item-end>{{selling.time}}</p>
         </ion-item>
     </ion-item-group>
 

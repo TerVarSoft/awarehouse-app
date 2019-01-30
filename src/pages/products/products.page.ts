@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer, NgZone } from '@angular/core';
+import { Component, ElementRef, Renderer, NgZone, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NavController, NavParams, ActionSheetController, Platform, AlertController, ModalController } from '@ionic/angular';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -26,7 +26,7 @@ import { SettingsCache } from '../../providers/settings-cache';
   templateUrl: 'products.html',
   providers: [ProductsUtil]
 })
-export class ProductsPage {
+export class ProductsPage implements OnInit {
 
   private products: Product[] = [];
 
@@ -49,7 +49,7 @@ export class ProductsPage {
 
   private productTypes: any[];
 
-  private productPrices: any[];
+  private productPrices: any[];  
 
   constructor(public platform: Platform,
     public navCtrl: NavController,
@@ -69,11 +69,14 @@ export class ProductsPage {
     private _ngZone: NgZone
     // public params: NavParams
   ) {
-
     this.setDefaultValues();
     this.setupKeyboard();
     // this.initFavorites();
     this.initSearchQuery();
+    // this.searchProducts();
+  }
+
+  ngOnInit() {
     this.searchProducts();
   }
 
@@ -121,6 +124,22 @@ export class ProductsPage {
     });
 
     createProductModal.present();
+    // this.navCtrl.push(ProductUpdatePage, {
+    //   product: new Product(),
+    //   selectedProductCategoryId: this.selectedCategory.id,
+    //   selectedProductTypeId: this.selectedType.id,
+    // });    
+  }
+
+  async updateProduct(product: Product) {
+    const updateProductModal = await this.modalCtrl.create({
+      component: ProductUpdatePage,
+      componentProps: {
+        product: product
+      }
+    });
+
+    updateProductModal.present();
     // this.navCtrl.push(ProductUpdatePage, {
     //   product: new Product(),
     //   selectedProductCategoryId: this.selectedCategory.id,
@@ -358,6 +377,7 @@ export class ProductsPage {
           text: 'Ver',
           icon: !this.platform.is('ios') ? 'eye' : null,
           handler: () => {
+            this.goToProductDetails(product);
             // this.navCtrl.push(ProductDetailPage, {
             //   product: product
             // });
@@ -366,6 +386,7 @@ export class ProductsPage {
           text: 'Editar',
           icon: !this.platform.is('ios') ? 'create' : null,
           handler: () => {
+            this.updateProduct(product);
             // this.navCtrl.push(ProductUpdatePage, {
             //   product: product,
             //   selectedProductCategoryId: this.selectedCategory.id,
@@ -561,22 +582,45 @@ export class ProductsPage {
       .invokeElementMethod(searchInput, 'blur');
   }
 
-  private removeProduct(productToDelete) {
-    let removeProductAlert: any = this.util.getRemoveProductAlert(productToDelete.name);
+  private async removeProduct(productToDelete) {
 
-    removeProductAlert.addButton({
-      text: 'Borralo!',
-      handler: async () => {
-        let removeProductLoader =
-          await this.notifier.createLoader(`Borrando el Producto ${productToDelete.name}`);
-        this.productsProvider.remove(productToDelete).subscribe(() => {
-          this.products =
-            this.products.filter(product => product.name !== productToDelete.name)
-          // this.updateFavoritesInBackground();
-          removeProductLoader.dismiss();
-        });
-      }
+    let removeProductAlert = await this.alertCtrl.create({
+      header: 'Borrando!',
+      message: `Estas Seguro de borrar el producto ${productToDelete.name}`,
+      buttons: [
+        {
+          text: 'Cancelar',
+        }, {
+          text: 'Borralo!',
+          handler: async () => {
+            let removeProductLoader =
+              await this.notifier.createLoader(`Borrando el Producto ${productToDelete.name}`);
+            this.productsProvider.remove(productToDelete).subscribe(() => {
+              this.products =
+                this.products.filter(product => product.name !== productToDelete.name)
+              // this.updateFavoritesInBackground();
+              removeProductLoader.dismiss();
+            });
+          }
+        }
+      ]
     });
+
+    // let removeProductAlert: any = this.util.getRemoveProductAlert(productToDelete.name);
+
+    // removeProductAlert.addButton({
+    //   text: 'Borralo!',
+    //   handler: async () => {
+    //     let removeProductLoader =
+    //       await this.notifier.createLoader(`Borrando el Producto ${productToDelete.name}`);
+    //     this.productsProvider.remove(productToDelete).subscribe(() => {
+    //       this.products =
+    //         this.products.filter(product => product.name !== productToDelete.name)
+    //       // this.updateFavoritesInBackground();
+    //       removeProductLoader.dismiss();
+    //     });
+    //   }
+    // });
 
     removeProductAlert.present();
   }
