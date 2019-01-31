@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 
 import { ProductsPage } from './products.page';
 
+import { Camera } from '@ionic-native/camera/ngx';
+
 import { ProductDetailPage } from './product-detail/product-detail';
 import { ProductUpdatePage } from './product-update/product-update';
 import { ProductImgComponent } from './product-img/product-img.component';
@@ -41,6 +43,7 @@ import {  SafeUrlPipe } from './../../pipes/safe-url.pipe';
         ProductPreviewPage,
         ProductDetailPage,
         ProductUpdatePage
-    ]
+    ],
+    providers: [Camera]
 })
 export class ProductsModule { }

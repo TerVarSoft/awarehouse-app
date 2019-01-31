@@ -99,8 +99,8 @@ export class LoginPage {
     this.settingsProvider.loadFromStorage().then(settings => {
       if (settings) {
         console.log("Settings loaded from local storage...");
-        this.router.navigate(['/products']);
-        // this.navCtrl.setRoot(ProductsPage);
+        // this.router.navigate(['/products']);
+        this.navCtrl.navigateRoot('/products');
       }
     });
   }

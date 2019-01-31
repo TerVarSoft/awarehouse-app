@@ -66,10 +66,7 @@ export class TunariApi {
   }
 
   async postPromise(endpoint: string, body: any) {
-    return (await this.post(endpoint, body)).toPromise();
-  }
 
-  async post(endpoint: string, body: any) {
     let url = this.baseUrl + endpoint;
     let requestOptions = new RequestOptions();
     requestOptions.headers = new Headers(this.headers);
@@ -83,8 +80,23 @@ export class TunariApi {
 
     return await this.http
       .post(url, body, requestOptions)
-      .map(resp => resp.json().data);
+      .map(resp => resp.json().data)
+      .toPromise();
+  }
 
+  post(endpoint: string, body: any) {
+    let url = this.baseUrl + endpoint;
+    let requestOptions = new RequestOptions();
+    requestOptions.headers = new Headers(this.headers);
+
+    return this.getApiToken().flatMap(token => {
+      if (token) {
+        requestOptions.headers.append(this.authKey, 'Bearer ' + token);
+      }
+
+      return this.http.post(url, body, requestOptions)
+        .map(resp => resp.json().data).catch(this.catchErrors());
+    });
   }
 
   postImage(endpoint: string, imageData: any) {
