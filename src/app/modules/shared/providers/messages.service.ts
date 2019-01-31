@@ -22,4 +22,6 @@ export class MessagesService {
   errorWhenSavingProduct: string = `Hubo un error salvando el producto!`;
 
   noPriceConfigured: string = `No hay un precio configurado para este producto, actualizalo!`;
+
+  notAuthenticated: string = `Tus credenciales son incorrectas`;
 }

@@ -1,7 +1,6 @@
-import { Component, ElementRef, Renderer, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NavController, NavParams, ActionSheetController, Platform, AlertController, ModalController } from '@ionic/angular';
-import { Keyboard } from '@ionic-native/keyboard';
+import { ActionSheetController, Platform, AlertController, ModalController } from '@ionic/angular';
 import 'rxjs/add/observable/from';
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged"
@@ -28,52 +27,41 @@ import { SettingsCacheService } from '../../../shared/providers/settings-cache.s
 })
 export class ProductsPage implements OnInit {
 
-  private products: Product[] = [];
+  products: Product[] = [];
+  
+  searchQuery: FormControl = new FormControl();
 
-  private searchQuery: FormControl = new FormControl();
+  productsAreLoading: boolean = false;
 
-  public productsAreLoading: boolean = false;
+  page: number = 0;
 
-  private page: number = 0;
+  selectedCategory: any = {};
 
-  // private selectedCategory: any = this.settingsProvider.getProductCategoriesWithAll()[0];
-  private selectedCategory: any = {};
+  selectedType: any = {};
 
-  // private selectedType: any = this.settingsProvider.getProductTypesWithAll('')[0];
-  private selectedType: any = {};
+  selectedPrice: any = {};
 
-  // private selectedPrice: any = this.settingsProvider.getProductPrices('', '')[0] || {};
-  private selectedPrice: any = {};
+  productCategories: any[];
 
-  private productCategories: any[];
+  productTypes: any[];
 
-  private productTypes: any[];
+  productPrices: any[];
 
-  private productPrices: any[];  
-
-  constructor(public platform: Platform,
-    public navCtrl: NavController,
-    public actionSheetCtrl: ActionSheetController,
-    // public keyboard: Keyboard,
-    public renderer: Renderer,
-    private elRef: ElementRef,
-    public productsProvider: ProductsService,
-    public sellingsProvider: SellingsService,
-    public settingsProvider: SettingsCacheService,
-    public util: ProductsUtil,
-    public notifier: NotifierService,
-    public messages: MessagesService,
-    public connection: ConnectionService,
+  constructor(private platform: Platform,
+    private actionSheetCtrl: ActionSheetController,
+    private productsProvider: ProductsService,
+    private sellingsProvider: SellingsService,
+    private settingsProvider: SettingsCacheService,
+    private util: ProductsUtil,
+    private notifier: NotifierService,
+    private messages: MessagesService,
+    private connection: ConnectionService,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private _ngZone: NgZone
-    // public params: NavParams
   ) {
     this.setDefaultValues();
-    this.setupKeyboard();
-    // this.initFavorites();
     this.initSearchQuery();
-    // this.searchProducts();
   }
 
   ngOnInit() {
@@ -82,7 +70,7 @@ export class ProductsPage implements OnInit {
 
   /** Main Page functions */
 
-  public async pullNextProductsPage(eventInfiniteScroll) {
+  async pullNextProductsPage(eventInfiniteScroll) {
 
     if (this.page > 0 && this.connection.isConnected()) {
       this.page++;
@@ -105,14 +93,6 @@ export class ProductsPage implements OnInit {
     }
   }
 
-  onSearchClear(event) {
-    this.blurSearchBar();
-  }
-
-  /** Main Fab button functions. */
-
-  // createProduct(fab: FabContainer) {
-  //   fab.close();
   async createProduct() {
     const createProductModal = await this.modalCtrl.create({
       component: ProductUpdateComponent,
@@ -124,12 +104,9 @@ export class ProductsPage implements OnInit {
     });
 
     createProductModal.present();
-    // this.navCtrl.push(ProductUpdatePage, {
-    //   product: new Product(),
-    //   selectedProductCategoryId: this.selectedCategory.id,
-    //   selectedProductTypeId: this.selectedType.id,
-    // });    
-  }
+  }  
+
+  /** Individual Products functions. */
 
   async updateProduct(product: Product) {
     const updateProductModal = await this.modalCtrl.create({
@@ -140,20 +117,9 @@ export class ProductsPage implements OnInit {
     });
 
     updateProductModal.present();
-    // this.navCtrl.push(ProductUpdatePage, {
-    //   product: new Product(),
-    //   selectedProductCategoryId: this.selectedCategory.id,
-    //   selectedProductTypeId: this.selectedType.id,
-    // });    
   }
 
-  /** Individual Products functions. */
-
   async goToProductDetails(product: Product) {
-    // this.navCtrl.push(ProductDetailPage, {
-    //   product: product
-    // });
-
     const createProductModal = await this.modalCtrl.create({
       component: ProductDetailComponent,
       componentProps: {
@@ -198,10 +164,6 @@ export class ProductsPage implements OnInit {
 
             this.productsProvider.put(product).subscribe(() => {
               saveProductLoader.dismiss();
-
-              if (product.isFavorite) {
-                // this.updateFavoritesInBackground();
-              }
             }, error => {
               saveProductLoader.dismiss();
               this.notifier.createToast(this.messages.errorWhenSavingProduct);
@@ -210,33 +172,6 @@ export class ProductsPage implements OnInit {
         }
       ]
     });
-
-    // let alert: any = this.util.getAddPriceAlert(product, this.selectedPrice);
-    // alert.addButton({
-    //   text: 'Guardar',
-    //   handler: async data => {
-    //     let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-    //     const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id)
-
-    //     if (selectedPrice) {
-    //       selectedPrice.value = data.price;
-    //     } else {
-    //       saveProductLoader.dismiss();
-    //       this.notifier.createToast(this.messages.errorWhenSavingProduct);
-    //     }
-
-    //     this.productsProvider.put(product).subscribe(() => {
-    //       saveProductLoader.dismiss();
-
-    //       if (product.isFavorite) {
-    //         // this.updateFavoritesInBackground();
-    //       }
-    //     }, error => {
-    //       saveProductLoader.dismiss();
-    //       this.notifier.createToast(this.messages.errorWhenSavingProduct);
-    //     });
-    //   }
-    // });
 
     alert.present();
   }
@@ -275,31 +210,11 @@ export class ProductsPage implements OnInit {
             product.quantity = data.quantity;
             this.productsProvider.put(product).subscribe(() => {
               saveProductLoader.dismiss();
-
-              if (product.isFavorite) {
-                // this.updateFavoritesInBackground();
-              }
             });
           }
         }
       ]
     });
-
-    // let alert: any = this.util.getAddQuantityAlert(product);
-    // alert.addButton({
-    //   text: 'Guardar',
-    //   handler: async data => {
-    //     let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-    //     product.quantity = data.quantity;
-    //     this.productsProvider.put(product).subscribe(() => {
-    //       saveProductLoader.dismiss();
-
-    //       if (product.isFavorite) {
-    //         // this.updateFavoritesInBackground();
-    //       }
-    //     });
-    //   }
-    // });
 
     alert.present();
   }
@@ -338,33 +253,8 @@ export class ProductsPage implements OnInit {
       ]
     });
 
-    // let alert: any = this.util.getCreateSellingAlert(product, this.selectedPrice.id);
-    // alert.addButton({
-    //   text: 'Guardar',
-    //   handler: async data => {
-    //     let createSellingLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-    //     product.quantity = data.quantity;
-    //     this.sellingsProvider.post({
-    //       productId: product.id,
-    //       quantity: data.quantity,
-    //       priceId: this.selectedPrice.id
-    //     }).subscribe(() => {
-    //       createSellingLoader.dismiss();
-    //     });
-    //   }
-    // });
-
     alert.present();
   }
-
-  // createSelling(event, product: Product) {
-  //   event.stopPropagation();
-
-  //   this.navCtrl.push(ProductSellingUpdatePage, {
-  //     selling: {},
-  //     product: product
-  //   });
-  // }
 
   async openProductOptions(event, product) {
     event.stopPropagation();
@@ -378,20 +268,12 @@ export class ProductsPage implements OnInit {
           icon: !this.platform.is('ios') ? 'eye' : null,
           handler: () => {
             this.goToProductDetails(product);
-            // this.navCtrl.push(ProductDetailPage, {
-            //   product: product
-            // });
           }
         }, {
           text: 'Editar',
           icon: !this.platform.is('ios') ? 'create' : null,
           handler: () => {
             this.updateProduct(product);
-            // this.navCtrl.push(ProductUpdatePage, {
-            //   product: product,
-            //   selectedProductCategoryId: this.selectedCategory.id,
-            //   selectedProductTypeId: this.selectedType.id,
-            // });
           }
         }, {
           text: 'Eliminar',
@@ -406,7 +288,7 @@ export class ProductsPage implements OnInit {
     actionSheet.present();
   }
 
-  /** Product options functions */
+  /** Product filter functions */
 
   async changeCategory(event) {
     event.stopPropagation();
@@ -447,31 +329,6 @@ export class ProductsPage implements OnInit {
       ]
     });
 
-    // return alert;
-
-    // let alert: any = this.util.getProductCategoriesAlert(this.selectedCategory);
-    // alert.addButton({
-    //   text: 'Guardar',
-    //   handler: async data => {
-    //     console.log(data);
-    //     this.selectedCategory = data
-
-    //     this.selectedType = this.productTypes[0];
-    //     this.productTypes = await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
-    //     this.productPrices = await this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id);
-
-    //     this.selectedPrice = this.productPrices.length > 0 ?
-    //       this.productPrices[0] : {};
-
-    //     if (this.selectedCategory.id === '') {
-    //       // this.initFavorites();
-    //     } else {
-    //       this.searchProducts();
-    //     }
-
-    //   }
-    // })
-
     alert.present();
   }
 
@@ -503,16 +360,6 @@ export class ProductsPage implements OnInit {
         }
       ]
     });
-
-    // let alert: any = this.util.getProductTypesAlert(this.selectedCategory, this.selectedType);
-    // alert.addButton({
-    //   text: 'Guardar',
-    //   handler: data => {
-    //     console.log(data);
-    //     this.selectedType = data
-    //     this.searchProducts();
-    //   }
-    // })
 
     alert.present();
   }
@@ -546,16 +393,6 @@ export class ProductsPage implements OnInit {
       ]
     });
 
-    // let alert: any = this.util.getProductPricesAlert(this.selectedCategory, this.selectedType, this.selectedPrice);
-    // alert.addButton({
-    //   text: 'Guardar',
-    //   handler: data => {
-    //     console.log(data);
-    //     this.selectedPrice = data
-    //     this.searchProducts();
-    //   }
-    // })
-
     alert.present();
   }
 
@@ -568,18 +405,6 @@ export class ProductsPage implements OnInit {
     this.selectedType = this.productTypes[0];
     this.productPrices = await this.settingsProvider.getProductPrices('', '');
     this.selectedPrice = this.productPrices[0];
-  }
-
-  private setupKeyboard() {
-    // this.keyboard.onKeyboardHide().subscribe(() => {
-    //   this.blurSearchBar();
-    // });
-  }
-
-  private blurSearchBar() {
-    const searchInput = this.elRef.nativeElement.querySelector('.searchbar-input')
-    this.renderer
-      .invokeElementMethod(searchInput, 'blur');
   }
 
   private async removeProduct(productToDelete) {
@@ -598,7 +423,6 @@ export class ProductsPage implements OnInit {
             this.productsProvider.remove(productToDelete).subscribe(() => {
               this.products =
                 this.products.filter(product => product.name !== productToDelete.name)
-              // this.updateFavoritesInBackground();
               removeProductLoader.dismiss();
             });
           }
@@ -606,52 +430,8 @@ export class ProductsPage implements OnInit {
       ]
     });
 
-    // let removeProductAlert: any = this.util.getRemoveProductAlert(productToDelete.name);
-
-    // removeProductAlert.addButton({
-    //   text: 'Borralo!',
-    //   handler: async () => {
-    //     let removeProductLoader =
-    //       await this.notifier.createLoader(`Borrando el Producto ${productToDelete.name}`);
-    //     this.productsProvider.remove(productToDelete).subscribe(() => {
-    //       this.products =
-    //         this.products.filter(product => product.name !== productToDelete.name)
-    //       // this.updateFavoritesInBackground();
-    //       removeProductLoader.dismiss();
-    //     });
-    //   }
-    // });
-
     removeProductAlert.present();
   }
-
-  // private initFavorites() {
-  //   this.page = 0;
-  //   this.productsProvider.getFavorites(this.params.data.productCategory)
-  //     .then(async cachedFavorites => {
-  //       if (cachedFavorites && cachedFavorites.length > 0) {
-  //         console.log("Favorites pulled from storage...");
-  //         this.products = cachedFavorites;
-  //         this.updateFavoritesInBackground();
-  //       } else {
-  //         console.log("Favorites pulled from the server...");
-  //         let loader = await this.notifier.createLoader("Cargando Novedades");
-  //         this.productsProvider.loadFavoritesFromServer(this.params.data.productCategory)
-  //           .map(productsObject => productsObject.items)
-  //           .subscribe(products => {
-  //             this.products = products
-  //             loader.dismiss();
-  //           });
-  //       }
-  //     });
-  // }
-
-  // private updateFavoritesInBackground() {
-  //   // Update storage in background with server response.
-  //   console.log("Updating product favorites in background");
-  //   this.productsProvider.loadFavoritesFromServer(this.params.data.productCategory)
-  //     .subscribe();
-  // }
 
   private initSearchQuery() {
 
@@ -660,52 +440,9 @@ export class ProductsPage implements OnInit {
       .filter(query => this.connection.isConnected())
       .debounceTime(200)
       .distinctUntilChanged()
-      // .switchMap(query => {
-      //   this.productsAreLoading = true;
-      //   return this.productsProvider.getObserver({
-      //     tags: query,
-      //     categoryId: this.selectedCategory.id,
-      //     typeId: this.selectedType.id
-      //   })
-      // })
-      // .map(productsObject => productsObject.items)
       .subscribe(query => {
-        console.log('subscripte searchQuery')
         this.searchProducts();
       });
-
-    // this.searchQuery.valueChanges
-    //   .filter(query => query)
-    //   .filter(query => this.connection.isConnected())
-    //   .debounceTime(100)
-    //   .distinctUntilChanged()
-    //   .switchMap(query => {
-    //     this.productsAreLoading = true;
-    //     return this.productsProvider.getObserver({
-    //       tags: query,
-    //       categoryId: this.selectedCategory.id,
-    //       typeId: this.selectedType.id
-    //     })
-    //   })
-    //   .map(productsObject => productsObject.items)
-    //   .subscribe(products => {
-    //     console.log('hey')
-    //     console.log(products)
-
-    //     this.productsAreLoading = false;
-    //     this.page = 1;
-    //     this.products = products
-
-    //   });
-
-    // this.searchQuery.valueChanges
-    //   .filter(query => query)
-    //   .filter(query => !this.connection.isConnected())
-    //   .subscribe(() => this.notifier.createToast(this.messages.noInternetError));
-
-    // this.searchQuery.valueChanges
-    //   .filter(query => !query)
-    //   .subscribe(() => this.initFavorites());
   }
 
 

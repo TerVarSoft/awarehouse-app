@@ -37,59 +37,39 @@ export class LoginPage {
     });
   }
 
-  // async onLogin(form: NgForm) {
-  //   this.submitted = true;
-
-  //   if (form.valid) {
-  //     let loader = await this.notifier.createLoader(this.messages.authenticating);
-  //     this.loginService.post(this.login.username, this.login.password)
-  //       .subscribe(resp => {
-  //         const userToken: UserToken = resp;
-  //         if (userToken.role === 0) {
-  //           this.storage.setAuthToken(userToken.authToken).then(() => {
-  //             console.log("Token Authentication has been provided by the server");
-  //             this.settingsProvider.setSettings(userToken.settings);
-  //             loader.dismiss();
-  //             // this.navCtrl.setRoot(ProductsPage);
-  //           });
-  //         } else {
-  //           // loader.dismiss();
-  //           this.notifier.createToast(this.messages.notAdminUser);
-  //         }
-  //       }, error => {
-  //         // loader.dismiss();
-  //         this.notifier.createToast(this.messages.invalidUser);
-  //       });
-  //   }
-  // }
-
   async onLogin(form: NgForm) {
     this.submitted = true;
 
     if (form.valid) {
       let loader = await this.notifier.createLoader(this.messages.authenticating);
-      const loginResponse = await this.loginService.post(this.login.username, this.login.password);
 
-      const userToken: UserToken = loginResponse;
-      if (userToken.role === 0) {
-        this.storage.setAuthToken(userToken.authToken).then(() => {
+      let loginResponse: UserToken;
+      try {
+        loginResponse = await this.loginService.post(this.login.username, this.login.password);
+      } catch (exception) {
+        const errorResponse = JSON.parse(exception._body);
+
+        if (errorResponse.status === 401 && errorResponse.code === 1) {
+          this.notifier.createToast(this.messages.notAuthenticated);
+        }
+
+        loader.dismiss();
+        return;
+      }
+
+      if (loginResponse.role === 0) {
+        this.storage.setAuthToken(loginResponse.authToken).then(() => {
           console.log("Token Authentication has been provided by the server");
-          this.settingsProvider.setSettings(userToken.settings);
+          this.settingsProvider.setSettings(loginResponse.settings);
           loader.dismiss();
 
           this.router.navigate(['/products']);
-          // this.navCtrl.setRoot(ProductsPage);
         });
       } else {
-        // loader.dismiss();
+        loader.dismiss();
         this.notifier.createToast(this.messages.notAdminUser);
       }
     }
-    // }, error => {
-    //   // loader.dismiss();
-    //   this.notifier.createToast(this.messages.invalidUser);
-    // });
-
   }
 
   private loadConfiguration() {
@@ -97,7 +77,6 @@ export class LoginPage {
     this.settingsProvider.loadFromStorage().then(settings => {
       if (settings) {
         console.log("Settings loaded from local storage...");
-        // this.router.navigate(['/products']);
         this.navCtrl.navigateRoot('/products');
       }
     });

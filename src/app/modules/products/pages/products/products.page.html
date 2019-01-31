@@ -9,7 +9,7 @@
   </ion-toolbar>
 
   <ion-toolbar color="primary">
-    <ion-searchbar animated=true #searchInput placeholder="Que buscas hoy?" [formControl]="searchQuery" (ionClear)="onSearchClear()"></ion-searchbar>
+    <ion-searchbar animated=true #searchInput placeholder="Que buscas hoy?" [formControl]="searchQuery"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -38,10 +38,6 @@
           <ion-icon name="pricetag"></ion-icon>
           Precio
         </ion-item-option>
-        <!-- <ion-button (click)="addPriceWhenNoPrice($event, product)" color="primary">
-          <ion-icon name="pricetag"></ion-icon>
-          Precio
-        </ion-button> -->
         <ion-item-option (click)="setProductQuantity($event, product)" color="primary">
           <ion-icon name="home"></ion-icon>
           Cantidad
