@@ -3,15 +3,13 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router'
 import { NavController } from '@ionic/angular';
 
-import { ProductsPage } from '../../../products/pages/products/products.page';
+import { LoginService } from '../../../shared/providers/login.service';
+import { SettingsCache } from '../../../shared/providers/settings-cache.service';
+import { MessagesService } from '../../../shared/providers/messages.service';
+import { NotifierService } from '../../../shared/providers/tunari-notifier.service';
+import { StorageService } from '../../../shared/providers/storage.service';
 
-import { Login } from '../../../../../providers/login';
-import { SettingsCache } from '../../../../../providers/settings-cache';
-import { TunariMessages } from '../../../../../providers/tunari-messages';
-import { TunariNotifier } from '../../../../../providers/tunari-notifier';
-import { TunariStorage } from '../../../../../providers/tunari-storage';
-
-import { UserToken } from '../../../../../models/user-token';
+import { UserToken } from './../../../shared/models/user-token';
 
 @Component({
   selector: 'page-login',
@@ -25,11 +23,11 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController,
     private router: Router,
-    public loginService: Login,
+    public loginService: LoginService,
     public settingsProvider: SettingsCache,
-    public notifier: TunariNotifier,
-    public storage: TunariStorage,
-    public messages: TunariMessages) {
+    public notifier: NotifierService,
+    public storage: StorageService,
+    public messages: MessagesService) {
     this.storage.getAuthtoken().then(token => {
       if (!token) {
         this.isLoggedIn = false;

@@ -5,7 +5,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
  * Notifications service helper. 
  */
 @Injectable()
-export class TunariNotifier {
+export class NotifierService {
 
   constructor(public loadingCtrl: LoadingController,
     private toastCtrl: ToastController) { }

@@ -2,19 +2,19 @@ import { RequestOptions, URLSearchParams } from '@angular/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { TunariApi } from './tunari-api';
+import { ApiService } from './api.service';
 
 /**
  * Sellings endpoint provider. 
  */
 @Injectable()
-export class Sellings {
+export class SellingsService {
 
   baseUrl: string;
 
   endpoint: string = "sellings";
 
-  constructor(public api: TunariApi) { }
+  constructor(public api: ApiService) { }
 
   get() {
     return this.api.get(this.endpoint);

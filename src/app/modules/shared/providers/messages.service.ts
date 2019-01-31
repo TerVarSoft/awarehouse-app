@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
  * Notifications service helper. 
  */
 @Injectable()
-export class TunariMessages {  
+export class MessagesService {  
   
   authenticating: string = `Autenticando GrafTunari`;
 

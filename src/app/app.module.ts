@@ -11,16 +11,16 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { Connection } from '../providers/connection';
-import { Login } from '../providers/login';
-import { TunariNotifier } from '../providers/tunari-notifier';
-import { TunariMessages } from '../providers/tunari-messages';
-import { Products } from '../providers/products';
-import { Settings } from '../providers/settings';
-import { Sellings } from '../providers/sellings';
-import { SettingsCache } from '../providers/settings-cache';
-import { TunariApi } from '../providers/tunari-api';
-import { TunariStorage } from '../providers/tunari-storage';
+import { Connection } from './modules/shared/providers/connection.service';
+import { LoginService } from './modules/shared/providers/login.service';
+import { NotifierService } from './modules/shared/providers/notifier.service';
+import { MessagesService } from './modules/shared/providers/messages.service';
+import { ProductsService } from './modules/shared/providers/products.service';
+import { SettingsService } from './modules/shared/providers/settings.service';
+import { SellingsService } from './modules/shared/providers/sellings.service';
+import { SettingsCache } from './modules/shared/providers/settings-cache.service';
+import { ApiService } from './modules/shared/providers/api.service';
+import { StorageService } from './modules/shared/providers/storage.service';
 
 @NgModule({
   declarations: [
@@ -36,21 +36,19 @@ import { TunariStorage } from '../providers/tunari-storage';
     AppRoutingModule,
     IonicStorageModule.forRoot()],
   providers: [
+    SplashScreen,
+    StatusBar,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Connection,
-    Login,
-    Products,
-    Settings,
-    Sellings,
-    SettingsCache,
-    SplashScreen,
-    StatusBar,
-    TunariApi,
-    TunariMessages,
-    TunariNotifier,
-    TunariStorage,
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    ApiService,        
+    StorageService,
+    MessagesService,
+    NotifierService,
+    LoginService,
+    ProductsService,
+    SettingsService,
+    SellingsService,
+    SettingsCache
   ],
   bootstrap: [AppComponent]
 })

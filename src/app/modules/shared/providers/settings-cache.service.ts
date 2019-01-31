@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { Settings } from './settings';
-import { TunariStorage } from './tunari-storage';
+import { Settings } from './settings.service';
+import { StorageService } from './storage.service';
 
 /**
  * Settings Cache provider. 
@@ -13,7 +13,7 @@ export class SettingsCache {
   settings: any = {};
 
   constructor(public settingsProvider: Settings,
-    public storage: TunariStorage) {
+    public storage: StorageService) {
   }
 
   getImgServerUrl(): string {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
-import { SettingsCache } from '../../../providers/settings-cache';
+import { SettingsCache } from '../shared/providers/settings-cache.service';
 
 @Injectable()
 export class ProductsSellingsUtil {

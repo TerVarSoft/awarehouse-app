@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
 /**
- * Tunari wrapper to access storage.
+ * Wrapper to access storage.
  */
 @Injectable()
-export class TunariStorage {
+export class StorageService {
 
   private authTokenKey: string = "authToken";
 

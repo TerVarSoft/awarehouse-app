@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { TunariApi } from './tunari-api';
+import { ApiService } from './api.service';
 
 /**
  * Settings endpoint provider. 
  */
 @Injectable()
-export class Settings {
+export class SettingsService {
 
   baseUrl: string;
 
   endpoint: string = "settings";
 
-  constructor(public api: TunariApi) {}
+  constructor(public api: ApiService) {}
 
   get() {
     return this.api.get(this.endpoint);

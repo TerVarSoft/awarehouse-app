@@ -4,14 +4,14 @@ import 'rxjs/add/operator/map';
 
 import * as _ from "lodash";
 
-import { TunariApi } from './tunari-api';
-import { TunariStorage } from './tunari-storage';
+import { ApiService } from './api.service';
+import { StorageService } from './storage.service';
 
 /**
  * Products endpoint provider. 
  */
 @Injectable()
-export class Products {
+export class ProductsService {
 
   baseUrl: string;
 
@@ -19,7 +19,7 @@ export class Products {
 
   imageEndpoint: string = 'images';
 
-  constructor(public api: TunariApi, public storage: TunariStorage) { }
+  constructor(public api: ApiService, public storage: StorageService) { }
 
   get(query: any, page: number = 1) {
     let params: URLSearchParams = new URLSearchParams();

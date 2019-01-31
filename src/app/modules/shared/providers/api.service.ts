@@ -11,13 +11,13 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 // import 'rxjs/add/observable/throw';
 
-import { TunariStorage } from './tunari-storage';
+import { TunariStorage } from './storage.service';
 
 /**
- * Tunari Api, generic REST api handler.
+ * Api, generic REST api handler.
  */
 @Injectable()
-export class TunariApi {
+export class ApiService {
 
   baseUrl: string = 'https://imptunari.herokuapp.com/api/';
 

@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { TunariApi } from './tunari-api';
+import { ApiService } from './api.service';
 
 /**
  * Login endpoint provider. 
  */
 @Injectable()
-export class Login {
+export class LoginService {
 
   baseUrl: string;
 
   endpoint: string = "auth";
 
-  constructor(public api: TunariApi) {
+  constructor(public api: ApiService) {
     this.baseUrl = this.api.baseUrl;
   }
 

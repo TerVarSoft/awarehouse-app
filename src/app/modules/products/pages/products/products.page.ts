@@ -10,15 +10,15 @@ import "rxjs/add/operator/switchMap";
 import { ProductDetailComponent } from '../../components/product-detail/product-detail.component';
 import { ProductUpdateComponent } from '../../components/product-update/product-update.component';
 
-import { Connection } from '../../../../../providers/connection';
-import { Products } from '../../../../../providers/products';
-import { Sellings } from '../../../../../providers/sellings';
-import { ProductsUtil } from '../../products.util';
-import { TunariMessages } from '../../../../../providers/tunari-messages';
-import { TunariNotifier } from '../../../../../providers/tunari-notifier';
+import { Connection } from '../../../shared/providers/connection.service';
+import { ProductsService } from '../../../shared/providers/products.service';
+import { SellingsService } from '../../../shared/providers/sellings.service';
+import { ProductsUtil } from './../../products.util';
+import { MessagesService } from '../../../shared/providers/messages.service';
+import { NotifierService } from '../../../shared/providers/notifier.service';
 
-import { Product } from '../../../../../models/product';
-import { SettingsCache } from '../../../../../providers/settings-cache';
+import { Product } from '../../../shared/models/product';
+import { SettingsCache } from '../../../shared/providers/settings-cache.service';
 
 @Component({
   selector: 'page-products',
@@ -57,12 +57,12 @@ export class ProductsPage implements OnInit {
     // public keyboard: Keyboard,
     public renderer: Renderer,
     private elRef: ElementRef,
-    public productsProvider: Products,
-    public sellingsProvider: Sellings,
+    public productsProvider: ProductsService,
+    public sellingsProvider: SellingsService,
     public settingsProvider: SettingsCache,
     public util: ProductsUtil,
-    public notifier: TunariNotifier,
-    public messages: TunariMessages,
+    public notifier: NotifierService,
+    public messages: MessagesService,
     public connection: Connection,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,

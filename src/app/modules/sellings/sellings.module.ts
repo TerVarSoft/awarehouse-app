@@ -4,9 +4,9 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { SellingsPage } from './pages/sellings.page';
+import { SellingsPage } from './pages/sellings/sellings.page';
 
-import { Transactions } from '../../../providers/transactions';
+import { Transactions } from './../shared/providers/transactions';
 
 @NgModule({
     imports: [
