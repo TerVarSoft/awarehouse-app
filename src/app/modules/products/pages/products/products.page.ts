@@ -7,23 +7,23 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged"
 import "rxjs/add/operator/switchMap";
 
-import { ProductDetailPage } from './product-detail/product-detail';
-import { ProductUpdatePage } from './product-update/product-update';
+import { ProductDetailComponent } from '../../components/product-detail/product-detail.component';
+import { ProductUpdateComponent } from '../../components/product-update/product-update.component';
 
-import { Connection } from '../../providers/connection';
-import { Products } from '../../providers/products';
-import { Sellings } from '../../providers/sellings';
-import { ProductsUtil } from './products-util';
-import { TunariMessages } from '../../providers/tunari-messages';
-import { TunariNotifier } from '../../providers/tunari-notifier';
+import { Connection } from '../../../../../providers/connection';
+import { Products } from '../../../../../providers/products';
+import { Sellings } from '../../../../../providers/sellings';
+import { ProductsUtil } from '../../products.util';
+import { TunariMessages } from '../../../../../providers/tunari-messages';
+import { TunariNotifier } from '../../../../../providers/tunari-notifier';
 
-import { Product } from '../../models/product';
-import { SettingsCache } from '../../providers/settings-cache';
+import { Product } from '../../../../../models/product';
+import { SettingsCache } from '../../../../../providers/settings-cache';
 
 @Component({
   selector: 'page-products',
   styleUrls: ['products.page.scss'],
-  templateUrl: 'products.html',
+  templateUrl: 'products.page.html',
   providers: [ProductsUtil]
 })
 export class ProductsPage implements OnInit {
@@ -115,7 +115,7 @@ export class ProductsPage implements OnInit {
   //   fab.close();
   async createProduct() {
     const createProductModal = await this.modalCtrl.create({
-      component: ProductUpdatePage,
+      component: ProductUpdateComponent,
       componentProps: {
         product: new Product(),
         selectedProductCategoryId: this.selectedCategory.id,
@@ -133,7 +133,7 @@ export class ProductsPage implements OnInit {
 
   async updateProduct(product: Product) {
     const updateProductModal = await this.modalCtrl.create({
-      component: ProductUpdatePage,
+      component: ProductUpdateComponent,
       componentProps: {
         product: product
       }
@@ -155,7 +155,7 @@ export class ProductsPage implements OnInit {
     // });
 
     const createProductModal = await this.modalCtrl.create({
-      component: ProductDetailPage,
+      component: ProductDetailComponent,
       componentProps: {
         product: product
       }

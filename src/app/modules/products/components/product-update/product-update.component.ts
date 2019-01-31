@@ -3,21 +3,21 @@ import { Component } from '@angular/core';
 import { Camera } from '@ionic-native/camera/ngx';
 import { NavParams, AlertController, NavController, ModalController } from '@ionic/angular';
 
-import { Products } from '../../../providers/products';
-import { ProductsUtil } from './../products-util';
-import { TunariNotifier } from '../../../providers/tunari-notifier';
-import { SettingsCache } from '../../../providers/settings-cache';
-import { TunariMessages } from '../../../providers/tunari-messages';
+import { Products } from '../../../../../providers/products';
+import { ProductsUtil } from '../../products.util';
+import { TunariNotifier } from '../../../../../providers/tunari-notifier';
+import { SettingsCache } from '../../../../../providers/settings-cache';
+import { TunariMessages } from '../../../../../providers/tunari-messages';
 
-import { Product, updateProductPatch } from '../../../models/product';
+import { Product, updateProductPatch } from '../../../../../models/product';
 
 @Component({
   selector: 'product-update',
-  templateUrl: 'product-update.html',
-  styleUrls: ['product-update.scss'],
+  templateUrl: 'product-update.component.html',
+  styleUrls: ['product-update.component.scss'],
   providers: [ProductsUtil]
 })
-export class ProductUpdatePage {
+export class ProductUpdateComponent {
 
   segment = 'general';
 

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
-import { TunariApi } from '../../../providers/tunari-api';
+import { TunariApi } from './../../../../../providers/tunari-api';
 
 @Component({
   selector: 'thumbnail-img',
@@ -27,10 +27,10 @@ export class ThumbnailImgComponent implements OnInit {
       },
         error => {
           if (error.status === 0) {
-            this.url = 'assets/img/errorLoading.gif';
+            this.url = './assets/img/errorLoading.gif';
             this.isLoading = false;
           } else if (error.status === 404) {
-            this.url = 'assets/img/defaultProduct.png';
+            this.url = './assets/img/defaultProduct.png';
             this.isLoading = false;
           }
         });

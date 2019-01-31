@@ -1,9 +1,9 @@
 import { Injectable, } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
-import { SettingsCache } from '../../providers/settings-cache';
+import { SettingsCache } from '../../../providers/settings-cache';
 
-import { Product } from '../../models/product';
+import { Product } from '../../../models/product';
 
 /**
  * Utility class for products endpoint provider. 

@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from '@ionic/angular';
 
-import { ProductUpdatePage } from '../product-update/product-update';
+import { ProductUpdateComponent } from '../product-update/product-update.component';
 
-import { Product } from '../../../models/product';
+import { Product } from '../../../../../models/product';
 
-import { ProductsUtil } from './../products-util';
-import { SettingsCache } from '../../../providers/settings-cache';
+import { ProductsUtil } from '../../products.util';
+import { SettingsCache } from '../../../../../providers/settings-cache';
 
 @Component({
   selector: 'product-detail',
-  templateUrl: 'product-detail.html',
-  styleUrls: ['product-detail.scss'],
+  templateUrl: 'product-detail.component.html',
+  styleUrls: ['product-detail.component.scss'],
   providers: [ProductsUtil]
 })
-export class ProductDetailPage {
+export class ProductDetailComponent {
 
   segment = 'prices';
 
@@ -52,7 +52,7 @@ export class ProductDetailPage {
     // });
 
     const createProductModal = await this.modalCtrl.create({
-      component: ProductUpdatePage,
+      component: ProductUpdateComponent,
       componentProps: {
         product: this.product
       }

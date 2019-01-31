@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ModalController } from '@ionic/angular';
 
-import { ProductPreviewPage } from '../product-preview/product-preview';
+import { ProductPreviewComponent } from '../product-preview/product-preview.component';
 
-import { Product } from '../../../models/product';
+import { Product } from './../../../../../models/product';
 
 @Component({
   selector: 'product-img',
@@ -19,7 +19,7 @@ export class ProductImgComponent {
     event.stopPropagation();
 
     const modal = await this.modalController.create({
-      component: ProductPreviewPage,
+      component: ProductPreviewComponent,
       componentProps: {
         'product': this.product
       }

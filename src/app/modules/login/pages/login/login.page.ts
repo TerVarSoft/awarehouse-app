@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router'
 import { NavController } from '@ionic/angular';
 
-import { ProductsPage } from '../../../../../pages/products/products.page';
+import { ProductsPage } from '../../../products/pages/products/products.page';
 
 import { Login } from '../../../../../providers/login';
 import { SettingsCache } from '../../../../../providers/settings-cache';

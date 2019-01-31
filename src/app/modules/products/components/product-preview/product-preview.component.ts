@@ -1,15 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NavController, NavParams, ModalController } from '@ionic/angular';
 
-import { TunariApi } from '../../../providers/tunari-api';
+import { TunariApi } from '../../../../../providers/tunari-api';
 
-import { Product } from '../../../models/product';
+import { Product } from '../../../../../models/product';
 
 @Component({
     selector: 'product-preview',
-    templateUrl: 'product-preview.html',
+    templateUrl: 'product-preview.component.html',
 })
-export class ProductPreviewPage implements OnInit {
+export class ProductPreviewComponent implements OnInit {
 
     url: String;
 
