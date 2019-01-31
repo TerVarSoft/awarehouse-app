@@ -8,7 +8,7 @@ import { ApiService } from './api.service';
  * Sellings endpoint provider. 
  */
 @Injectable()
-export class Transactions {
+export class TransactionsService {
 
   baseUrl: string;
 

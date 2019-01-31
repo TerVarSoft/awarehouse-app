@@ -3,13 +3,13 @@ import { FormControl } from '@angular/forms';
 import { NavController, NavParams } from '@ionic/angular';
 import * as _ from "lodash";
 
-import { TunariNotifier } from './../../../../../providers/tunari-notifier';
+import { NotifierService } from './../../../shared/providers/notifier.service';
 import { ProductsSellingsUtil } from './../../sellings.util';
-import { Products } from './../../../../../providers/products';
-import { Sellings } from './../../../../../providers/sellings';
+import { ProductsService } from './../../../shared/providers/products.service';
+import { SellingsService } from './../../../shared/providers/sellings.service';
 
-import { Selling } from './../../../../../models/selling';
-import { Product } from './../../../../../models/product';
+import { Selling } from './../../../shared/models/selling';
+import { Product } from './../../../shared/models/product';
 
 @Component({
     selector: 'selling-update',
@@ -47,9 +47,9 @@ export class ProductSellingUpdatePage {
     constructor(public navCtrl: NavController,
         public navParams: NavParams,
         public util: ProductsSellingsUtil,
-        public notifier: TunariNotifier,
-        public productsProvider: Products,
-        public sellingsProvider: Sellings,
+        public notifier: NotifierService,
+        public productsProvider: ProductsService,
+        public sellingsProvider: SellingsService,
     ) {
         this.selling = this.navParams.data.selling;
         this.product = this.navParams.data.product;

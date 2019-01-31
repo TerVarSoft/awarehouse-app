@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { Settings } from './settings.service';
+import { SettingsService } from './settings.service';
 import { StorageService } from './storage.service';
 
 /**
  * Settings Cache provider. 
  */
 @Injectable()
-export class SettingsCache {
+export class SettingsCacheService {
 
   settings: any = {};
 
-  constructor(public settingsProvider: Settings,
+  constructor(public settingsProvider: SettingsService,
     public storage: StorageService) {
   }
 

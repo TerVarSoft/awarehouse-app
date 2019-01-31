@@ -4,9 +4,9 @@ import { Router } from '@angular/router'
 import { NavController } from '@ionic/angular';
 
 import { LoginService } from '../../../shared/providers/login.service';
-import { SettingsCache } from '../../../shared/providers/settings-cache.service';
+import { SettingsCacheService } from '../../../shared/providers/settings-cache.service';
 import { MessagesService } from '../../../shared/providers/messages.service';
-import { NotifierService } from '../../../shared/providers/tunari-notifier.service';
+import { NotifierService } from '../../../shared/providers/notifier.service';
 import { StorageService } from '../../../shared/providers/storage.service';
 
 import { UserToken } from './../../../shared/models/user-token';
@@ -24,7 +24,7 @@ export class LoginPage {
   constructor(public navCtrl: NavController,
     private router: Router,
     public loginService: LoginService,
-    public settingsProvider: SettingsCache,
+    public settingsProvider: SettingsCacheService,
     public notifier: NotifierService,
     public storage: StorageService,
     public messages: MessagesService) {

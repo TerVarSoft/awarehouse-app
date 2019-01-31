@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { SellingsPage } from './pages/sellings/sellings.page';
 
-import { Transactions } from './../shared/providers/transactions';
+import { TransactionsService } from './../shared/providers/transactions.service';
 
 @NgModule({
     imports: [
@@ -24,7 +24,7 @@ import { Transactions } from './../shared/providers/transactions';
     declarations: [
         SellingsPage
     ],
-    providers: [Transactions],
+    providers: [TransactionsService],
     entryComponents: []
 })
 export class SellingsModule { }

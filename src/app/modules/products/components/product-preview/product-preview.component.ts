@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NavController, NavParams, ModalController } from '@ionic/angular';
 
-import { TunariApi } from '../../../../../providers/tunari-api';
+import { ApiService } from './../../..//shared/providers/api.service';
 
-import { Product } from '../../../../../models/product';
+import { Product } from './../../..//shared/models/product';
 
 @Component({
     selector: 'product-preview',
@@ -19,7 +19,7 @@ export class ProductPreviewComponent implements OnInit {
         private modalCtrl: ModalController,
         public navParams: NavParams,
         public navCtrl: NavController,
-        public api: TunariApi) {
+        public api: ApiService) {
     }
 
     ngOnInit() {

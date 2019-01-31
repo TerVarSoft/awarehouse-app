@@ -3,7 +3,7 @@ import { NavController, ModalController } from '@ionic/angular';
 
 import { ProductPreviewComponent } from '../product-preview/product-preview.component';
 
-import { Product } from './../../../../../models/product';
+import { Product } from './../../../shared/models/product';
 
 @Component({
   selector: 'product-img',

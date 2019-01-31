@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
-import { SettingsCache } from '../shared/providers/settings-cache.service';
+import { SettingsCacheService } from './../shared/providers/settings-cache.service';
 
 @Injectable()
 export class ProductsSellingsUtil {
 
-    constructor(public alertCtrl: AlertController, private settingsProvider: SettingsCache) { }
+    constructor(public alertCtrl: AlertController, private settingsProvider: SettingsCacheService) { }
 
     async getRemoveSellingAlert(productName: string) {
         let alert = await this.alertCtrl.create({

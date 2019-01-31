@@ -7,7 +7,7 @@ declare var navigator: any;
  * Connection helper. 
  */
 @Injectable()
-export class Connection {  
+export class ConnectionService {  
   
   // constructor(public network: Network) {
 

@@ -4,7 +4,7 @@ import { NavController } from '@ionic/angular';
 import * as _ from "lodash";
 import * as moment from 'moment';
 
-import { Transactions } from './../../../shared/providers/transactions.service';
+import { TransactionsService } from './../../../shared/providers/transactions.service';
 
 import { Selling } from './../../../shared/models/selling';
 
@@ -19,7 +19,7 @@ export class SellingsPage {
 
     filterDate: Date;
 
-    constructor(public transactionsProvider: Transactions,
+    constructor(public transactionsProvider: TransactionsService,
         public navCtrl: NavController) { }
 
     ionViewWillEnter() {

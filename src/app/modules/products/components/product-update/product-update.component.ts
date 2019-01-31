@@ -3,13 +3,13 @@ import { Component } from '@angular/core';
 import { Camera } from '@ionic-native/camera/ngx';
 import { NavParams, AlertController, NavController, ModalController } from '@ionic/angular';
 
-import { Products } from '../../../../../providers/products';
-import { ProductsUtil } from '../../products.util';
-import { TunariNotifier } from '../../../../../providers/tunari-notifier';
-import { SettingsCache } from '../../../../../providers/settings-cache';
-import { TunariMessages } from '../../../../../providers/tunari-messages';
+import { ProductsService } from './../../../shared/providers/products.service';
+import { ProductsUtil } from './../../products.util';
+import { NotifierService } from './../../../shared/providers/notifier.service';
+import { SettingsCacheService } from './../../../shared/providers/settings-cache.service';
+import { MessagesService } from './../../../shared/providers/messages.service';
 
-import { Product, updateProductPatch } from '../../../../../models/product';
+import { Product, updateProductPatch } from './../../../shared/models/product';
 
 @Component({
   selector: 'product-update',
@@ -45,10 +45,10 @@ export class ProductUpdateComponent {
     public navCtrl: NavController,
     private modalCtrl: ModalController,
     public util: ProductsUtil,
-    public productsProvider: Products,
-    public notifier: TunariNotifier,
-    private settingsProvider: SettingsCache,
-    private messages: TunariMessages,
+    public productsProvider: ProductsService,
+    public notifier: NotifierService,
+    private settingsProvider: SettingsCacheService,
+    private messages: MessagesService,
     private camera: Camera) {
 
     this.originalProduct = this.navParams.data.product;

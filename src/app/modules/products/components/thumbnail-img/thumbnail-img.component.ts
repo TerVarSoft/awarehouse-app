@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
-import { TunariApi } from './../../../../../providers/tunari-api';
+import { ApiService } from './../../../shared/providers/api.service';
 
 @Component({
   selector: 'thumbnail-img',
@@ -15,7 +15,7 @@ export class ThumbnailImgComponent implements OnInit {
 
   isLoading: boolean = true;
 
-  constructor(public navCtrl: NavController, public api: TunariApi) { }
+  constructor(public navCtrl: NavController, public api: ApiService) { }
 
   ngOnInit() {
 

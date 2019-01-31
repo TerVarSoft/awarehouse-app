@@ -1,9 +1,9 @@
 import { Injectable, } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 
-import { SettingsCache } from '../../../providers/settings-cache';
+import { SettingsCacheService } from './../shared/providers/settings-cache.service';
 
-import { Product } from '../../../models/product';
+import { Product } from '../shared/models/product';
 
 /**
  * Utility class for products endpoint provider. 
@@ -12,7 +12,7 @@ import { Product } from '../../../models/product';
 export class ProductsUtil {
 
   constructor(public alertCtrl: AlertController,
-    private settingsProvider: SettingsCache) { }
+    private settingsProvider: SettingsCacheService) { }
 
   /* *Get Alert helper methods */
 

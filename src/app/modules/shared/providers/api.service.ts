@@ -11,7 +11,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 // import 'rxjs/add/observable/throw';
 
-import { TunariStorage } from './storage.service';
+import { StorageService } from './storage.service';
 
 /**
  * Api, generic REST api handler.
@@ -29,7 +29,7 @@ export class ApiService {
 
   multipartHeaders: Headers;
 
-  constructor(public http: Http, public storage: TunariStorage,
+  constructor(public http: Http, public storage: StorageService,
     public sanitizer: DomSanitizer, public events: Events) {
     this.headers = new Headers({ 'Content-Type': 'application/json' });
     this.multipartHeaders = new Headers({});

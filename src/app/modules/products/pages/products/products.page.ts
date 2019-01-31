@@ -10,7 +10,7 @@ import "rxjs/add/operator/switchMap";
 import { ProductDetailComponent } from '../../components/product-detail/product-detail.component';
 import { ProductUpdateComponent } from '../../components/product-update/product-update.component';
 
-import { Connection } from '../../../shared/providers/connection.service';
+import { ConnectionService } from '../../../shared/providers/connection.service';
 import { ProductsService } from '../../../shared/providers/products.service';
 import { SellingsService } from '../../../shared/providers/sellings.service';
 import { ProductsUtil } from './../../products.util';
@@ -18,7 +18,7 @@ import { MessagesService } from '../../../shared/providers/messages.service';
 import { NotifierService } from '../../../shared/providers/notifier.service';
 
 import { Product } from '../../../shared/models/product';
-import { SettingsCache } from '../../../shared/providers/settings-cache.service';
+import { SettingsCacheService } from '../../../shared/providers/settings-cache.service';
 
 @Component({
   selector: 'page-products',
@@ -59,11 +59,11 @@ export class ProductsPage implements OnInit {
     private elRef: ElementRef,
     public productsProvider: ProductsService,
     public sellingsProvider: SellingsService,
-    public settingsProvider: SettingsCache,
+    public settingsProvider: SettingsCacheService,
     public util: ProductsUtil,
     public notifier: NotifierService,
     public messages: MessagesService,
-    public connection: Connection,
+    public connection: ConnectionService,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private _ngZone: NgZone

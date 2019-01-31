@@ -10,10 +10,10 @@ import { Events } from '@ionic/angular';
 
 import * as moment from 'moment';
 
-import { Connection } from '../providers/connection';
-import { TunariMessages } from '../providers/tunari-messages';
-import { TunariNotifier } from '../providers/tunari-notifier';
-import { TunariStorage } from '../providers/tunari-storage';
+import { ConnectionService } from './modules/shared/providers/connection.service';
+import { MessagesService } from './modules/shared/providers/messages.service';
+import { NotifierService } from './modules/shared/providers/notifier.service';
+import { StorageService } from './modules/shared/providers/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -29,10 +29,10 @@ export class AppComponent {
     private router: Router,
     // public network: Network,
     splashScreen: SplashScreen,
-    public storage: TunariStorage,
-    public messages: TunariMessages,
-    public notifier: TunariNotifier,
-    public connection: Connection,
+    public storage: StorageService,
+    public messages: MessagesService,
+    public notifier: NotifierService,
+    public connection: ConnectionService,
     public events: Events,
     private menu: MenuController
   ) {
@@ -76,8 +76,6 @@ export class AppComponent {
 
     this.menu.close();
   }
-
-
 
   onLogout() {
     this.menu.close();

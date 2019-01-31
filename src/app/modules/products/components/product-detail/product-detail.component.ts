@@ -3,10 +3,10 @@ import { NavController, NavParams, ModalController } from '@ionic/angular';
 
 import { ProductUpdateComponent } from '../product-update/product-update.component';
 
-import { Product } from '../../../../../models/product';
+import { Product } from './../../..//shared/models/product';
 
-import { ProductsUtil } from '../../products.util';
-import { SettingsCache } from '../../../../../providers/settings-cache';
+import { ProductsUtil } from './../../products.util';
+import { SettingsCacheService } from './../../../shared/providers/settings-cache.service';
 
 @Component({
   selector: 'product-detail',
@@ -25,7 +25,7 @@ export class ProductDetailComponent {
   constructor(public navParams: NavParams,
     private modalCtrl: ModalController,
     public navCtrl: NavController,
-    public settingsProvider: SettingsCache) {
+    public settingsProvider: SettingsCacheService) {
     this.initProperties();
   }
 
