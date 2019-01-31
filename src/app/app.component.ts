@@ -59,6 +59,10 @@ export class AppComponent {
       this.events.subscribe('user:logout', () => {
         this.onLogout();
       });
+
+      this.events.subscribe('connection:No', () => {
+        this.notifier.createToast(this.messages.noInternetError);
+      });
     });
   }
 

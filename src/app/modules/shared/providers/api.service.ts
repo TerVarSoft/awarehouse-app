@@ -81,6 +81,7 @@ export class ApiService {
     return await this.http
       .post(url, body, requestOptions)
       .map(resp => resp.json().data)
+      .catch(this.catchErrors())
       .toPromise();
   }
 
@@ -183,11 +184,19 @@ export class ApiService {
 
     return (res: Response) => {
 
+      if (res.status === 0) {
+        console.log("You are not connected to internet");
+
+        this.events.publish('connection:No');
+        return _throw({ _body: JSON.stringify({ status: 0 }) });
+      }
+
       if (res.status === 401 || res.status === 403) {
         console.log("Invalid or expired token. Redirecting to login");
 
         this.events.publish('user:logout');
       }
+
       console.log(res);
       return _throw(res);
     };

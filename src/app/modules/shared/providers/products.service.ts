@@ -27,7 +27,7 @@ export class ProductsService {
     params.set('categoryId', query.categoryId);
     params.set('typeId', query.typeId);
     params.set('page', page.toString());
-    params.set('limit', "20");
+    params.set('limit', "30");
     let requestOptions = new RequestOptions({ search: params });
 
     return this.api.getPromise(this.endpoint, requestOptions);

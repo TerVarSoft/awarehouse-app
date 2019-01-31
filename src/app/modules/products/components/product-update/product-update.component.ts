@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Camera } from '@ionic-native/camera/ngx';
 import { NavParams, AlertController, NavController, ModalController } from '@ionic/angular';
 
@@ -17,7 +17,7 @@ import { Product, updateProductPatch } from './../../../shared/models/product';
   styleUrls: ['product-update.component.scss'],
   providers: [ProductsUtil]
 })
-export class ProductUpdateComponent {
+export class ProductUpdateComponent implements OnInit {
 
   segment = 'general';
 
@@ -53,7 +53,9 @@ export class ProductUpdateComponent {
 
     this.originalProduct = this.navParams.data.product;
     this.product = cloneDeep(this.navParams.data.product);
+  }
 
+  ngOnInit() {
     this.initProperties();
   }
 
@@ -80,7 +82,6 @@ export class ProductUpdateComponent {
 
     this.product.tags = this.product.tags || [];
     this.product.locations = this.product.locations || [];
-
     this.initProductPrices();
   }
 
@@ -163,10 +164,12 @@ export class ProductUpdateComponent {
           this.updateFavoritesInBackground();
         });
 
-      // this.navCtrl.pop(updatedProduct);
+      this.modalCtrl.dismiss({
+        updatedProduct: updatedProduct
+      });
       createProductLoader.dismiss();
     }, error => {
-      // this.navCtrl.pop();
+      this.modalCtrl.dismiss();
       createProductLoader.dismiss();
       this.notifier.createToast(this.messages.errorWhenSavingProduct);
     });

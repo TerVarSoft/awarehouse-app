@@ -1,4 +1,4 @@
 <loading-img *ngIf="product.isImgUploading">
 </loading-img>
-<thumbnail-img *ngIf="!product.isImgUploading" (click)="openImage($event)" [thumbnailUrl]="product.thumbnailUrl">
+<thumbnail-img *ngIf="!product.isImgUploading" (click)="openImage($event)" [thumbnailUrl]="product.thumbnailUrl" style="max-height: 100px">
 </thumbnail-img>

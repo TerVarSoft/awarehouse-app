@@ -17,39 +17,9 @@
   <p *ngIf="!productsAreLoading && products.length <= 0" padding>No hay productos en esta busqueda!</p>
   <ion-spinner name="dots" color="primary" *ngIf="productsAreLoading"></ion-spinner>
   <ion-list *ngIf="!productsAreLoading">
-    <ion-item-sliding *ngFor="let product of products" (click)="goToProductDetails(product)">
-      <ion-item>
-        <product-img [product]="product" style="height:80px;width:80px;padding:2px;margin-right:15px;text-align:center">
-        </product-img>
-        <ion-label>
-          <h2 class="text-color">{{product.name}}</h2>
-          <h3 class="text-color">{{product.description || product.properties?.type}}</h3>
-          <p>
-            {{getSelectedProductPrice(product)}}
-          </p>
-        </ion-label>
-
-
-        <ion-icon item-end (click)="openProductOptions($event, product)" color="primary" name="more"></ion-icon>
-
-      </ion-item>
-      <ion-item-options side="start">
-        <ion-item-option (click)="addPriceWhenNoPrice($event, product)" color="primary">
-          <ion-icon name="pricetag"></ion-icon>
-          Precio
-        </ion-item-option>
-        <ion-item-option (click)="setProductQuantity($event, product)" color="primary">
-          <ion-icon name="home"></ion-icon>
-          Cantidad
-        </ion-item-option>
-      </ion-item-options>
-      <ion-item-options side="end">
-        <ion-item-option (click)="createSelling($event, product)" color="primary">
-          <ion-icon name="basket"></ion-icon>
-          Vender
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+    <div *ngFor="let product of products">
+      <product-item [product]="product" [selectedPrice]="selectedPrice" (onDelete)="removeProductFromList($event)"></product-item>
+    </div>
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" #fab slot="fixed" (click)="createProduct(fab)">

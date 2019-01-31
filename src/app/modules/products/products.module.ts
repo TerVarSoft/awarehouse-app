@@ -10,11 +10,12 @@ import { Camera } from '@ionic-native/camera/ngx';
 
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductUpdateComponent } from './components/product-update/product-update.component';
+import { ProductItemComponent } from './components/product-item/product-item.component';
 import { ProductImgComponent } from './components/product-img/product-img.component';
 import { ProductPreviewComponent } from './components/product-preview/product-preview.component';
 import { LoadingImgComponent } from './components/loading-img/loading-img.component';
 import { ThumbnailImgComponent } from './components/thumbnail-img/thumbnail-img.component';
-import {  SafeUrlPipe } from './../shared/pipes/safe-url.pipe';
+import { SafeUrlPipe } from './../shared/pipes/safe-url.pipe';
 
 @NgModule({
     imports: [
@@ -32,7 +33,8 @@ import {  SafeUrlPipe } from './../shared/pipes/safe-url.pipe';
     declarations: [
         ProductsPage,
         ProductDetailComponent,
-        ProductUpdateComponent,        
+        ProductUpdateComponent,
+        ProductItemComponent,        
         ProductImgComponent,
         ProductPreviewComponent,
         LoadingImgComponent,

@@ -64,9 +64,7 @@ export class SettingsCacheService {
   }
 
   loadFromStorage() {
-    console.log('loading sotrage');
     return this.storage.getSettings().then(settings => {
-      console.log(settings)
       this.setSettings(settings);
       return settings;
     });

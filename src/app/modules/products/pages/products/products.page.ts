@@ -1,34 +1,30 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActionSheetController, Platform, AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import 'rxjs/add/observable/from';
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged"
 import "rxjs/add/operator/switchMap";
 
-import { ProductDetailComponent } from '../../components/product-detail/product-detail.component';
+
 import { ProductUpdateComponent } from '../../components/product-update/product-update.component';
 
 import { ConnectionService } from '../../../shared/providers/connection.service';
 import { ProductsService } from '../../../shared/providers/products.service';
-import { SellingsService } from '../../../shared/providers/sellings.service';
-import { ProductsUtil } from './../../products.util';
-import { MessagesService } from '../../../shared/providers/messages.service';
 import { NotifierService } from '../../../shared/providers/notifier.service';
+import { SettingsCacheService } from '../../../shared/providers/settings-cache.service';
 
 import { Product } from '../../../shared/models/product';
-import { SettingsCacheService } from '../../../shared/providers/settings-cache.service';
 
 @Component({
   selector: 'page-products',
   styleUrls: ['products.page.scss'],
-  templateUrl: 'products.page.html',
-  providers: [ProductsUtil]
+  templateUrl: 'products.page.html'
 })
 export class ProductsPage implements OnInit {
 
   products: Product[] = [];
-  
+
   searchQuery: FormControl = new FormControl();
 
   productsAreLoading: boolean = false;
@@ -47,14 +43,13 @@ export class ProductsPage implements OnInit {
 
   productPrices: any[];
 
-  constructor(private platform: Platform,
-    private actionSheetCtrl: ActionSheetController,
+  constructor(
     private productsProvider: ProductsService,
-    private sellingsProvider: SellingsService,
+
     private settingsProvider: SettingsCacheService,
-    private util: ProductsUtil,
+
     private notifier: NotifierService,
-    private messages: MessagesService,
+
     private connection: ConnectionService,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
@@ -104,188 +99,11 @@ export class ProductsPage implements OnInit {
     });
 
     createProductModal.present();
-  }  
-
-  /** Individual Products functions. */
-
-  async updateProduct(product: Product) {
-    const updateProductModal = await this.modalCtrl.create({
-      component: ProductUpdateComponent,
-      componentProps: {
-        product: product
-      }
-    });
-
-    updateProductModal.present();
   }
 
-  async goToProductDetails(product: Product) {
-    const createProductModal = await this.modalCtrl.create({
-      component: ProductDetailComponent,
-      componentProps: {
-        product: product
-      }
-    });
-
-    createProductModal.present();
-  }
-
-  async addPriceWhenNoPrice(event, product: Product) {
-    event.stopPropagation();
-
-    const priceToUpdate = product.prices.find(price => price.priceId === this.selectedPrice.id);
-
-    let alert = await this.alertCtrl.create({
-      header: product.name,
-      message: this.selectedPrice.name,
-      inputs: [
-        {
-          name: 'price',
-          type: 'number',
-          placeholder: 'Agrega un precio!',
-          value: "" + (priceToUpdate ? priceToUpdate.value : "")
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel'
-        }, {
-          text: 'Guardar',
-          handler: async data => {
-            let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-            const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id)
-
-            if (selectedPrice) {
-              selectedPrice.value = data.price;
-            } else {
-              saveProductLoader.dismiss();
-              this.notifier.createToast(this.messages.errorWhenSavingProduct);
-            }
-
-            this.productsProvider.put(product).subscribe(() => {
-              saveProductLoader.dismiss();
-            }, error => {
-              saveProductLoader.dismiss();
-              this.notifier.createToast(this.messages.errorWhenSavingProduct);
-            });
-          }
-        }
-      ]
-    });
-
-    alert.present();
-  }
-
-  getSelectedProductPrice(product: Product) {
-    const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id);
-
-    if (selectedPrice) {
-      return `${selectedPrice.name}: ${selectedPrice.value} Bs.`;
-    }
-
-    return "";
-  }
-
-  async setProductQuantity(event, product: Product) {
-    event.stopPropagation();
-
-    let alert = await this.alertCtrl.create({
-      header: product.name,
-      message: "Nueva Cantidad",
-      inputs: [
-        {
-          name: 'quantity',
-          type: 'number',
-          placeholder: 'Especifica la cantidad!',
-          value: "" + product.quantity
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel'
-        }, {
-          text: 'Guardar',
-          handler: async data => {
-            let saveProductLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-            product.quantity = data.quantity;
-            this.productsProvider.put(product).subscribe(() => {
-              saveProductLoader.dismiss();
-            });
-          }
-        }
-      ]
-    });
-
-    alert.present();
-  }
-
-  async createSelling(event, product: Product) {
-    event.stopPropagation();
-
-    const selectedPrice = product.prices.find(price => price.priceId === this.selectedPrice.id);
-    let alert = await this.alertCtrl.create({
-      header: `Venta ${product.name}`,
-      message: `${selectedPrice.name}: ${selectedPrice.value} Bs.`,
-      inputs: [
-        {
-          name: 'quantity',
-          type: 'number',
-          placeholder: 'Especifica la cantidad!'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel'
-        }, {
-          text: 'Guardar',
-          handler: async data => {
-            let createSellingLoader = await this.notifier.createLoader(`Salvando ${product.name}`);
-            product.quantity = data.quantity;
-            (await this.sellingsProvider.post({
-              productId: product.id,
-              quantity: data.quantity,
-              priceId: this.selectedPrice.id
-            })).subscribe(() => {
-              createSellingLoader.dismiss();
-            });
-          }
-        }
-      ]
-    });
-
-    alert.present();
-  }
-
-  async openProductOptions(event, product) {
-    event.stopPropagation();
-
-    let actionSheet: any = await this.actionSheetCtrl.create({
-      header: product.name,
-      cssClass: 'product-options',
-      buttons: [
-        {
-          text: 'Ver',
-          icon: !this.platform.is('ios') ? 'eye' : null,
-          handler: () => {
-            this.goToProductDetails(product);
-          }
-        }, {
-          text: 'Editar',
-          icon: !this.platform.is('ios') ? 'create' : null,
-          handler: () => {
-            this.updateProduct(product);
-          }
-        }, {
-          text: 'Eliminar',
-          icon: !this.platform.is('ios') ? 'trash' : null,
-          handler: () => {
-            this.removeProduct(product);
-          }
-        }
-      ]
-    });
-
-    actionSheet.present();
+  removeProductFromList(productToRemove: Product) {
+    this.products =
+      this.products.filter(product => product.name !== productToRemove.name)
   }
 
   /** Product filter functions */
@@ -407,31 +225,7 @@ export class ProductsPage implements OnInit {
     this.selectedPrice = this.productPrices[0];
   }
 
-  private async removeProduct(productToDelete) {
 
-    let removeProductAlert = await this.alertCtrl.create({
-      header: 'Borrando!',
-      message: `Estas Seguro de borrar el producto ${productToDelete.name}`,
-      buttons: [
-        {
-          text: 'Cancelar',
-        }, {
-          text: 'Borralo!',
-          handler: async () => {
-            let removeProductLoader =
-              await this.notifier.createLoader(`Borrando el Producto ${productToDelete.name}`);
-            this.productsProvider.remove(productToDelete).subscribe(() => {
-              this.products =
-                this.products.filter(product => product.name !== productToDelete.name)
-              removeProductLoader.dismiss();
-            });
-          }
-        }
-      ]
-    });
-
-    removeProductAlert.present();
-  }
 
   private initSearchQuery() {
 
@@ -452,8 +246,6 @@ export class ProductsPage implements OnInit {
       categoryId: this.selectedCategory.id,
       typeId: this.selectedType.id
     };
-
-    console.log(query);
 
     this.productsAreLoading = true;
     const productsResponse = await this.productsProvider.get(query);

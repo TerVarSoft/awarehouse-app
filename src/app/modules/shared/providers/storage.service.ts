@@ -24,14 +24,12 @@ export class StorageService {
   }
 
   public getSettings() {
-    console.log('get keeys2');
     return this.getValue(this.settingsKey).then(settings => {
       return JSON.parse(settings);
     });
   }
 
   public setSettings(value: any) {
-    console.log(value)
     this.setValue(this.settingsKey, JSON.stringify(value));
   }
 
