@@ -41,7 +41,7 @@
     <div *ngSwitchCase="'general'">
       <ion-list>
         <ion-item>
-          <ion-label>Nombre</ion-label>
+          <ion-label>Nombre:</ion-label>
           <ion-input [(ngModel)]="product.name" type="text" novalidate></ion-input>
         </ion-item>
         <ion-item>
@@ -50,7 +50,7 @@
         </ion-item>
 
         <ion-item *ngIf="productCategories.length > 1">
-          <ion-label>Categoria</ion-label>
+          <ion-label>Categoria:</ion-label>
           <ion-select [(ngModel)]="product.categoryId" interface="popover" (ionChange)='updateCategory()'>
             <ion-select-option *ngFor="let category of productCategories" [value]="category.id">
               {{category.name}}
@@ -58,7 +58,7 @@
           </ion-select>
         </ion-item>
         <ion-item *ngIf="productTypes.length > 1">
-          <ion-label>Tipo</ion-label>
+          <ion-label>Tipo:</ion-label>
           <ion-select [(ngModel)]="product.typeId" interface="popover" (ionChange)='updateType()'>
             <ion-select-option *ngFor="let type of productTypes" [value]="type.id">
               {{type.name}}
@@ -67,13 +67,13 @@
         </ion-item>
 
         <ion-item>
-          <ion-label>Cantidad</ion-label>
+          <ion-label>Cantidad:</ion-label>
           <ion-input [(ngModel)]="product.quantity" type="number"></ion-input>
         </ion-item>
-        <ion-item>
+        <!-- <ion-item>
           <ion-label>Cantidad por paquete</ion-label>
           <ion-input [(ngModel)]="product.quantityPerPackage" type="number"></ion-input>
-        </ion-item>
+        </ion-item> -->
 
         <ion-list-header>
           Etiquetas

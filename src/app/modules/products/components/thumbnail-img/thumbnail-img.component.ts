@@ -18,7 +18,6 @@ export class ThumbnailImgComponent implements OnInit {
   constructor(public navCtrl: NavController, public api: ApiService) { }
 
   ngOnInit() {
-
     this.api
       .getImage(this.thumbnailUrl)
       .subscribe(url => {
@@ -26,11 +25,12 @@ export class ThumbnailImgComponent implements OnInit {
         this.isLoading = false;
       },
         error => {
+          
           if (error.status === 0) {
-            this.url = './assets/img/errorLoading.gif';
+            this.url = 'assets/img/errorLoading.gif';
             this.isLoading = false;
           } else if (error.status === 404) {
-            this.url = './assets/img/defaultProduct.png';
+            this.url = 'assets/img/defaultProduct.png';
             this.isLoading = false;
           }
         });

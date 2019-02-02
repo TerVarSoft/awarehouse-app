@@ -161,6 +161,10 @@ export class ApiService {
       responseType: ResponseContentType.Blob
     });
 
+    if (!productUrl) {
+      return _throw({ status: 404 });
+    }
+
     return this.http.get(productUrl, requestOptions)
       .map(res => res.blob())
       .map(blob => URL.createObjectURL(blob));
