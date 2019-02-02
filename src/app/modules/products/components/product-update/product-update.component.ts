@@ -155,13 +155,13 @@ export class ProductUpdateComponent implements OnInit {
     this.product.isImgUploading = true;
     this.productsProvider.save(this.product).subscribe((updatedProduct: any) => {
       updateProductPatch(this.originalProduct, updatedProduct);
-      this.updateFavoritesInBackground();
+      // this.updateFavoritesInBackground();
 
       this.productsProvider.updateProductImg(updatedProduct.id, this.tmpImageData)
         .subscribe((updatedProduct: any) => {
           console.log('updating after upload')
           updateProductPatch(this.originalProduct, updatedProduct);
-          this.updateFavoritesInBackground();
+          // this.updateFavoritesInBackground();
         });
 
       this.modalCtrl.dismiss({

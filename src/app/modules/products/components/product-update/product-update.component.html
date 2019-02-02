@@ -92,10 +92,15 @@
 
     <div *ngSwitchCase="'prices'">
       <ion-item-group>
-        <ion-item-divider color="primary-50">Lista de precios de venta</ion-item-divider>
+        <ion-item-divider color="primary">Lista de precios de venta</ion-item-divider>
         <ion-item *ngFor="let price of product.prices">
-          <ion-label>{{price.name}}</ion-label>
+          <ion-label>{{price.name}}:</ion-label>
           <ion-input [(ngModel)]="price.value" type="number"></ion-input>
+        </ion-item>
+        <ion-item-divider color="primary">Otros precios</ion-item-divider>
+        <ion-item>
+          <ion-label>P/ Compra:</ion-label>
+          <ion-input [(ngModel)]="product.purchasePrice" type="number"></ion-input>
         </ion-item>
       </ion-item-group>
     </div>
