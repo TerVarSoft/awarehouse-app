@@ -1,5 +1,4 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { AlertController, ModalController } from '@ionic/angular';
 import 'rxjs/add/observable/from';
 import "rxjs/add/operator/debounceTime";
@@ -21,15 +20,15 @@ import { Product } from '../../../shared/models/product';
   styleUrls: ['products.page.scss'],
   templateUrl: 'products.page.html'
 })
-export class ProductsPage implements OnInit {
+export class ProductsPage {
 
   products: Product[] = [];
 
-  searchQuery: FormControl = new FormControl();
+  searchQuery: string = '';
 
   productsAreLoading: boolean = false;
 
-  page: number = 0;
+  page: number = 1;
 
   selectedCategory: any = {};
 
@@ -45,43 +44,32 @@ export class ProductsPage implements OnInit {
 
   constructor(
     private productsProvider: ProductsService,
-
     private settingsProvider: SettingsCacheService,
-
     private notifier: NotifierService,
-
     private connection: ConnectionService,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private _ngZone: NgZone
-  ) {
-    this.setDefaultValues();
-    this.initSearchQuery();
-  }
+  ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.setDefaultValues();
     this.searchProducts();
   }
 
   /** Main Page functions */
 
+  async onSearch($event) {
+    this.page = 1;
+    this.searchProducts($event.target.value);
+  }
+
   async pullNextProductsPage(eventInfiniteScroll) {
 
     if (this.page > 0 && this.connection.isConnected()) {
       this.page++;
-      console.log('Pulling page ' + this.page + '...');
-
-      const query = {
-        tags: this.searchQuery.value,
-        categoryId: this.selectedCategory.id,
-        typeId: this.selectedType.id
-      }
-
-      const productsResponse = await this.productsProvider.get(query, this.page);
-
-      this.products.push(...productsResponse.items);
+      await this.searchProducts();
       eventInfiniteScroll.target.complete();
-      console.log('Finished pulling page successfully');
 
     } else {
       eventInfiniteScroll.target.complete();
@@ -98,7 +86,7 @@ export class ProductsPage implements OnInit {
       }
     });
 
-    createProductModal.present();
+    return await createProductModal.present();
   }
 
   removeProductFromList(productToRemove: Product) {
@@ -128,9 +116,8 @@ export class ProductsPage implements OnInit {
           text: 'Cancel'
         },
         {
-          text: 'Guardar',
+          text: 'Buscar',
           handler: async data => {
-            console.log(data);
             this.selectedCategory = data
 
             this.selectedType = this.productTypes[0];
@@ -140,8 +127,9 @@ export class ProductsPage implements OnInit {
             this.selectedPrice = this.productPrices.length > 0 ?
               this.productPrices[0] : {};
 
+            this.page = 1;
+            this.searchQuery = '';
             this.searchProducts();
-
           }
         }
       ]
@@ -169,10 +157,11 @@ export class ProductsPage implements OnInit {
         {
           text: 'Cancel'
         }, {
-          text: 'Guardar',
+          text: 'Buscar',
           handler: data => {
-            console.log(data);
             this.selectedType = data
+            this.page = 1;
+            this.searchQuery = '';
             this.searchProducts();
           }
         }
@@ -203,9 +192,7 @@ export class ProductsPage implements OnInit {
         }, {
           text: 'Guardar',
           handler: data => {
-            console.log(data);
             this.selectedPrice = data
-            this.searchProducts();
           }
         }
       ]
@@ -226,36 +213,29 @@ export class ProductsPage implements OnInit {
   }
 
 
-
-  private initSearchQuery() {
-
-    this.searchQuery.valueChanges
-      .filter(query => query)
-      .filter(query => this.connection.isConnected())
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .subscribe(query => {
-        this.searchProducts();
-      });
-  }
-
-
-  private async searchProducts() {
+  private async searchProducts(searchText?: string) {
     const query = {
-      tags: this.searchQuery.value,
+      tags: searchText || this.searchQuery,
       categoryId: this.selectedCategory.id,
       typeId: this.selectedType.id
     };
 
-    this.productsAreLoading = true;
-    const productsResponse = await this.productsProvider.get(query);
+    if (this.page === 1) {
+      this.productsAreLoading = true;
+    }
+
+    const productsResponse = await this.productsProvider.get(query, this.page);
 
     this._ngZone.run(() => {
-      this.productsAreLoading = false;
-      this.page = 1;
-      this.products = productsResponse.items;
+      if (this.page === 1) {
+        this.products = productsResponse.items;
+        this.productsAreLoading = false;
+      } else {
+        this.products.push(...productsResponse.items);
+      }
     });
 
-    console.log('Finished pulling page 1 of products');
+    console.log(`Finished pulling page ${this.page} of products`);
   }
+
 }

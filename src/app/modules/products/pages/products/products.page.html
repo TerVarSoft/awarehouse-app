@@ -9,7 +9,7 @@
   </ion-toolbar>
 
   <ion-toolbar color="primary">
-    <ion-searchbar animated=true #searchInput placeholder="Que buscas hoy?" [formControl]="searchQuery"></ion-searchbar>
+    <ion-searchbar animated=true placeholder="Que buscas hoy?" (search)="onSearch($event)" [(ngModel)]="searchQuery"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -20,6 +20,11 @@
     <div *ngFor="let product of products">
       <product-item [product]="product" [selectedPrice]="selectedPrice" (onDelete)="removeProductFromList($event)"></product-item>
     </div>
+
+    <ion-infinite-scroll (ionInfinite)="pullNextProductsPage($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando mas productos">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" #fab slot="fixed" (click)="createProduct(fab)">
@@ -27,11 +32,6 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-  <ion-infinite-scroll (ionInfinite)="pullNextProductsPage($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando mas productos">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>
 
 
