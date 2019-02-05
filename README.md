@@ -34,7 +34,7 @@ to manage tunari services
     * Zip align (android sdk, usually: c:\Android\sdk\build-tools\23.0.3\):
         zipalign -v 4 android-release-unsigned.apk Gonter.apk
     
-    * Finally you can upload your Gonter.apk to: https://play.google.com/apps/publish/
+    * Finally you can upload your GrafTunari.apk to: https://play.google.com/apps/publish/
     
 # To update sdk manager, run:   
     
