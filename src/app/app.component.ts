@@ -72,10 +72,7 @@ export class AppComponent {
     switch (view) {
       case "inventory":
         this.router.navigate(['/products']);
-        break;
-      case "sellings":
-        this.router.navigate(['/sellings']);
-        break;
+        break;     
       default:
         this.router.navigate(['/products']);
     }

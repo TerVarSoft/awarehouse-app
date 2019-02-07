@@ -86,28 +86,6 @@ export class ProductsUtil {
     return alert;
   }
 
-  getCreateSellingAlert(product: Product, selectedPriceId: string) {
-    const selectedPrice = product.prices.find(price => price.priceId === selectedPriceId);
-    let alert = this.alertCtrl.create({
-      header: `Venta ${product.name}`,
-      message: `${selectedPrice.name}: ${selectedPrice.value} Bs.`,
-      inputs: [
-        {
-          name: 'quantity',
-          type: 'number',
-          placeholder: 'Especifica la cantidad!'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel'
-        }
-      ]
-    });
-
-    return alert;
-  }
-
   getRemoveProductAlert(productName: string) {
     let alert = this.alertCtrl.create({
       header: 'Borrando!',

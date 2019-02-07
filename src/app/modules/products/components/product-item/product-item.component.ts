@@ -8,7 +8,6 @@ import { ProductUpdateComponent } from '../../components/product-update/product-
 
 import { ProductsUtil } from './../../products.util';
 import { ProductsService } from '../../../shared/providers/products.service';
-import { SellingsService } from '../../../shared/providers/sellings.service';
 import { MessagesService } from '../../../shared/providers/messages.service';
 import { NotifierService } from '../../../shared/providers/notifier.service';
 
@@ -30,7 +29,6 @@ export class ProductItemComponent {
     constructor(private platform: Platform,
         private actionSheetCtrl: ActionSheetController,
         private productsProvider: ProductsService,
-        private sellingsProvider: SellingsService,
         private util: ProductsUtil,
         private alertCtrl: AlertController,
         private modalCtrl: ModalController,
@@ -124,44 +122,7 @@ export class ProductItemComponent {
         });
 
         alert.present();
-    }
-
-    async createSelling(event, product: Product) {
-        event.stopPropagation();
-
-        const selectedPrice = this.product.prices.find(price => price.priceId === this.selectedPrice.id);
-        let alert = await this.alertCtrl.create({
-            header: `Venta ${this.product.name}`,
-            message: `${selectedPrice.name}: ${selectedPrice.value} Bs.`,
-            inputs: [
-                {
-                    name: 'quantity',
-                    type: 'number',
-                    placeholder: 'Especifica la cantidad!'
-                },
-            ],
-            buttons: [
-                {
-                    text: 'Cancel'
-                }, {
-                    text: 'Guardar',
-                    handler: async data => {
-                        let createSellingLoader = await this.notifier.createLoader(`Salvando ${this.product.name}`);
-                        this.product.quantity = data.quantity;
-                        (await this.sellingsProvider.post({
-                            productId: this.product.id,
-                            quantity: data.quantity,
-                            priceId: this.selectedPrice.id
-                        })).subscribe(() => {
-                            createSellingLoader.dismiss();
-                        });
-                    }
-                }
-            ]
-        });
-
-        alert.present();
-    }
+    }    
 
     async openProductOptions(event) {
         event.stopPropagation();
