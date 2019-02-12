@@ -17,9 +17,13 @@
   <p *ngIf="!productsAreLoading && products.length <= 0" padding>No hay productos en esta busqueda!</p>
   <ion-spinner name="dots" color="primary" *ngIf="productsAreLoading"></ion-spinner>
   <ion-list *ngIf="!productsAreLoading">
-    <div *ngFor="let product of products">
-      <product-item [product]="product" [selectedPrice]="selectedPrice" (onDelete)="removeProductFromList($event)"></product-item>
-    </div>
+
+    <!-- <product-item *ngFor="let product of products" [product]="product" [selectedPrice]="selectedPrice" (onDelete)="removeProductFromList($event)"></product-item> -->
+
+    <ion-virtual-scroll [items]="products" approxItemHeight="600px" approxItemWidth="80px">
+
+      <product-item *virtualItem="let product" [product]="product" [selectedPrice]="selectedPrice" (onDelete)="removeProductFromList($event)"></product-item>
+    </ion-virtual-scroll>
 
     <ion-infinite-scroll (ionInfinite)="pullNextProductsPage($event)">
       <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando mas productos">

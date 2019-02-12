@@ -1,3 +1,6 @@
 <loading-img *ngIf="isLoading" style="object-fit: contain; max-height: 100px">
 </loading-img>
-<img *ngIf="!isLoading" [src]="url | safeUrl" style="object-fit: contain; max-height: 100%" />
+<!-- <ion-img *ngIf="!isLoading" [src]="url | safeUrl" style="object-fit: contain; max-height: 100%">
+</ion-img> -->
+<ion-img *ngIf="!isLoading" [src]="url" style="object-fit: contain; max-height: 100%">
+</ion-img>

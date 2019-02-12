@@ -1,4 +1,5 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { IonVirtualScroll } from '@ionic/angular';
 import { AlertController, ModalController } from '@ionic/angular';
 import 'rxjs/add/observable/from';
 import "rxjs/add/operator/debounceTime";
@@ -21,6 +22,8 @@ import { Product } from '../../../shared/models/product';
   templateUrl: 'products.page.html'
 })
 export class ProductsPage {
+
+  @ViewChild(IonVirtualScroll) virtualScroll: IonVirtualScroll;
 
   products: Product[] = [];
 
@@ -69,9 +72,11 @@ export class ProductsPage {
     if (this.page > 0 && this.connection.isConnected()) {
       this.page++;
       await this.searchProducts();
+      this.virtualScroll.checkEnd();
       eventInfiniteScroll.target.complete();
 
     } else {
+      this.virtualScroll.checkEnd();
       eventInfiniteScroll.target.complete();
     }
   }
