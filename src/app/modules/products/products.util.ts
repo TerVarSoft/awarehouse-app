@@ -44,7 +44,7 @@ export class ProductsUtil {
     const priceToUpdate = product.prices.find(price => price.priceId === selectedPriceType.id);
 
     let alert = this.alertCtrl.create({
-      header: product.name,
+      header: product.code,
       message: selectedPriceType.name,
       inputs: [
         {
@@ -66,7 +66,7 @@ export class ProductsUtil {
 
   getAddQuantityAlert(product: Product) {
     let alert = this.alertCtrl.create({
-      header: product.name,
+      header: product.code,
       message: "Cantidad",
       inputs: [
         {
@@ -86,10 +86,10 @@ export class ProductsUtil {
     return alert;
   }
 
-  getRemoveProductAlert(productName: string) {
+  getRemoveProductAlert(productCode: string) {
     let alert = this.alertCtrl.create({
       header: 'Borrando!',
-      message: `Estas Seguro de borrar el producto ${productName}`,
+      message: `Estas Seguro de borrar el producto ${productCode}`,
       buttons: [
         {
           text: 'Cancelar',

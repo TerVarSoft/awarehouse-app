@@ -41,7 +41,7 @@ export class ProductItemComponent {
         const priceToUpdate = this.product.prices.find(price => price.priceId === this.selectedPrice.id);
 
         let alert = await this.alertCtrl.create({
-            header: this.product.name,
+            header: this.product.code,
             message: this.selectedPrice.name,
             inputs: [
                 {
@@ -57,7 +57,7 @@ export class ProductItemComponent {
                 }, {
                     text: 'Guardar',
                     handler: async data => {
-                        let saveProductLoader = await this.notifier.createLoader(`Salvando ${this.product.name}`);
+                        let saveProductLoader = await this.notifier.createLoader(`Salvando ${this.product.code}`);
                         const selectedPrice = this.product.prices.find(price => price.priceId === this.selectedPrice.id)
 
                         if (selectedPrice) {
@@ -95,7 +95,7 @@ export class ProductItemComponent {
         event.stopPropagation();
 
         let alert = await this.alertCtrl.create({
-            header: this.product.name,
+            header: this.product.code,
             message: "Nueva Cantidad",
             inputs: [
                 {
@@ -111,7 +111,7 @@ export class ProductItemComponent {
                 }, {
                     text: 'Guardar',
                     handler: async data => {
-                        let saveProductLoader = await this.notifier.createLoader(`Salvando ${this.product.name}`);
+                        let saveProductLoader = await this.notifier.createLoader(`Salvando ${this.product.code}`);
                         this.product.quantity = data.quantity;
                         this.productsProvider.put(this.product).subscribe(() => {
                             saveProductLoader.dismiss();
@@ -128,7 +128,7 @@ export class ProductItemComponent {
         event.stopPropagation();
 
         let actionSheet: any = await this.actionSheetCtrl.create({
-            header: this.product.name,
+            header: this.product.code,
             cssClass: 'product-options',
             buttons: [
                 {
@@ -171,7 +171,7 @@ export class ProductItemComponent {
         const updateProductModal = await this.modalCtrl.create({
             component: ProductUpdateComponent,
             componentProps: {
-                product: this.product
+                productToUpdate: this.product
             }
         });
 
@@ -185,7 +185,7 @@ export class ProductItemComponent {
 
         let removeProductAlert = await this.alertCtrl.create({
             header: 'Borrando!',
-            message: `Estas Seguro de borrar el producto ${this.product.name}`,
+            message: `Estas Seguro de borrar el producto ${this.product.code}`,
             buttons: [
                 {
                     text: 'Cancelar',
@@ -193,7 +193,7 @@ export class ProductItemComponent {
                     text: 'Borralo!',
                     handler: async () => {
                         let removeProductLoader =
-                            await this.notifier.createLoader(`Borrando el Producto ${this.product.name}`);
+                            await this.notifier.createLoader(`Borrando el Producto ${this.product.code}`);
                         this.productsProvider.remove(this.product).subscribe(() => {
 
                             this.onDelete.emit(this.product);

@@ -10,7 +10,7 @@
         <ion-icon name="create"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{product.name}}</ion-title>
+    <ion-title>{{product.code}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -32,7 +32,7 @@
   <div [ngSwitch]="segment">
     <div *ngSwitchCase="'general'">
       <div class="product-detail" padding>
-        <h2 class="text-color">{{product.name}}</h2>
+        <h2 class="text-color">{{product.code}}</h2>
         <p class="text-color">{{product.description}}</p>
         <p class="text-color">{{product.properties?.type || product.category}}</p>
       </div>

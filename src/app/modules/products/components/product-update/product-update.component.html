@@ -10,7 +10,7 @@
         Guardar
       </ion-button>
     </ion-buttons>
-    <ion-title>{{product.name || "Crear Producto"}}</ion-title>
+    <ion-title>{{product.code || "Crear Producto"}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -41,8 +41,8 @@
     <div *ngSwitchCase="'general'">
       <ion-list>
         <ion-item>
-          <ion-label>Nombre:</ion-label>
-          <ion-input [(ngModel)]="product.name" type="text" novalidate></ion-input>
+          <ion-label>Codigo:</ion-label>
+          <ion-input [(ngModel)]="product.code" type="text" novalidate></ion-input>
         </ion-item>
         <ion-item>
           <ion-label>Descripcion</ion-label>

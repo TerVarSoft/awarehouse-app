@@ -51,8 +51,8 @@ export class ProductUpdateComponent implements OnInit {
     private messages: MessagesService,
     private camera: Camera) {
 
-    this.originalProduct = this.navParams.data.product;
-    this.product = cloneDeep(this.navParams.data.product);
+    this.originalProduct = this.navParams.data.productToUpdate;
+    this.product = cloneDeep(this.originalProduct);
   }
 
   ngOnInit() {
@@ -105,7 +105,7 @@ export class ProductUpdateComponent implements OnInit {
   async addTag() {
     let addTagAlert = await this.alertCtrl.create({
       header: 'Agregar Etiqueta',
-      message: this.product.name,
+      message: this.product.code,
       inputs: [
         {
           name: 'newTag',
@@ -151,7 +151,7 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   async save() {
-    let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.name}`);
+    let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.code}`);
     this.product.isImgUploading = true;
     this.productsProvider.save(this.product).subscribe((updatedProduct: any) => {
       updateProductPatch(this.originalProduct, updatedProduct);
@@ -221,13 +221,5 @@ export class ProductUpdateComponent implements OnInit {
 
   closePreview() {
     this.modalCtrl.dismiss();
-  }
-
-  private updateFavoritesInBackground() {
-    console.log("Updating product favorites in background");
-    // Just update, no need to retrieve the favorites so sending ""
-    // to this method
-    this.productsProvider.loadFavoritesFromServer("")
-      .subscribe();
   }
 }

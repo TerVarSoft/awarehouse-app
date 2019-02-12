@@ -80,7 +80,7 @@ export class ProductsPage {
     const createProductModal = await this.modalCtrl.create({
       component: ProductUpdateComponent,
       componentProps: {
-        product: new Product(),
+        productToUpdate: new Product(),
         selectedProductCategoryId: this.selectedCategory.id,
         selectedProductTypeId: this.selectedType.id,
       }
@@ -91,7 +91,7 @@ export class ProductsPage {
 
   removeProductFromList(productToRemove: Product) {
     this.products =
-      this.products.filter(product => product.name !== productToRemove.name)
+      this.products.filter(product => product.code !== productToRemove.code)
   }
 
   /** Product filter functions */
