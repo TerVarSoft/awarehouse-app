@@ -44,6 +44,10 @@ export class SettingsCacheService {
     return filteredTypes;
   }
 
+  async getProductPricesWithOptionalProductPrices(categoryId: string, typeId: string) {
+    return [...(await this.getProductPrices(categoryId, typeId)), ...(await this.getOptionalProductPrices(categoryId, typeId))];
+  }
+
   async getProductPrices(categoryId: string, typeId: string) {
     if (!this.settings.productPrices) await this.loadFromStorage();
 
@@ -56,6 +60,21 @@ export class SettingsCacheService {
         .find(type => (type.id === typeId && type.categoryId === categoryId)).prices :
       this.settings.productCategories.find(category => category.id === categoryId).prices;
 
+    return assignedPrices || [];
+  }
+
+  async getOptionalProductPrices(categoryId: string, typeId: string) {
+    if (!this.settings.productPrices) await this.loadFromStorage();
+
+    if (!categoryId && !typeId) {
+      return [];
+    }
+
+    let assignedPrices = typeId ?
+      this.settings.productTypes
+        .find(type => (type.id === typeId && type.categoryId === categoryId)).optionalPrices :
+      this.settings.productCategories.find(category => category.id === categoryId).optionalPrices;
+      
     return assignedPrices || [];
   }
 

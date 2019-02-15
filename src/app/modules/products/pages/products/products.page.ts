@@ -122,7 +122,7 @@ export class ProductsPage {
 
             this.selectedType = this.productTypes[0];
             this.productTypes = await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
-            this.productPrices = await this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id);
+            this.productPrices = await this.settingsProvider.getProductPricesWithOptionalProductPrices(this.selectedCategory.id, this.selectedType.id);            
 
             this.selectedPrice = this.productPrices.length > 0 ?
               this.productPrices[0] : {};
@@ -158,9 +158,10 @@ export class ProductsPage {
           text: 'Cancel'
         }, {
           text: 'Buscar',
-          handler: data => {
+          handler: async data => {
             this.selectedType = data
             this.page = 1;
+            this.productPrices = await this.settingsProvider.getProductPricesWithOptionalProductPrices(this.selectedCategory.id, this.selectedType.id);            
             this.searchQuery = '';
             this.searchProducts();
           }
@@ -174,7 +175,7 @@ export class ProductsPage {
   async changePrice(event) {
     event.stopPropagation();
 
-    const priceInputs: any[] = (await this.settingsProvider.getProductPrices(this.selectedCategory.id, this.selectedType.id))
+    const priceInputs: any[] = this.productPrices
       .map(price => ({
         label: price.name,
         value: price,

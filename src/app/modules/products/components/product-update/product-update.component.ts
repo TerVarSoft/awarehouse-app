@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, union } from 'lodash';
 import { Component, OnInit } from '@angular/core';
 import { Camera } from '@ionic-native/camera/ngx';
 import { NavParams, AlertController, NavController, ModalController } from '@ionic/angular';
@@ -38,6 +38,8 @@ export class ProductUpdateComponent implements OnInit {
   productTypes: any[];
 
   productPrices: any[];
+
+  optionalProductPrices: any[];
 
 
   constructor(public navParams: NavParams,
@@ -90,6 +92,12 @@ export class ProductUpdateComponent implements OnInit {
       this.product.categoryId || '0',
       this.product.typeId || '0');
 
+    this.optionalProductPrices = await this.settingsProvider.getOptionalProductPrices(
+      this.product.categoryId || '0',
+      this.product.typeId || '0');
+
+
+
     const newPrices = this.productPrices.map(priceType => {
       const productPrice = this.product.prices.find(price => price.priceId === priceType.id);
       return {
@@ -99,7 +107,65 @@ export class ProductUpdateComponent implements OnInit {
       }
     });
 
-    this.product.prices = newPrices;
+    const newOptionalPrices = this.optionalProductPrices
+      .filter(optionalPrice => {
+        const foundPriceId = this.product.optionalPriceIds.find(priceId => priceId === optionalPrice.id);
+        
+        return foundPriceId !== undefined;
+      })
+      .map(priceType => {
+        const productPrice = this.product.prices.find(price => price.priceId === priceType.id);
+        return {
+          priceId: priceType.id,
+          name: priceType.name,
+          value: productPrice ? productPrice.value : 0
+        }
+      });    
+
+    this.product.prices = [...newPrices, ...newOptionalPrices];
+  }
+
+  getOptionalPriceName(priceId) {
+    const foundPrice = this.optionalProductPrices.find(price => price.id === priceId);
+
+    return foundPrice ? foundPrice.name : ''
+  }
+
+  async addOptionalPrice() {
+
+    const optionalPriceInputs: any[] = (await this.optionalProductPrices)
+      .filter(optionalPrice => this.product.optionalPriceIds.find(priceId => priceId === optionalPrice.id) === undefined)
+      .map(optionalPrice => ({
+        label: optionalPrice.name,
+        value: optionalPrice.id,
+        type: 'checkbox'
+      }));
+
+    let addOptionalPriceAlert = await this.alertCtrl.create({
+      header: 'Elige precios opcional',
+      message: this.product.code,
+      inputs: optionalPriceInputs,
+      buttons: [
+        {
+          text: 'Cancelar',
+        },
+        {
+          text: 'Agregar',
+          handler: data => {
+            this.product.optionalPriceIds = union(this.product.optionalPriceIds, data);
+            this.initProductPrices();
+          }
+        }
+      ]
+    });
+    addOptionalPriceAlert.present();
+  }
+
+  removeOptionalPrice(priceIdToRemove) {
+    this.product.optionalPriceIds = this.product.optionalPriceIds.filter(optionalPriceId => optionalPriceId !== priceIdToRemove);
+
+    console.log(this.product.optionalPriceIds);
+    this.initProductPrices();
   }
 
   async addTag() {

@@ -48,6 +48,8 @@ export class Product {
   tags: string[];
 
   isImgUploading: boolean;
+
+  optionalPriceIds: string[] = [];
 }
 
 export const updateProductPatch = (original: Product, newData: Product) => {
