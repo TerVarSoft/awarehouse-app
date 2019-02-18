@@ -41,7 +41,7 @@ export class Product {
 
   provider: string;
 
-  quantityPerPackage: number;
+  barCode: string = '';
 
   quantity: number;
 
@@ -59,6 +59,7 @@ export const updateProductPatch = (original: Product, newData: Product) => {
   original.previewUrl = newData.previewUrl;
   original.prices = newData.prices;
   original.quantity = newData.quantity;
+  original.barCode = newData.barCode;
   original.description = newData.description;
   original.isImgUploading = newData.isImgUploading;
   original.tags = newData.tags;
