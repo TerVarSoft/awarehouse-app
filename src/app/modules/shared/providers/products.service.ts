@@ -58,11 +58,11 @@ export class ProductsService {
   }
 
   post(product) {
-    return this.api.post(this.endpoint, product);
+    return this.api.postPromise(this.endpoint, product);
   }
 
   put(product) {
-    return this.api.put(`${this.endpoint}/${product.id}`, product);
+    return this.api.putPromise(`${this.endpoint}/${product.id}`, product);
   }
 
   updateProductImg(productId, imageData) {

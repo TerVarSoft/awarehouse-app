@@ -67,12 +67,14 @@ export class ProductItemComponent {
                             this.notifier.createToast(this.messages.errorWhenSavingProduct);
                         }
 
-                        this.productsProvider.put(this.product).subscribe(() => {
+                        try {
+                            await this.productsProvider.put(this.product);
                             saveProductLoader.dismiss();
-                        }, error => {
+
+                        } catch (ex) {
                             saveProductLoader.dismiss();
                             this.notifier.createToast(this.messages.errorWhenSavingProduct);
-                        });
+                        }
                     }
                 }
             ]
@@ -113,9 +115,14 @@ export class ProductItemComponent {
                     handler: async data => {
                         let saveProductLoader = await this.notifier.createLoader(`Salvando ${this.product.code}`);
                         this.product.quantity = data.quantity;
-                        this.productsProvider.put(this.product).subscribe(() => {
+
+                        try {
+                            await this.productsProvider.put(this.product);
                             saveProductLoader.dismiss();
-                        });
+                        } catch (ex) {
+                            saveProductLoader.dismiss();
+                            this.notifier.createToast(this.messages.errorWhenSavingProduct);
+                        }                        
                     }
                 }
             ]
@@ -172,7 +179,6 @@ export class ProductItemComponent {
         let productToUpdate;
         try {
             productToUpdate = await this.productsProvider.getById(this.product.id);
-            console.log(productToUpdate)
         } catch (ex) {
             createProductLoader.dismiss();
             return;
@@ -187,7 +193,13 @@ export class ProductItemComponent {
             }
         });
 
-        updateProductModal.present();
+        await updateProductModal.present();
+
+        const { data } = await updateProductModal.onDidDismiss();
+
+        if (data && data.updatedProduct) {
+            this.product = data.updatedProduct;
+        }
     }
 
 

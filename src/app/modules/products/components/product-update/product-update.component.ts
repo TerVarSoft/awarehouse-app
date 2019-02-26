@@ -113,7 +113,7 @@ export class ProductUpdateComponent implements OnInit {
     const newOptionalPrices = this.optionalProductPrices
       .filter(optionalPrice => {
         const foundPriceId = this.product.optionalPriceIds.find(priceId => priceId === optionalPrice.id);
-        
+
         return foundPriceId !== undefined;
       })
       .map(priceType => {
@@ -123,7 +123,7 @@ export class ProductUpdateComponent implements OnInit {
           name: priceType.name,
           value: productPrice ? productPrice.value : 0
         }
-      });    
+      });
 
     this.product.prices = [...newPrices, ...newOptionalPrices];
   }
@@ -141,7 +141,7 @@ export class ProductUpdateComponent implements OnInit {
         value: productLocation ? productLocation.value : '',
         quantity: productLocation ? productLocation.quantity : 0
       }
-    });   
+    });
 
     this.product.locations = newLocations;
   }
@@ -185,7 +185,6 @@ export class ProductUpdateComponent implements OnInit {
   removeOptionalPrice(priceIdToRemove) {
     this.product.optionalPriceIds = this.product.optionalPriceIds.filter(optionalPriceId => optionalPriceId !== priceIdToRemove);
 
-    console.log(this.product.optionalPriceIds);
     this.initProductPrices();
   }
 
@@ -237,29 +236,60 @@ export class ProductUpdateComponent implements OnInit {
     });
   }
 
+  // async save() {
+  //   let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.code || ''}`);
+  //   this.product.isImgUploading = true;
+  //   this.productsProvider.save(this.product).subscribe((updatedProduct: any) => {
+  //     updateProductPatch(this.originalProduct, updatedProduct);
+  //     // this.updateFavoritesInBackground();
+
+  //     this.productsProvider.updateProductImg(updatedProduct.id, this.tmpImageData)
+  //       .subscribe((updatedProduct: any) => {
+  //         console.log('updating after upload')
+  //         updateProductPatch(this.originalProduct, updatedProduct);
+  //         // this.updateFavoritesInBackground();
+  //       });
+
+  //     this.modalCtrl.dismiss({
+  //       updatedProduct: updatedProduct
+  //     });
+  //     createProductLoader.dismiss();
+  //   }, error => {
+  //     this.modalCtrl.dismiss();
+  //     createProductLoader.dismiss();
+  //     this.notifier.createToast(this.messages.errorWhenSavingProduct);
+  //   });
+  // }
+
   async save() {
-    let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.code}`);
+    let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.code || ''}`);
     this.product.isImgUploading = true;
-    this.productsProvider.save(this.product).subscribe((updatedProduct: any) => {
-      updateProductPatch(this.originalProduct, updatedProduct);
-      // this.updateFavoritesInBackground();
 
-      this.productsProvider.updateProductImg(updatedProduct.id, this.tmpImageData)
-        .subscribe((updatedProduct: any) => {
-          console.log('updating after upload')
-          updateProductPatch(this.originalProduct, updatedProduct);
-          // this.updateFavoritesInBackground();
-        });
-
-      this.modalCtrl.dismiss({
-        updatedProduct: updatedProduct
-      });
-      createProductLoader.dismiss();
-    }, error => {
+    let updatedProduct;
+    try {
+      updatedProduct = await this.productsProvider.save(this.product);
+      console.log(updatedProduct)
+    } catch (ex) {
       this.modalCtrl.dismiss();
       createProductLoader.dismiss();
       this.notifier.createToast(this.messages.errorWhenSavingProduct);
+      return;
+    }
+
+    // updateProductPatch(this.originalProduct, updatedProduct);    
+
+    this.productsProvider.updateProductImg(updatedProduct.id, this.tmpImageData)
+      .subscribe((updatedProductWithImage: any) => {
+        console.log('updating after upload')
+        // updateProductPatch(this.originalProduct, updatedProductWithImage);
+        updateProductPatch(updatedProduct, updatedProductWithImage);        
+      });
+
+    this.modalCtrl.dismiss({
+      updatedProduct: updatedProduct
     });
+    createProductLoader.dismiss();
+
   }
 
   removeTag(tagToRemove: string) {

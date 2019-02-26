@@ -50,7 +50,7 @@ export class ProductsPage {
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private _ngZone: NgZone
-  ) {}
+  ) { }
 
   ionViewWillEnter() {
     this.setDefaultValues();
@@ -86,7 +86,13 @@ export class ProductsPage {
       }
     });
 
-    return await createProductModal.present();
+    await createProductModal.present();
+
+    const { data } = await createProductModal.onDidDismiss();
+
+    if (data && data.updatedProduct) {
+      this.products.unshift(data.updatedProduct);
+    }
   }
 
   removeProductFromList(productToRemove: Product) {
@@ -122,7 +128,7 @@ export class ProductsPage {
 
             this.selectedType = this.productTypes[0];
             this.productTypes = await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
-            this.productPrices = await this.settingsProvider.getProductPricesWithOptionalProductPrices(this.selectedCategory.id, this.selectedType.id);            
+            this.productPrices = await this.settingsProvider.getProductPricesWithOptionalProductPrices(this.selectedCategory.id, this.selectedType.id);
 
             this.selectedPrice = this.productPrices.length > 0 ?
               this.productPrices[0] : {};
@@ -161,7 +167,7 @@ export class ProductsPage {
           handler: async data => {
             this.selectedType = data
             this.page = 1;
-            this.productPrices = await this.settingsProvider.getProductPricesWithOptionalProductPrices(this.selectedCategory.id, this.selectedType.id);            
+            this.productPrices = await this.settingsProvider.getProductPricesWithOptionalProductPrices(this.selectedCategory.id, this.selectedType.id);
             this.searchQuery = '';
             this.searchProducts();
           }

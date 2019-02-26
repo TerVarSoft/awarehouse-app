@@ -158,6 +158,26 @@ export class ApiService {
     });
   }
 
+  async putPromise(endpoint: string, body: any) {
+
+    let url = this.baseUrl + endpoint;
+    let requestOptions = new RequestOptions();
+    requestOptions.headers = new Headers(this.headers);
+
+    const token = await this.storage.getAuthtoken();
+
+
+    if (token) {
+      requestOptions.headers.append(this.authKey, 'Bearer ' + token);
+    }
+
+    return await this.http
+      .put(url, body, requestOptions)
+      .map(resp => resp.json().data)
+      .catch(this.catchErrors())
+      .toPromise();
+  }
+
   remove(endpoint: string, requestOptions: RequestOptions = new RequestOptions()) {
     let url = this.baseUrl + endpoint;
     requestOptions.headers = new Headers(this.headers);
