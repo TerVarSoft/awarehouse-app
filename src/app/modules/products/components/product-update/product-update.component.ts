@@ -39,6 +39,8 @@ export class ProductUpdateComponent implements OnInit {
 
   productPrices: any[];
 
+  productLocations: any[];
+
   optionalProductPrices: any[];
 
 
@@ -85,6 +87,7 @@ export class ProductUpdateComponent implements OnInit {
     this.product.tags = this.product.tags || [];
     this.product.locations = this.product.locations || [];
     this.initProductPrices();
+    this.initProductLocations();
   }
 
   async initProductPrices() {
@@ -123,6 +126,24 @@ export class ProductUpdateComponent implements OnInit {
       });    
 
     this.product.prices = [...newPrices, ...newOptionalPrices];
+  }
+
+  async initProductLocations() {
+    this.productLocations = await this.settingsProvider.getProductLocations(
+      this.product.categoryId || '0',
+      this.product.typeId || '0');
+
+    const newLocations = this.productLocations.map(locationType => {
+      const productLocation = this.product.locations.find(location => location.locationId === locationType.id);
+      return {
+        locationId: locationType.id,
+        name: locationType.name,
+        value: productLocation ? productLocation.value : '',
+        quantity: productLocation ? productLocation.quantity : 0
+      }
+    });   
+
+    this.product.locations = newLocations;
   }
 
   getOptionalPriceName(priceId) {
@@ -245,41 +266,41 @@ export class ProductUpdateComponent implements OnInit {
     this.product.tags = this.product.tags.filter(tag => tag !== tagToRemove);
   }
 
-  addWarehouseLocation() {
-    this.addLocation("Deposito");
-  }
+  // addWarehouseLocation() {
+  //   this.addLocation("Deposito");
+  // }
 
-  addStoreLocation() {
-    this.addLocation("Tienda");
-  }
+  // addStoreLocation() {
+  //   this.addLocation("Tienda");
+  // }
 
-  private async addLocation(type: string) {
-    let addLocationAlert = await this.alertCtrl.create({
-      header: 'Agregar Ubicacion',
-      message: type,
-      inputs: [
-        {
-          name: 'newLocation',
-          placeholder: 'Nueva Ubicacion'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-        },
-        {
-          text: 'Agregar',
-          handler: data => {
-            this.product.locations.unshift({
-              type: type,
-              value: data.newLocation
-            });
-          }
-        }
-      ]
-    });
-    addLocationAlert.present();
-  }
+  // private async addLocation(type: string) {
+  //   let addLocationAlert = await this.alertCtrl.create({
+  //     header: 'Agregar Ubicacion',
+  //     message: type,
+  //     inputs: [
+  //       {
+  //         name: 'newLocation',
+  //         placeholder: 'Nueva Ubicacion'
+  //       },
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Cancelar',
+  //       },
+  //       {
+  //         text: 'Agregar',
+  //         handler: data => {
+  //           this.product.locations.unshift({
+  //             type: type,
+  //             value: data.newLocation
+  //           });
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   addLocationAlert.present();
+  // }
 
   removeLocation(locationToRemove) {
     this.product.locations = this.product.locations.filter(location => location !== locationToRemove);

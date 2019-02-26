@@ -1,4 +1,5 @@
 import { ProductPrice } from "./product-price";
+import { ProductLocation } from "./product-location";
 
 /**
  * Product model.
@@ -19,9 +20,9 @@ export class Product {
 
   prices: ProductPrice[] = [];
 
-  buyingUnitPrice: number;
+  locations: ProductLocation[] = [];
 
-  locations: any[];
+  buyingUnitPrice: number;  
 
   isFavorite: boolean;
 
@@ -58,6 +59,7 @@ export const updateProductPatch = (original: Product, newData: Product) => {
   original.thumbnailUrl = newData.thumbnailUrl;
   original.previewUrl = newData.previewUrl;
   original.prices = newData.prices;
+  original.locations = newData.locations;
   original.quantity = newData.quantity;
   original.barCode = newData.barCode;
   original.description = newData.description;

@@ -63,6 +63,21 @@ export class SettingsCacheService {
     return assignedPrices || [];
   }
 
+  async getProductLocations(categoryId: string, typeId: string) {
+    if (!this.settings.productLocations) await this.loadFromStorage();
+
+    if (!categoryId && !typeId) {
+      return this.settings.productLocations || [];
+    }
+
+    let assignedLocations = typeId ?
+      this.settings.productTypes
+        .find(type => (type.id === typeId && type.categoryId === categoryId)).locations :
+      this.settings.productCategories.find(category => category.id === categoryId).locations;
+
+    return assignedLocations || [];
+  }
+
   async getOptionalProductPrices(categoryId: string, typeId: string) {
     if (!this.settings.productPrices) await this.loadFromStorage();
 

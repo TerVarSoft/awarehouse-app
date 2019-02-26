@@ -65,6 +65,23 @@ export class ApiService {
       .toPromise();
   }
 
+  async getByIdPromise(endpoint: string, id: string, requestOptions: RequestOptions = new RequestOptions()) {
+
+    let url = this.baseUrl + endpoint + "/" + id;
+    requestOptions.headers = new Headers(this.headers);
+
+    const token = await this.storage.getAuthtoken();
+
+    if (token) {
+      requestOptions.headers.append(this.authKey, 'Bearer ' + token);
+    }
+
+    return await this.http.get(url, requestOptions)
+      .map(resp => resp.json().data)
+      .catch(this.catchErrors())
+      .toPromise();
+  }
+
   async postPromise(endpoint: string, body: any) {
 
     let url = this.baseUrl + endpoint;

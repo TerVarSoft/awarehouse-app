@@ -33,6 +33,10 @@ export class ProductsService {
     return this.api.getPromise(this.endpoint, requestOptions);
   }
 
+  getById(id: string) {        
+    return this.api.getByIdPromise(this.endpoint, id);
+  }
+
   getObserver(query: any, page: number = 1) {
     let params: URLSearchParams = new URLSearchParams();
     params.set('tags', query.tags);

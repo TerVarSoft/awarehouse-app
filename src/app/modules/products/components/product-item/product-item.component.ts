@@ -24,7 +24,7 @@ export class ProductItemComponent {
 
     @Input() selectedPrice: any;
 
-    @Output() onDelete: EventEmitter<any> = new EventEmitter();    
+    @Output() onDelete: EventEmitter<any> = new EventEmitter();
 
     constructor(private platform: Platform,
         private actionSheetCtrl: ActionSheetController,
@@ -122,7 +122,7 @@ export class ProductItemComponent {
         });
 
         alert.present();
-    }    
+    }
 
     async openProductOptions(event) {
         event.stopPropagation();
@@ -168,10 +168,22 @@ export class ProductItemComponent {
     }
 
     async updateProduct() {
+        let createProductLoader = await this.notifier.createLoader(`Cargando producto: ${this.product.code}`);
+        let productToUpdate;
+        try {
+            productToUpdate = await this.productsProvider.getById(this.product.id);
+            console.log(productToUpdate)
+        } catch (ex) {
+            createProductLoader.dismiss();
+            return;
+        }
+
+
+        createProductLoader.dismiss();
         const updateProductModal = await this.modalCtrl.create({
             component: ProductUpdateComponent,
             componentProps: {
-                productToUpdate: this.product
+                productToUpdate: productToUpdate
             }
         });
 
