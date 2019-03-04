@@ -16,7 +16,8 @@
 
 <ion-content>
   <div class="product-profile" text-center>
-    <img *ngIf="(imagePreview || product.thumbnailUrl)" [src]="(imagePreview || product.thumbnailUrl) | safeUrl" style="max-height: 100px;" />
+    <img *ngIf="(imagePreview || product.thumbnailUrl)" [src]="(imagePreview || product.thumbnailUrl) | safeUrl"
+      style="max-height: 100px;" />
     <ion-fab class="gallery-button">
       <ion-fab-button size="small" (click)="pickPicture()" color="secondary">
         <ion-icon name="image"></ion-icon>
@@ -114,7 +115,8 @@
         </ion-list-header>
         <ion-item *ngFor="let optionalPriceId of product.optionalPriceIds">
           {{getOptionalPriceName(optionalPriceId)}}
-          <ion-icon name="close-circle" color="primary" item-end (click)="removeOptionalPrice(optionalPriceId)"></ion-icon>
+          <ion-icon name="close-circle" color="primary" item-end (click)="removeOptionalPrice(optionalPriceId)">
+          </ion-icon>
         </ion-item>
       </ion-item-group>
     </div>
@@ -129,6 +131,19 @@
           <ion-item>
             <ion-label>Cantidad:</ion-label>
             <ion-input [(ngModel)]="location.quantity"></ion-input>
+          </ion-item>
+        </div>
+        <ion-item-divider>
+            <ion-label>
+                Alarmas
+            </ion-label>
+          </ion-item-divider>
+        <div *ngFor="let alarm of product.quantityAlarms">
+          <ion-item>
+            <ion-toggle [(ngModel)]="alarm.isOn"></ion-toggle>
+            <ion-label >Minimo:</ion-label>
+            <ion-input [(ngModel)]="alarm.threshold"></ion-input>
+            <ion-label>{{alarm.type}}</ion-label>
           </ion-item>
         </div>
       </ion-item-group>

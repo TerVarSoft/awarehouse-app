@@ -88,6 +88,7 @@ export class ProductUpdateComponent implements OnInit {
     this.product.locations = this.product.locations || [];
     this.initProductPrices();
     this.initProductLocations();
+    this.initProductAlarmQuantities();
   }
 
   async initProductPrices() {
@@ -144,6 +145,32 @@ export class ProductUpdateComponent implements OnInit {
     });
 
     this.product.locations = newLocations;
+  }
+
+  async initProductAlarmQuantities() {
+    this.productLocations = await this.settingsProvider.getProductLocations(
+      this.product.categoryId || '0',
+      this.product.typeId || '0');
+
+    const newQuantityAlarms = this.productLocations.map(locationType => {
+      const alarm = this.product.quantityAlarms.find(quantityAlarm => quantityAlarm.locationId === locationType.id);
+      return {
+        locationId: locationType.id,
+        type: locationType.name,
+        threshold: alarm ? alarm.threshold : 0,
+        isOn: alarm ? alarm.isOn : false
+      }
+    });
+
+    const totalAlarm = this.product.quantityAlarms.find(alarm => alarm.locationId === '0');
+    newQuantityAlarms.push({
+      locationId: '0',
+      type: 'Total',
+      threshold: totalAlarm ? totalAlarm.threshold : 0,
+      isOn: totalAlarm ? totalAlarm.isOn : false
+    });
+
+    this.product.quantityAlarms = newQuantityAlarms;
   }
 
   getOptionalPriceName(priceId) {
@@ -282,7 +309,7 @@ export class ProductUpdateComponent implements OnInit {
       .subscribe((updatedProductWithImage: any) => {
         console.log('updating after upload')
         // updateProductPatch(this.originalProduct, updatedProductWithImage);
-        updateProductPatch(updatedProduct, updatedProductWithImage);        
+        updateProductPatch(updatedProduct, updatedProductWithImage);
       });
 
     this.modalCtrl.dismiss({

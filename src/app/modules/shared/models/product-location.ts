@@ -1,5 +1,5 @@
 /**
- * Product price model.
+ * Product location model.
  */
 export class ProductLocation {
 

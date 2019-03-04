@@ -1,5 +1,6 @@
 import { ProductPrice } from "./product-price";
 import { ProductLocation } from "./product-location";
+import { ProductQuantityAlarm } from "./product-quantity-alarm";
 
 /**
  * Product model.
@@ -21,6 +22,8 @@ export class Product {
   prices: ProductPrice[] = [];
 
   locations: ProductLocation[] = [];
+
+  quantityAlarms: ProductQuantityAlarm[] = [];
 
   buyingUnitPrice: number;  
 
@@ -60,6 +63,7 @@ export const updateProductPatch = (original: Product, newData: Product) => {
   original.previewUrl = newData.previewUrl;
   original.prices = newData.prices;
   original.locations = newData.locations;
+  original.quantityAlarms = newData.quantityAlarms;
   original.quantity = newData.quantity;
   original.barCode = newData.barCode;
   original.description = newData.description;
