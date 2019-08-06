@@ -9,7 +9,8 @@
   </ion-toolbar>
 
   <ion-toolbar color="primary">
-    <ion-searchbar animated=true placeholder="Que buscas hoy?" (search)="onSearch($event)" [(ngModel)]="searchQuery"></ion-searchbar>
+    <ion-searchbar animated=true placeholder="Que buscas hoy?" (search)="onSearch($event)" [(ngModel)]="searchQuery">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -18,7 +19,8 @@
   <ion-spinner name="dots" color="primary" *ngIf="productsAreLoading"></ion-spinner>
   <ion-list *ngIf="!productsAreLoading">
     <div *ngFor="let product of products">
-      <product-item [product]="product" [selectedPrice]="selectedPrice" (onDelete)="removeProductFromList($event)"></product-item>
+      <product-item [product]="product" [selectedPrice]="selectedPrice" (onDelete)="removeProductFromList($event)">
+      </product-item>
     </div>
 
     <ion-infinite-scroll (ionInfinite)="pullNextProductsPage($event)">
@@ -37,11 +39,9 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-chip *ngIf="productCategories && productCategories.length > 2" (click)="changeCategory($event)">
-      <ion-label>{{selectedCategory.name}}</ion-label>
-    </ion-chip>
-    <ion-chip *ngIf="productTypes && productTypes.length > 2" (click)="changeType($event)">
-      <ion-label>{{selectedType.name}}</ion-label>
+    <ion-chip *ngIf="productFilters && productFilters.length > 2" (click)="changeFilter($event)">
+      <ion-label>{{selectedType.id ? selectedCategory.name+ ' : ' + selectedType.name : selectedCategory.name}}
+      </ion-label>
     </ion-chip>
     <ion-chip *ngIf="productPrices && productPrices.length > 0" (click)="changePrice($event)">
       <ion-label>{{selectedPrice.name}}</ion-label>

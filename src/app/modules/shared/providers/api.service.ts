@@ -224,6 +224,8 @@ export class ApiService {
   private catchErrors() {
 
     return async (res: Response) => {
+      if (!res.text) return;
+
       const body = JSON.parse(await res.text());
 
       if (res.status === 0) {

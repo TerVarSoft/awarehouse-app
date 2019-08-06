@@ -5,15 +5,13 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged"
 import "rxjs/add/operator/switchMap";
 
-
 import { ProductUpdateComponent } from '../../components/product-update/product-update.component';
 
 import { ConnectionService } from '../../../shared/providers/connection.service';
 import { ProductsService } from '../../../shared/providers/products.service';
-import { NotifierService } from '../../../shared/providers/notifier.service';
-import { SettingsCacheService } from '../../../shared/providers/settings-cache.service';
 
 import { Product } from '../../../shared/models/product';
+import { ProductConfigCacheService } from 'src/app/modules/shared/providers/product-config-cache.service';
 
 @Component({
   selector: 'page-products',
@@ -36,16 +34,15 @@ export class ProductsPage {
 
   selectedPrice: any = {};
 
-  productCategories: any[];
+  productConfigCache: any;
 
-  productTypes: any[];
+  productFilters: any[];
 
   productPrices: any[];
 
   constructor(
     private productsProvider: ProductsService,
-    private settingsProvider: SettingsCacheService,
-    private notifier: NotifierService,
+    private configCacheService: ProductConfigCacheService,
     private connection: ConnectionService,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
@@ -102,10 +99,10 @@ export class ProductsPage {
 
   /** Product filter functions */
 
-  async changeCategory(event) {
+  async changeFilter(event) {
     event.stopPropagation();
 
-    const categoryInputs: any[] = (await this.settingsProvider.getProductCategoriesWithAll())
+    const categoryInputs: any[] = this.productFilters
       .map(category => ({
         label: category.name,
         value: category,
@@ -124,18 +121,39 @@ export class ProductsPage {
         {
           text: 'Buscar',
           handler: async data => {
-            this.selectedCategory = data
 
-            this.selectedType = this.productTypes[0];
-            this.productTypes = await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id);
-            this.productPrices = await this.settingsProvider.getProductPricesWithOptionalProductPrices(this.selectedCategory.id, this.selectedType.id);
+            const categoryFromData = data;
+            if (data.subFilters.length > 0) {
+              const typeInputs: any[] = data.subFilters
+                .map(type => ({
+                  label: type.name,
+                  value: type,
+                  type: 'radio',
+                  checked: this.selectedType.id === type.id
+                }));
 
-            this.selectedPrice = this.productPrices.length > 0 ?
-              this.productPrices[0] : {};
 
-            this.page = 1;
-            this.searchQuery = '';
-            this.searchProducts();
+              let alert = await this.alertCtrl.create({
+                header: 'Tipos',
+                message: 'Selecciona un Tipo',
+                inputs: typeInputs,
+                buttons: [
+                  {
+                    text: 'Cancel'
+                  },
+                  {
+                    text: 'Buscar',
+                    handler: async data => {
+                      this.filterProducts(categoryFromData, data);
+                    }
+                  }
+                ]
+              });
+
+              alert.present();
+            } else {
+              this.filterProducts(categoryFromData);
+            }
           }
         }
       ]
@@ -144,38 +162,21 @@ export class ProductsPage {
     alert.present();
   }
 
-  async changeType(event) {
-    event.stopPropagation();
+  filterProducts(selectedCategory = { id: '' }, selectedType = { id: '' }) {
+    this.page = 1;
+    this.searchQuery = '';
+    this.selectedCategory = selectedCategory;
+    this.selectedType = selectedType;
 
-    const typeInputs: any[] = (await this.settingsProvider.getProductTypesWithAll(this.selectedCategory.id))
-      .map(type => ({
-        label: type.name,
-        value: type,
-        type: 'radio',
-        checked: this.selectedType.id === type.id
-      }));
+    const categoryTypeId = this.selectedType.id
+      ? `${this.selectedCategory.id}:${this.selectedType.id}`
+      : this.selectedCategory.id
 
-    let alert = await this.alertCtrl.create({
-      header: 'Tipos',
-      message: 'Selecciona un tipo',
-      inputs: typeInputs,
-      buttons: [
-        {
-          text: 'Cancel'
-        }, {
-          text: 'Buscar',
-          handler: async data => {
-            this.selectedType = data
-            this.page = 1;
-            this.productPrices = await this.settingsProvider.getProductPricesWithOptionalProductPrices(this.selectedCategory.id, this.selectedType.id);
-            this.searchQuery = '';
-            this.searchProducts();
-          }
-        }
-      ]
-    });
+    this.productPrices = this.productConfigCache.pricesByCategoryAndType[categoryTypeId];
+    this.selectedPrice = this.productPrices.length > 0 ?
+      this.productPrices[0] : {};
 
-    alert.present();
+    this.searchProducts();
   }
 
   async changePrice(event) {
@@ -211,11 +212,17 @@ export class ProductsPage {
   /** Private functions */
 
   private async setDefaultValues() {
-    this.productCategories = await this.settingsProvider.getProductCategoriesWithAll();
-    this.selectedCategory = this.productCategories[0];
-    this.productTypes = await this.settingsProvider.getProductTypesWithAll('');
-    this.selectedType = this.productTypes[0];
-    this.productPrices = await this.settingsProvider.getProductPrices('', '');
+    this.productConfigCache = await this.configCacheService.get();
+
+    this.productFilters = this.productConfigCache.filters;
+    this.selectedCategory = this.productFilters[0];
+    this.selectedType = { id: '' };
+
+    const categoryTypeId = this.selectedType.id
+      ? `${this.selectedCategory.id}:${this.selectedType.id}`
+      : this.selectedCategory.id
+
+    this.productPrices = this.productConfigCache.pricesByCategoryAndType[categoryTypeId];
     this.selectedPrice = this.productPrices[0];
   }
 

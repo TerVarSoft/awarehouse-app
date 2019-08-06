@@ -21,6 +21,7 @@ import { SettingsService } from './modules/shared/providers/settings.service';
 import { SettingsCacheService } from './modules/shared/providers/settings-cache.service';
 import { ApiService } from './modules/shared/providers/api.service';
 import { StorageService } from './modules/shared/providers/storage.service';
+import { ProductConfigCacheService } from './modules/shared/providers/product-config-cache.service';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { StorageService } from './modules/shared/providers/storage.service';
     LoginService,
     LogoutService,
     ProductsService,
+    ProductConfigCacheService,
     SettingsService,
     SettingsCacheService
   ],

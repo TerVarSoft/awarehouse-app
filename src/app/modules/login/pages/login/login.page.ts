@@ -65,7 +65,7 @@ export class LoginPage {
 
           this.router.navigate(['/products']);
         });
-      } else {        
+      } else {
         loader.dismiss();
         this.notifier.createToast(this.messages.notAdminUser);
       }
