@@ -19,7 +19,8 @@
   <ion-spinner name="dots" color="primary" *ngIf="productsAreLoading"></ion-spinner>
   <ion-list *ngIf="!productsAreLoading">
     <div *ngFor="let product of products">
-      <product-item [product]="product" [selectedPrice]="selectedPrice" (onDelete)="removeProductFromList($event)">
+      <product-item [product]="product" [productConfigCache]="productConfigCache" [selectedPrice]="selectedPrice"
+        (onDelete)="removeProductFromList($event)">
       </product-item>
     </div>
 

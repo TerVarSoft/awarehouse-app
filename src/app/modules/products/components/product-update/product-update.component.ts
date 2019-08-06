@@ -6,7 +6,6 @@ import { NavParams, AlertController, NavController, ModalController } from '@ion
 import { ProductsService } from './../../../shared/providers/products.service';
 import { ProductsUtil } from './../../products.util';
 import { NotifierService } from './../../../shared/providers/notifier.service';
-import { SettingsCacheService } from './../../../shared/providers/settings-cache.service';
 import { MessagesService } from './../../../shared/providers/messages.service';
 
 import { Product, updateProductPatch } from './../../../shared/models/product';
@@ -31,6 +30,8 @@ export class ProductUpdateComponent implements OnInit {
 
   originalProduct: Product;
 
+  productConfigCache: any = {};
+
   productCategories: any[];
 
   priceTypes: any[]
@@ -51,9 +52,10 @@ export class ProductUpdateComponent implements OnInit {
     public util: ProductsUtil,
     public productsProvider: ProductsService,
     public notifier: NotifierService,
-    private settingsProvider: SettingsCacheService,
     private messages: MessagesService,
     private camera: Camera) {
+
+    this.productConfigCache = this.navParams.data.productConfigCache;
 
     this.originalProduct = this.navParams.data.productToUpdate;
     this.product = cloneDeep(this.originalProduct);
@@ -64,21 +66,25 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   public updateCategory() {
-    this.productTypes = this.settingsProvider.getProductTypes(this.product.categoryId);
+    this.productTypes = this.productConfigCache.typesByCategory[this.product.categoryId];
     this.product.typeId = '0';
     this.initProductPrices();
+    this.initProductLocations();
+    this.initProductAlarmQuantities();
   }
 
   public updateType() {
     this.initProductPrices();
+    this.initProductLocations();
+    this.initProductAlarmQuantities();
   }
 
   public initProperties() {
-    this.productCategories = this.settingsProvider.getProductCategories();
+    this.productCategories = this.productConfigCache.categories;
     this.product.categoryId = this.product.categoryId ||
       this.navParams.data.selectedProductCategoryId ||
       '0';
-    this.productTypes = this.settingsProvider.getProductTypes(this.product.categoryId);
+    this.productTypes = this.productConfigCache.typesByCategory[this.product.categoryId];
 
     this.product.typeId = this.product.typeId ||
       this.navParams.data.selectedProductTypeId ||
@@ -92,15 +98,18 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   async initProductPrices() {
-    this.productPrices = await this.settingsProvider.getProductPrices(
-      this.product.categoryId || '0',
-      this.product.typeId || '0');
 
-    this.optionalProductPrices = await this.settingsProvider.getOptionalProductPrices(
-      this.product.categoryId || '0',
-      this.product.typeId || '0');
+    const categoryTypeId = this.product.typeId
+      ? `${this.product.categoryId}:${this.product.typeId}`
+      : this.product.categoryId
 
+    this.productPrices =
+      this.productConfigCache.pricesByCategoryAndType[categoryTypeId]
+        .filter(price => !price.isOptional);
 
+    this.optionalProductPrices =
+      this.productConfigCache.pricesByCategoryAndType[categoryTypeId]
+        .filter(price => price.isOptional);
 
     const newPrices = this.productPrices.map(priceType => {
       const productPrice = this.product.prices.find(price => price.priceId === priceType.id);
@@ -130,9 +139,12 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   async initProductLocations() {
-    this.productLocations = await this.settingsProvider.getProductLocations(
-      this.product.categoryId || '0',
-      this.product.typeId || '0');
+    const categoryTypeId = this.product.typeId
+      ? `${this.product.categoryId}:${this.product.typeId}`
+      : this.product.categoryId
+
+    this.productLocations =
+      this.productConfigCache.locationsByCategoryAndType[categoryTypeId];
 
     const newLocations = this.productLocations.map(locationType => {
       const productLocation = this.product.locations.find(location => location.locationId === locationType.id);
@@ -148,9 +160,12 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   async initProductAlarmQuantities() {
-    this.productLocations = await this.settingsProvider.getProductLocations(
-      this.product.categoryId || '0',
-      this.product.typeId || '0');
+    const categoryTypeId = this.product.typeId
+      ? `${this.product.categoryId}:${this.product.typeId}`
+      : this.product.categoryId
+
+    this.productLocations =
+      this.productConfigCache.locationsByCategoryAndType[categoryTypeId];
 
     const newQuantityAlarms = this.productLocations.map(locationType => {
       const alarm = this.product.quantityAlarms.find(quantityAlarm => quantityAlarm.locationId === locationType.id);

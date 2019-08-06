@@ -6,7 +6,6 @@ import { ProductUpdateComponent } from '../product-update/product-update.compone
 import { Product } from './../../..//shared/models/product';
 
 import { ProductsUtil } from './../../products.util';
-import { SettingsCacheService } from './../../../shared/providers/settings-cache.service';
 
 @Component({
   selector: 'product-detail',
@@ -24,26 +23,27 @@ export class ProductDetailComponent {
 
   constructor(public navParams: NavParams,
     private modalCtrl: ModalController,
-    public navCtrl: NavController,
-    public settingsProvider: SettingsCacheService) {
+    public navCtrl: NavController) {
     this.initProperties();
   }
 
   async initProperties() {
     this.product = this.navParams.data.product;
-    this.productPrices = await this.settingsProvider.getProductPrices(
-      this.product.categoryId, this.product.typeId);
 
-    const newPrices = this.productPrices.map(priceType => {
-      const productPrice = this.product.prices.find(price => price.priceId === priceType.id);
-      return {
-        priceId: priceType.id,
-        name: priceType.name,
-        value: productPrice ? productPrice.value : 0
-      }
-    });
+    // No use of settingsProvider
+    // this.productPrices = await this.settingsProvider.getProductPrices(
+    //   this.product.categoryId, this.product.typeId);
 
-    this.product.prices = newPrices;
+    // const newPrices = this.productPrices.map(priceType => {
+    //   const productPrice = this.product.prices.find(price => price.priceId === priceType.id);
+    //   return {
+    //     priceId: priceType.id,
+    //     name: priceType.name,
+    //     value: productPrice ? productPrice.value : 0
+    //   }
+    // });
+
+    // this.product.prices = newPrices;
   }
 
   async editProduct() {

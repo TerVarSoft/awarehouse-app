@@ -22,6 +22,8 @@ export class ProductItemComponent {
 
     @Input() product: Product;
 
+    @Input() productConfigCache: any;
+
     @Input() selectedPrice: any;
 
     @Output() onDelete: EventEmitter<any> = new EventEmitter();
@@ -122,7 +124,7 @@ export class ProductItemComponent {
                         } catch (ex) {
                             saveProductLoader.dismiss();
                             this.notifier.createToast(this.messages.errorWhenSavingProduct);
-                        }                        
+                        }
                     }
                 }
             ]
@@ -138,13 +140,14 @@ export class ProductItemComponent {
             header: this.product.code,
             cssClass: 'product-options',
             buttons: [
+                // {
+                //     text: 'Ver',
+                //     icon: !this.platform.is('ios') ? 'eye' : null,
+                //     handler: () => {
+                //         this.goToProductDetails();
+                //     }
+                // }
                 {
-                    text: 'Ver',
-                    icon: !this.platform.is('ios') ? 'eye' : null,
-                    handler: () => {
-                        this.goToProductDetails();
-                    }
-                }, {
                     text: 'Editar',
                     icon: !this.platform.is('ios') ? 'create' : null,
                     handler: () => {
@@ -189,6 +192,7 @@ export class ProductItemComponent {
         const updateProductModal = await this.modalCtrl.create({
             component: ProductUpdateComponent,
             componentProps: {
+                productConfigCache: this.productConfigCache,
                 productToUpdate: productToUpdate
             }
         });

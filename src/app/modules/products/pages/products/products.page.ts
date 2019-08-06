@@ -78,6 +78,7 @@ export class ProductsPage {
       component: ProductUpdateComponent,
       componentProps: {
         productToUpdate: new Product(),
+        productConfigCache: this.productConfigCache,
         selectedProductCategoryId: this.selectedCategory.id,
         selectedProductTypeId: this.selectedType.id,
       }
