@@ -14,6 +14,7 @@ import { ConnectionService } from './modules/shared/providers/connection.service
 import { MessagesService } from './modules/shared/providers/messages.service';
 import { NotifierService } from './modules/shared/providers/notifier.service';
 import { StorageService } from './modules/shared/providers/storage.service';
+import { LogoutService } from './modules/shared/providers/logout.service';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +34,7 @@ export class AppComponent {
     public messages: MessagesService,
     public notifier: NotifierService,
     public connection: ConnectionService,
+    public logoutService: LogoutService,
     public events: Events,
     private menu: MenuController
   ) {
@@ -80,9 +82,14 @@ export class AppComponent {
     this.menu.close();
   }
 
-  onLogout() {
+  async onLogout() {
+    const loader = await this.notifier.createLoader(this.messages.authenticating);
+    await this.logoutService.post();
+
     this.menu.close();
     this.storage.removeStorage();
+    loader.dismiss();
     this.router.navigate(['/']);
+
   }
 }

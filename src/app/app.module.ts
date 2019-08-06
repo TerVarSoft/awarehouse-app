@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { ConnectionService } from './modules/shared/providers/connection.service';
 import { LoginService } from './modules/shared/providers/login.service';
+import { LogoutService } from './modules/shared/providers/logout.service';
 import { NotifierService } from './modules/shared/providers/notifier.service';
 import { MessagesService } from './modules/shared/providers/messages.service';
 import { ProductsService } from './modules/shared/providers/products.service';
@@ -44,6 +45,7 @@ import { StorageService } from './modules/shared/providers/storage.service';
     MessagesService,
     NotifierService,
     LoginService,
+    LogoutService,
     ProductsService,
     SettingsService,
     SettingsCacheService

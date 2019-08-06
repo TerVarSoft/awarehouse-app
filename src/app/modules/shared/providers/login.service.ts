@@ -17,9 +17,9 @@ export class LoginService {
     this.baseUrl = this.api.baseUrl;
   }
 
-  post(userName: string, password: string) {    
+  post(userName: string, password: string) {
 
-    return this.api.postPromise(this.endpoint, { 
+    return this.api.postPromise(this.endpoint, {
       userName: userName,
       password: password
     });

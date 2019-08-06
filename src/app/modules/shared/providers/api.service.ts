@@ -223,7 +223,8 @@ export class ApiService {
 
   private catchErrors() {
 
-    return (res: Response) => {
+    return async (res: Response) => {
+      const body = JSON.parse(await res.text());
 
       if (res.status === 0) {
         console.log("You are not connected to internet");
@@ -232,13 +233,13 @@ export class ApiService {
         return _throw({ _body: JSON.stringify({ status: 0 }) });
       }
 
-      if (res.status === 401 || res.status === 403) {
+      if (body.status === 401 && (body.code === 0 || body.code === 2 || body.code === 4)
+        || body.status === 403) {
         console.log("Invalid or expired token. Redirecting to login");
 
         this.events.publish('user:logout');
       }
-
-      console.log(res);
+            
       return _throw(res);
     };
   }
