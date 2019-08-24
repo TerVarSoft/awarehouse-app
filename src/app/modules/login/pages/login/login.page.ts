@@ -56,29 +56,26 @@ export class LoginPage {
         loader.dismiss();
         return;
       }
-
-      if (loginResponse.role === 0) {
-        this.storage.setAuthToken(loginResponse.authToken).then(() => {
-          console.log("Token Authentication has been provided by the server");
-          this.settingsProvider.setSettings(loginResponse.settings);
-          loader.dismiss();
-
-          this.router.navigate(['/products']);
-        });
-      } else {
+      
+      this.storage.setAuthToken(loginResponse.authToken).then(() => {
+        console.log("Token Authentication has been provided by the server");
+        this.settingsProvider.setSettings(loginResponse.settings);
         loader.dismiss();
-        this.notifier.createToast(this.messages.notAdminUser);
-      }
+
+        this.router.navigate(['/products']);
+      });      
     }
   }
 
   private loadConfiguration() {
-    console.log("Loading settings from storages...");
-    this.settingsProvider.loadFromStorage().then(settings => {
-      if (settings) {
-        console.log("Settings loaded from local storage...");
-        this.navCtrl.navigateRoot('/products');
-      }
-    });
+    this.navCtrl.navigateRoot('/products');
+
+    // console.log("Loading settings from storages...");
+    // this.settingsProvider.loadFromStorage().then(settings => {
+    //   if (settings) {
+    //     console.log("Settings loaded from local storage...");
+    //     this.navCtrl.navigateRoot('/products');
+    //   }
+    // });
   }
 }
