@@ -66,7 +66,7 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   public updateCategory() {
-    this.productTypes = this.productConfigCache.typesByCategory[this.product.categoryId];
+    this.productTypes = this.productConfigCache.productTypesByCategory[this.product.categoryId];
     this.product.typeId = '0';
     this.initProductPrices();
     this.initProductLocations();
@@ -80,11 +80,11 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   public initProperties() {
-    this.productCategories = this.productConfigCache.categories;
+    this.productCategories = this.productConfigCache.productCategories;
     this.product.categoryId = this.product.categoryId ||
       this.navParams.data.selectedProductCategoryId ||
       '0';
-    this.productTypes = this.productConfigCache.typesByCategory[this.product.categoryId];
+    this.productTypes = this.productConfigCache.productTypesByCategory[this.product.categoryId];
 
     this.product.typeId = this.product.typeId ||
       this.navParams.data.selectedProductTypeId ||
@@ -104,11 +104,11 @@ export class ProductUpdateComponent implements OnInit {
       : this.product.categoryId
 
     this.productPrices =
-      this.productConfigCache.pricesByCategoryAndType[categoryTypeId]
+      this.productConfigCache.productPricesByCategoryAndType[categoryTypeId]
         .filter(price => !price.isOptional);
 
     this.optionalProductPrices =
-      this.productConfigCache.pricesByCategoryAndType[categoryTypeId]
+      this.productConfigCache.productPricesByCategoryAndType[categoryTypeId]
         .filter(price => price.isOptional);
 
     const newPrices = this.productPrices.map(priceType => {
@@ -144,7 +144,7 @@ export class ProductUpdateComponent implements OnInit {
       : this.product.categoryId
 
     this.productLocations =
-      this.productConfigCache.locationsByCategoryAndType[categoryTypeId];
+      this.productConfigCache.productLocationsByCategoryAndType[categoryTypeId];
 
     const newLocations = this.productLocations.map(locationType => {
       const productLocation = this.product.locations.find(location => location.locationId === locationType.id);
@@ -165,7 +165,7 @@ export class ProductUpdateComponent implements OnInit {
       : this.product.categoryId
 
     this.productLocations =
-      this.productConfigCache.locationsByCategoryAndType[categoryTypeId];
+      this.productConfigCache.productLocationsByCategoryAndType[categoryTypeId];
 
     const newQuantityAlarms = this.productLocations.map(locationType => {
       const alarm = this.product.quantityAlarms.find(quantityAlarm => quantityAlarm.locationId === locationType.id);

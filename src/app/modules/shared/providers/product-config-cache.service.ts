@@ -13,18 +13,18 @@ import { StorageService } from './storage.service';
 @Injectable()
 export class ProductConfigCacheService {
 
-    endpoint: string = 'product-config-cache';
+    endpoint: string = 'user-config-cache';
 
     constructor(public api: ApiService) { }
 
     async get() {
         let params: URLSearchParams = new URLSearchParams();
-        params.set('properties', 'categories typesByCategory pricesByCategoryAndType locationsByCategoryAndType filters');
+        params.set('properties', 'productCategories productTypesByCategory productPricesByCategoryAndType productLocationsByCategoryAndType productCategoryAndTypeFilters');
 
         let requestOptions = new RequestOptions({ search: params });
 
         const productConfigCache = await this.api.getPromise(this.endpoint, requestOptions);
-
+        console.log(productConfigCache)
         return productConfigCache;
     }
 }

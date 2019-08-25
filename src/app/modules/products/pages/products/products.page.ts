@@ -173,7 +173,7 @@ export class ProductsPage {
       ? `${this.selectedCategory.id}:${this.selectedType.id}`
       : this.selectedCategory.id
 
-    this.productPrices = this.productConfigCache.pricesByCategoryAndType[categoryTypeId];
+    this.productPrices = this.productConfigCache.productPricesByCategoryAndType[categoryTypeId];
     this.selectedPrice = this.productPrices.length > 0 ?
       this.productPrices[0] : {};
 
@@ -215,7 +215,7 @@ export class ProductsPage {
   private async setDefaultValues() {
     this.productConfigCache = await this.configCacheService.get();
 
-    this.productFilters = this.productConfigCache.filters;
+    this.productFilters = this.productConfigCache.productCategoryAndTypeFilters;
     this.selectedCategory = this.productFilters[0];
     this.selectedType = { id: '' };
 
@@ -223,7 +223,7 @@ export class ProductsPage {
       ? `${this.selectedCategory.id}:${this.selectedType.id}`
       : this.selectedCategory.id
 
-    this.productPrices = this.productConfigCache.pricesByCategoryAndType[categoryTypeId];
+    this.productPrices = this.productConfigCache.productPricesByCategoryAndType[categoryTypeId];
     this.selectedPrice = this.productPrices[0];
   }
 
