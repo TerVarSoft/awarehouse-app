@@ -302,11 +302,13 @@ export class ProductUpdateComponent implements OnInit {
   async save() {
     let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.code || ''}`);
     this.product.isImgUploading = true;
-    this.product.barCodes = this.product.barCodes ? this.product.barCodes.split(',') : [];
 
     let updatedProduct;
     try {
-      updatedProduct = await this.productsProvider.save(this.product);
+      updatedProduct = await this.productsProvider.save({
+        ...this.product,
+        barCodes: this.product.barCodes ? this.product.barCodes.split(',') : []
+      });
       console.log(updatedProduct)
     } catch (ex) {
       this.modalCtrl.dismiss();

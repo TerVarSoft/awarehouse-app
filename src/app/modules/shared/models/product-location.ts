@@ -11,7 +11,7 @@ export class ProductLocation {
 
     quantity: number;
 
-    minQuantity: string[];
+    minQuantity: number;
 
     isAlarmOn: boolean;
 }

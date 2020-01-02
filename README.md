@@ -33,7 +33,10 @@ to manage tunari services
         <widget id="io.tervarsoft.gonter" version="0.0.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     * (Probably not needed anymore) Remove not needed plugins for production mode, so far.: 
         ionic cordova plugin rm cordova-plugin-console
-    * Build release build for android
+    * Build release build for android (Install Androi Studio is needed: https://developer.android.com/studio/ . 
+      Android studio installs android sdk tools at (C:\Users\mirko\AppData\Local\Android\Sdk), and we have to add ANDROID_HOME environment variable to that location (platform-tools, tools and build-tools))
+      We have also acccept the license in Android studio for android sdk (in this case android sdk platform 27)
+      and install gradle, and create GRADLE_HOME property and added to path
         ionic cordova build --release android
     * If no key exists, generate private key. Use already created private key, request to the team members. Just for documentation this key was generated     with this command, should not be created again (keytool in jdk, usually: c:\Program Files\Java\jdk1.8.0_74\):
         keytool -genkey -v -keystore gonter.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
