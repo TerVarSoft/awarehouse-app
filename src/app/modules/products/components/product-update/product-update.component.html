@@ -76,7 +76,7 @@
         </ion-item> -->
         <ion-item>
           <ion-label>Codigo de barras:</ion-label>
-          <ion-input [(ngModel)]="product.barCode" type="text"></ion-input>
+          <ion-input [(ngModel)]="product.barCodes" type="text"></ion-input>
         </ion-item>
 
         <ion-list-header>
@@ -134,18 +134,24 @@
           </ion-item>
         </div>
         <ion-item-divider>
-            <ion-label>
-                Alarmas
-            </ion-label>
-          </ion-item-divider>
-        <div *ngFor="let alarm of product.quantityAlarms">
+          <ion-label>
+            Alarmas
+          </ion-label>
+        </ion-item-divider>
+        <div *ngFor="let location of product.locations">
           <ion-item>
-            <ion-toggle [(ngModel)]="alarm.isOn"></ion-toggle>
-            <ion-label >Minimo:</ion-label>
-            <ion-input [(ngModel)]="alarm.threshold"></ion-input>
-            <ion-label>{{alarm.type}}</ion-label>
+            <ion-toggle [(ngModel)]="location.isAlarmOn"></ion-toggle>
+            <ion-label>Minimo:</ion-label>
+            <ion-input [(ngModel)]="location.minQuantity"></ion-input>
+            <ion-label>{{location.name}}</ion-label>
           </ion-item>
         </div>
+        <ion-item>
+          <ion-toggle [(ngModel)]="product.isAlarmOn"></ion-toggle>
+          <ion-label>Minimo:</ion-label>
+          <ion-input [(ngModel)]="product.minQuantity"></ion-input>
+          <ion-label>Total</ion-label>
+        </ion-item>
       </ion-item-group>
     </div>
   </div>

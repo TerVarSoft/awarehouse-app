@@ -25,7 +25,7 @@ export class Product {
 
   quantityAlarms: ProductQuantityAlarm[] = [];
 
-  buyingUnitPrice: number;  
+  buyingUnitPrice: number;
 
   isFavorite: boolean;
 
@@ -47,7 +47,13 @@ export class Product {
 
   barCode: string = '';
 
+  barCodes: string = '';
+
   quantity: number;
+
+  isAlarmOn: boolean;
+
+  minQuantity: number;
 
   tags: string[];
 

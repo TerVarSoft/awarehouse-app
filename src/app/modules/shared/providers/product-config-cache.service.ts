@@ -19,7 +19,7 @@ export class ProductConfigCacheService {
 
     async get() {
         let params: URLSearchParams = new URLSearchParams();
-        params.set('properties', 'productCategories productTypesByCategory productPricesByCategoryAndType productLocationsByCategoryAndType productCategoryAndTypeFilters');
+        params.set('properties', 'productCategories productPricesByCategoryAndType productLocationsByCategoryAndType productCategoriesWithTypes');
 
         let requestOptions = new RequestOptions({ search: params });
 

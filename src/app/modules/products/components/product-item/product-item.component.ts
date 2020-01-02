@@ -182,6 +182,7 @@ export class ProductItemComponent {
         let productToUpdate;
         try {
             productToUpdate = await this.productsProvider.getById(this.product.id);
+            productToUpdate.barCodes =productToUpdate.barCodes.join(',');
         } catch (ex) {
             createProductLoader.dismiss();
             return;

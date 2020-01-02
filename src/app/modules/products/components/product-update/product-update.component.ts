@@ -66,7 +66,7 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   public updateCategory() {
-    this.productTypes = this.productConfigCache.productTypesByCategory[this.product.categoryId];
+    this.productTypes = this.productConfigCache.productCategoriesWithTypes[this.product.categoryId].types;
     this.product.typeId = '0';
     this.initProductPrices();
     this.initProductLocations();
@@ -84,7 +84,7 @@ export class ProductUpdateComponent implements OnInit {
     this.product.categoryId = this.product.categoryId ||
       this.navParams.data.selectedProductCategoryId ||
       '0';
-    this.productTypes = this.productConfigCache.productTypesByCategory[this.product.categoryId];
+    this.productTypes = this.productConfigCache.productCategoriesWithTypes[this.product.categoryId].types;
 
     this.product.typeId = this.product.typeId ||
       this.navParams.data.selectedProductTypeId ||
@@ -99,9 +99,7 @@ export class ProductUpdateComponent implements OnInit {
 
   async initProductPrices() {
 
-    const categoryTypeId = this.product.typeId
-      ? `${this.product.categoryId}:${this.product.typeId}`
-      : this.product.categoryId
+    const categoryTypeId = `${this.product.categoryId}:${this.product.typeId}`;
 
     this.productPrices =
       this.productConfigCache.productPricesByCategoryAndType[categoryTypeId]
@@ -139,9 +137,7 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   async initProductLocations() {
-    const categoryTypeId = this.product.typeId
-      ? `${this.product.categoryId}:${this.product.typeId}`
-      : this.product.categoryId
+    const categoryTypeId = `${this.product.categoryId}:${this.product.typeId}`;
 
     this.productLocations =
       this.productConfigCache.productLocationsByCategoryAndType[categoryTypeId];
@@ -152,7 +148,9 @@ export class ProductUpdateComponent implements OnInit {
         locationId: locationType.id,
         name: locationType.name,
         value: productLocation ? productLocation.value : '',
-        quantity: productLocation ? productLocation.quantity : 0
+        quantity: productLocation ? productLocation.quantity : 0,
+        minQuantity: productLocation ? productLocation.minQuantity : 0,
+        isAlarmOn: productLocation ? productLocation.isAlarmOn : false
       }
     });
 
@@ -160,9 +158,7 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   async initProductAlarmQuantities() {
-    const categoryTypeId = this.product.typeId
-      ? `${this.product.categoryId}:${this.product.typeId}`
-      : this.product.categoryId
+    const categoryTypeId = `${this.product.categoryId}:${this.product.typeId}`;
 
     this.productLocations =
       this.productConfigCache.productLocationsByCategoryAndType[categoryTypeId];
@@ -306,6 +302,7 @@ export class ProductUpdateComponent implements OnInit {
   async save() {
     let createProductLoader = await this.notifier.createLoader(`Guardando producto ${this.product.code || ''}`);
     this.product.isImgUploading = true;
+    this.product.barCodes = this.product.barCodes ? this.product.barCodes.split(',') : [];
 
     let updatedProduct;
     try {

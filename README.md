@@ -3,8 +3,16 @@ to manage tunari services
 
 ## To install
 
-    * Install ionic
+    * Install ionic: npm install -g ionic cordova
     * Run: npm install
+
+    In case an error with missing python appears (please try first the next paragraph since looks like "npm install --global --production windows-build-tools" also installs python): 
+    install python 27: https://www.python.org/download/releases/2.7/
+    npm config set python "c:\Python27\python.exe"   
+
+    Need to have installed visual studio to have some executables from there (vc++): https://visualstudio.microsoft.com/downloads/#DownloadFamilies_2 
+    So far we just needed Visual Studio Build Tools 2017 (no need to install th e whole visual studio community 2019)
+    with node 12.14. didn't work, moving to node 10.18.0 worked fine
 
 ## To run it
 

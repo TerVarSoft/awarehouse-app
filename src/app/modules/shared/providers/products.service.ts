@@ -21,12 +21,12 @@ export class ProductsService {
 
   constructor(public api: ApiService, public storage: StorageService) { }
 
-  get(query: any, page: number = 1) {
+  get(query: any, offset: number = 0) {
     let params: URLSearchParams = new URLSearchParams();
     params.set('tags', query.tags);
     params.set('categoryId', query.categoryId);
     params.set('typeId', query.typeId);
-    params.set('page', page.toString());
+    params.set('offset', offset.toString());
     params.set('limit', "30");
     let requestOptions = new RequestOptions({ search: params });
 

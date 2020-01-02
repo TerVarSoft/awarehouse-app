@@ -10,4 +10,8 @@ export class ProductLocation {
     value: string;
 
     quantity: number;
+
+    minQuantity: string[];
+
+    isAlarmOn: boolean;
 }

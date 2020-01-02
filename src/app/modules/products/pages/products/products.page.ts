@@ -28,6 +28,10 @@ export class ProductsPage {
 
   page: number = 1;
 
+  itemsPerPage: number = 30;
+
+  offset: number = 0;
+
   selectedCategory: any = {};
 
   selectedType: any = {};
@@ -57,14 +61,14 @@ export class ProductsPage {
   /** Main Page functions */
 
   async onSearch($event) {
-    this.page = 1;
+    this.offset = 0;
     this.searchProducts($event.target.value);
   }
 
   async pullNextProductsPage(eventInfiniteScroll) {
 
-    if (this.page > 0 && this.connection.isConnected()) {
-      this.page++;
+    if (this.offset > 0 && this.connection.isConnected()) {
+      this.offset = this.offset + this.itemsPerPage;
       await this.searchProducts();
       eventInfiniteScroll.target.complete();
 
@@ -164,14 +168,12 @@ export class ProductsPage {
   }
 
   filterProducts(selectedCategory = { id: '' }, selectedType = { id: '' }) {
-    this.page = 1;
+    this.offset = 0;
     this.searchQuery = '';
     this.selectedCategory = selectedCategory;
     this.selectedType = selectedType;
 
-    const categoryTypeId = this.selectedType.id
-      ? `${this.selectedCategory.id}:${this.selectedType.id}`
-      : this.selectedCategory.id
+    const categoryTypeId = `${this.selectedCategory.id}:${this.selectedType.id}`;
 
     this.productPrices = this.productConfigCache.productPricesByCategoryAndType[categoryTypeId];
     this.selectedPrice = this.productPrices.length > 0 ?
@@ -215,13 +217,20 @@ export class ProductsPage {
   private async setDefaultValues() {
     this.productConfigCache = await this.configCacheService.get();
 
-    this.productFilters = this.productConfigCache.productCategoryAndTypeFilters;
+    this.productFilters = Object.keys(this.productConfigCache.productCategoriesWithTypes).map(categoryKey => {
+
+      const category = this.productConfigCache.productCategoriesWithTypes[categoryKey];
+      return {
+        id: category.id,
+        name: category.name,
+        subFilters: category.types
+      }
+    });
+    this.productFilters.unshift({ id: '', name: 'Todos', subFilters: [] })
     this.selectedCategory = this.productFilters[0];
     this.selectedType = { id: '' };
 
-    const categoryTypeId = this.selectedType.id
-      ? `${this.selectedCategory.id}:${this.selectedType.id}`
-      : this.selectedCategory.id
+    const categoryTypeId = `${this.selectedCategory.id}:${this.selectedType.id}`;
 
     this.productPrices = this.productConfigCache.productPricesByCategoryAndType[categoryTypeId];
     this.selectedPrice = this.productPrices[0];
@@ -235,14 +244,14 @@ export class ProductsPage {
       typeId: this.selectedType.id
     };
 
-    if (this.page === 1) {
+    if (this.offset === 0) {
       this.productsAreLoading = true;
     }
 
-    const productsResponse = await this.productsProvider.get(query, this.page);
+    const productsResponse = await this.productsProvider.get(query, this.offset);
 
     this._ngZone.run(() => {
-      if (this.page === 1) {
+      if (this.offset === 0) {
         this.products = productsResponse.items;
         this.productsAreLoading = false;
       } else {
