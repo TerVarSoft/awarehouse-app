@@ -19,9 +19,9 @@ import { StorageService } from './storage.service';
 @Injectable()
 export class ApiService {
 
-  // baseUrl: string = 'https://tunari.herokuapp.com/api/';
+  baseUrl: string = 'https://tunari.herokuapp.com/api/';
 
-  baseUrl: string = 'http://localhost:5000/api/';
+  // baseUrl: string = 'http://localhost:5000/api/';
 
   authKey: string = 'authorization';
 

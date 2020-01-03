@@ -67,7 +67,7 @@ export class ProductsPage {
 
   async pullNextProductsPage(eventInfiniteScroll) {
 
-    if (this.offset > 0 && this.connection.isConnected()) {
+    if (this.offset >= 0 && this.connection.isConnected()) {
       this.offset = this.offset + this.itemsPerPage;
       await this.searchProducts();
       eventInfiniteScroll.target.complete();
